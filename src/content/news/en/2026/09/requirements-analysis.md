@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-requirements
 locale: en
 sourceLang: de
+sourceVersionHash: "cb452b0658729a48da70459403399567ce0819a2"
 translationStatus: machine
 slug: needs-and-requirements-analysis-structured
 title: "Needs and requirements analysis structured"
