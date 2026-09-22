@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import { archiveMonthPath, pathFor, ui, type Locale } from "../lib/i18n";
+import { eventDate, publishedNews } from "../lib/news";
+
+interface Props {
+  lang: Locale;
+  year: number;
+  month: number;
+}
+
+const { lang, year, month } = Astro.props;
+const copy = ui[lang];
+const all = await publishedNews();
+const posts = all
+  .filter((post) => post.data.locale === lang)
+  .filter((post) => {
+    const date = eventDate(post);
+    return date.getUTCFullYear() === year && date.getUTCMonth() + 1 === month;
+  })
+  .sort((a, b) => eventDate(b).valueOf() - eventDate(a).valueOf());
+
+const otherLang: Locale = lang === "de" ? "en" : "de";
+const otherExists = all.some((post) => {
+  if (post.data.locale !== otherLang) return false;
+  const date = eventDate(post);
+  return date.getUTCFullYear() === year && date.getUTCMonth() + 1 === month;
+});
+const alternatePaths: Partial<Record<Locale, string>> = {
+  [lang]: archiveMonthPath(lang, year, month),
+  [otherLang]: otherExists ? archiveMonthPath(otherLang, year, month) : pathFor(otherLang, "archive")
+};
+const monthTitle = new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC"
+}).format(new Date(Date.UTC(year, month - 1, 1)));
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${monthTitle} · ${copy.archiveHeading} · IncluLearn.AI Newsroom`}
+  description={copy.archiveLead}
+  canonicalPath={archiveMonthPath(lang, year, month)}
+  alternatePaths={alternatePaths}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.archiveHeading}</p>
+        <h1>{monthTitle}</h1>
+        <p class="lead">{copy.archiveLead}</p>
+      </div>
+      <PostTimeline lang={lang} entries={posts} mode="event" />
+    </div>
+  </section>
+</BaseLayout>
