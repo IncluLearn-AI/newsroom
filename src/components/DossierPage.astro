@@ -1,0 +1,52 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import { pathFor, phaseLabel, type Locale } from "../lib/i18n";
+import { counterpart, dossierPath, formatEventRange, publishedDossiers, publishedNews } from "../lib/news";
+
+interface Props {
+  lang: Locale;
+  dossier: CollectionEntry<"dossiers">;
+}
+const { lang, dossier } = Astro.props;
+const { Content } = await render(dossier);
+const allDossiers = await publishedDossiers();
+const allNews = await publishedNews(lang);
+const related = allNews
+  .filter((post) => post.data.dossiers.includes(dossier.data.translationKey))
+  .sort((a, b) => (b.data.event.end ?? b.data.event.start).valueOf() - (a.data.event.end ?? a.data.event.start).valueOf());
+
+const otherLang: Locale = lang === "de" ? "en" : "de";
+const other = counterpart(allDossiers, dossier.data.translationKey, otherLang);
+const alternatePaths: Partial<Record<Locale, string>> = { [lang]: dossierPath(dossier) };
+if (other) alternatePaths[otherLang] = dossierPath(other);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${dossier.data.title} · IncluLearn.AI Newsroom`}
+  description={dossier.data.summary}
+  canonicalPath={dossierPath(dossier)}
+  alternatePaths={alternatePaths}
+>
+  <article class="shell article">
+    <p class="eyebrow">{phaseLabel(lang, dossier.data.projectPhase)} · {lang === "de" ? "Dossier" : "Dossier"}</p>
+    <h1>{dossier.data.title}</h1>
+    <p class="lead">{dossier.data.summary}</p>
+    <p class="meta">{formatEventRange(lang, dossier.data.from, dossier.data.to)}</p>
+    {dossier.data.translationStatus === "machine" && (
+      <p class="notice">{lang === "de" ? "Diese Übersetzung ist noch nicht geprüft." : "This translation has not yet been reviewed."}</p>
+    )}
+    <Content />
+  </article>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="section-head">
+        <h2>{lang === "de" ? "Beiträge in diesem Dossier" : "Posts in this dossier"}</h2>
+      </div>
+      <PostTimeline lang={lang} entries={related} mode="event" />
+    </div>
+  </section>
+</BaseLayout>
