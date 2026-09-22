@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-vision-prototype
 locale: en
 sourceLang: de
+sourceVersionHash: "23a8b6b521c13b499afdd573049f071a34f52821"
 translationStatus: machine
 slug: vision-prototype-and-accessible-de-en-demo-expanded
 title: "Vision prototype and accessible DE/EN demo expanded"
