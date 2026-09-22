@@ -25,18 +25,47 @@ const { Content } = await render(post);
       </time>
       {" · Evidenz: "}
       {post.data.evidence}
+      {post.data.updated && (
+        <>
+          {" · aktualisiert "}
+          <time datetime={post.data.updated.toISOString()}>
+            {post.data.updated.toLocaleDateString("de-DE")}
+          </time>
+        </>
+      )}
     </p>
+
+    {post.data.aiAssisted && (
+      <p class="notice">
+        Dieser Beitrag wurde KI-gestützt recherchiert oder redaktionell vorbereitet und vor der Veröffentlichung menschlich geprüft.
+      </p>
+    )}
 
     <Content />
 
-    {post.data.sourceUrl && (
-      <section aria-labelledby="quelle">
-        <h2 id="quelle">Quelle</h2>
-        <p>
-          <a href={post.data.sourceUrl}>
-            {post.data.sourceLabel ?? "Primärquelle öffnen"}
-          </a>
-        </p>
+    {post.data.sources.length > 0 && (
+      <section aria-labelledby="quellen">
+        <h2 id="quellen">Quellen</h2>
+        <ol class="source-list">
+          {post.data.sources.map((source) => (
+            <li>
+              <a href={source.url}>{source.title}</a>
+              <span class="meta">
+                {" — "}
+                {source.kind}
+                {source.published && (
+                  <>
+                    {", "}
+                    <time datetime={source.published.toISOString()}>
+                      {source.published.toLocaleDateString("de-DE")}
+                    </time>
+                  </>
+                )}
+                {source.doi && <> · DOI: {source.doi}</>}
+              </span>
+            </li>
+          ))}
+        </ol>
       </section>
     )}
   </article>
