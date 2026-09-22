@@ -2,6 +2,7 @@
 translationKey: prep-2026-09
 locale: en
 sourceLang: de
+sourceVersionHash: "563e2142922fc403caf3b38007df1deca0526c7e"
 translationStatus: machine
 slug: preparation-phase-september-2026
 title: "Preparation phase September 2026"
