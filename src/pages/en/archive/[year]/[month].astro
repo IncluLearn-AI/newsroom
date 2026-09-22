@@ -1,0 +1,21 @@
+---
+import ArchiveMonthPage from "../../../../components/ArchiveMonthPage.astro";
+import { eventDate, publishedNews } from "../../../../lib/news";
+
+export async function getStaticPaths() {
+  const posts = await publishedNews("en");
+  const months = new Map<string, { year: number; month: number }>();
+  for (const post of posts) {
+    const date = eventDate(post);
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    months.set(`${year}-${month}`, { year, month });
+  }
+  return [...months.values()].map(({ year, month }) => ({
+    params: { year: String(year), month: String(month).padStart(2, "0") },
+    props: { year, month }
+  }));
+}
+const { year, month } = Astro.props;
+---
+<ArchiveMonthPage lang="en" year={year} month={month} />
