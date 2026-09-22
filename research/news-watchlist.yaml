@@ -1,29 +1,69 @@
-# Startpunkt für den automatisierten Research Radar.
-# Die Liste wird kuratiert und darf vom Agenten nur über Review erweitert werden.
+# Kuratierter Startpunkt für den automatisierten Research Radar.
+# Änderungen an Themen, Quellenklassen und dauerhaft beobachteten Akteuren erfolgen per Pull Request.
 
 topics:
-  - accessible STEM education
-  - accessible diagrams
-  - tactile graphics
-  - sonification
-  - accessible mathematics
-  - MathML accessibility
-  - document understanding
-  - multimodal document AI
-  - vision-language models
-  - digital accessibility higher education
-  - AI-assisted accessibility
+  accessible_stem:
+    label: "Barrierefreie MINT-Lehre"
+    queries:
+      - accessible STEM education blind visually impaired
+      - accessible engineering education diagrams
+      - inclusive technical education accessibility
+  diagrams:
+    label: "Diagramm- und Strukturverständnis"
+    queries:
+      - accessible diagrams blind
+      - diagram understanding vision language model
+      - UML diagram understanding multimodal
+      - scientific diagram understanding
+  circuits:
+    label: "Schaltpläne und technische Informatik"
+    queries:
+      - circuit diagram understanding AI
+      - accessible circuit diagrams blind
+      - schematic parsing multimodal model
+  mathematics:
+    label: "Mathematik und MathML"
+    queries:
+      - MathML accessibility
+      - accessible mathematics screen reader
+      - math accessibility speech braille
+  tactile:
+    label: "Taktile Grafiken und 3D"
+    queries:
+      - tactile graphics generation blind
+      - automated tactile graphics
+      - accessible 3D models visual impairment
+  audio:
+    label: "Audio und Sonifikation"
+    queries:
+      - sonification data visualization blind
+      - accessible charts sonification
+      - audio description technical diagrams
+  document_ai:
+    label: "Document AI und multimodale Modelle"
+    queries:
+      - document understanding multimodal AI
+      - vision language model structured extraction
+      - document layout semantic extraction
+  accessibility_ai:
+    label: "KI und digitale Barrierefreiheit"
+    queries:
+      - generative AI accessibility blind education
+      - AI assisted accessibility higher education
+      - automated alt text technical content
 
 source_types:
   preferred:
     - peer-reviewed publication
     - official standard or specification
     - official research project page
+    - official research group page
     - primary-source technical documentation
   supplementary:
     - preprint
     - research-group blog
     - company engineering blog
+    - reputable accessibility organization
     - community discussion
 
 venues:
@@ -32,9 +72,19 @@ venues:
   - W4A
   - ICCHP
   - Universal Access in the Information Society
+  - ACM Transactions on Accessible Computing
+
+standards_and_ecosystems:
+  - W3C WAI
+  - W3C Math Working Group
+  - DAISY Consortium
+  - EPUB Accessibility
 
 rules:
   - "Relevanz für IncluLearn.AI explizit begründen."
   - "Peer Review und Preprint unterscheiden."
-  - "Bei Produkt- oder Firmenaussagen möglichst Primärquelle plus unabhängige Einordnung verwenden."
-  - "Neue Watchlist-Einträge nur per Pull Request ergänzen."
+  - "Bei wissenschaftlichen Aussagen die Originalpublikation öffnen, wenn verfügbar."
+  - "Bei Produkt- oder Firmenaussagen Primärquelle und bei wesentlichen Behauptungen möglichst unabhängige Einordnung verwenden."
+  - "Marketing- oder Presseformulierungen nicht als eigene Tatsachenbehauptungen übernehmen."
+  - "Dubletten gegenüber bestehenden Newsroom-Beiträgen und dem Forschungsstand vermeiden."
+  - "Neue dauerhaft beobachtete Akteure nur per Pull Request ergänzen."
