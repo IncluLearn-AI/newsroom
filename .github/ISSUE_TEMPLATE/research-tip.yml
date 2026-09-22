@@ -1,0 +1,44 @@
+name: Research-Tipp
+description: Öffentlichen Hinweis auf eine relevante Publikation, ein Tool, einen Standard oder ein Forschungsprojekt geben.
+title: "[Research-Tipp] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für den Hinweis. Bitte keine vertraulichen, personenbezogenen oder nicht zur Veröffentlichung bestimmten Informationen eintragen.
+  - type: input
+    id: title
+    attributes:
+      label: Titel / Name
+      placeholder: Publikation, Tool, Projekt oder Standard
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Öffentliche Quelle
+      placeholder: https://...
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Quellentyp
+      options:
+        - Peer-reviewte Publikation
+        - Preprint
+        - Standard / Spezifikation
+        - Forschungsprojekt
+        - Tool / Open Source
+        - Hersteller- / Projektinformation
+        - Sonstiges
+    validations:
+      required: true
+  - type: textarea
+    id: relevance
+    attributes:
+      label: Relevanz für IncluLearn.AI
+      description: Warum könnte die Quelle für barrierefreie MINT-Lehrmaterialien relevant sein?
+    validations:
+      required: true
