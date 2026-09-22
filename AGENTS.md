@@ -1,57 +1,70 @@
 # Arbeitsregeln für KI-Agenten
 
-Dieses Repository ist **öffentlich**. Automatisierte Werkzeuge und KI-Agenten müssen deshalb besonders konservativ arbeiten.
+Dieses Repository ist **öffentlich**. Agenten arbeiten deshalb konservativ, quellengestützt und reviewbar.
 
 ## Zweck
 
-Agenten dürfen insbesondere:
+Agenten dürfen:
 
-- öffentlich belegbare Entwicklungen recherchieren,
-- Änderungen in freigegebenen IncluLearn.AI-Repositories zusammenfassen,
-- Entwürfe für Newsroom-Beiträge erstellen,
+- öffentlich geeigneten Projektfortschritt aus IncluLearn.AI-Artefakten ableiten,
+- relevante externe Forschung, Standards, Tools und Projekte recherchieren,
+- Ereignisse zu redaktionell sinnvollen Meldungen clustern,
+- deutsche Entwürfe und englische Übersetzungen vorbereiten,
 - Quellen und Metadaten strukturieren,
-- Pull Requests für menschliches Review vorbereiten.
+- Draft Pull Requests für menschliches Review öffnen.
 
 ## Verbindliche Grenzen
 
-1. **Keine direkte Veröffentlichung durch den Agenten.** Neue redaktionelle Inhalte werden über einen Pull Request vorbereitet.
-2. **Keine vertraulichen Informationen.** Interne, personenbezogene, sensible oder förderadministrative Informationen dürfen nicht in dieses öffentliche Repository übernommen werden.
-3. **Beleg vor Behauptung.** Tatsachenbehauptungen über externe Forschung, Produkte, Standards oder Organisationen benötigen eine nachvollziehbare Quelle.
-4. **Quellentyp kenntlich machen.** Peer Review, Preprint, offizielle Primärquelle, Hersteller-/Projektinformation und andere Quellentypen dürfen nicht vermischt werden.
+1. **Kein direkter Merge durch den Agenten.**
+2. **Keine vertraulichen Informationen.** Keine personenbezogenen, sensiblen, sicherheitsrelevanten, administrativen oder nicht öffentlichen Details aus privaten Repositories übernehmen.
+3. **Beleg vor Behauptung.** Externe Tatsachenbehauptungen benötigen nachvollziehbare Quellen; Primärquellen werden bevorzugt.
+4. **Quellentyp korrekt kennzeichnen.** Peer Review, Preprint, Standard, offizielle Primärquelle, Forschungsprojekt und Herstellerinformation nicht vermischen.
 5. **Keine erfundenen Quellen, DOI, Zitate oder Messwerte.**
-6. **Projektfortschritt nur aus belastbaren Projektquellen ableiten.** Commit-Zahlen allein sind kein Fortschrittsindikator.
-7. **Freigabestatus nicht selbst vergeben.** Ein Agent darf den eigenen Output nicht als fachlich verifiziert oder freigegeben kennzeichnen.
-8. **Barrierefreiheit mitprüfen.** Überschriftenstruktur, aussagekräftige Linktexte, verständliche Sprache und textuelle Alternativen gehören zur Definition of Done.
-9. **Deutsch ist die Referenzsprache.** Englische Originaltitel, Fachbegriffe und Quellennamen bleiben bei Bedarf im Original.
-10. **Keine ungeprüfte PR-Automatik.** Ein Agent darf Pull Requests erstellen oder aktualisieren, aber nicht selbst mergen.
-11. **Projektstart korrekt einordnen.** Aktivitäten vor dem 01.10.2026 werden nicht als Fortschritt des geförderten Durchführungszeitraums dargestellt, sofern dies nicht ausdrücklich fachlich freigegeben wurde.
-12. **Keine vertraulichen Repository-Details leaken.** Interne Branch-Namen, Sicherheitsdetails, personenbezogene Zuständigkeiten, nicht öffentliche URLs und Verwaltungsunterlagen werden nicht in öffentliche Beiträge übernommen.
+6. **Commits sind Rohmaterial, keine News.** Mehrere technische Einzeländerungen werden zu einem Ereignis zusammengefasst, wenn sie dasselbe Ergebnis herstellen.
+7. **Projektfortschritt nur aus belastbaren Artefakten ableiten.** Commit-Zahl ist kein Fortschrittsindikator.
+8. **Freigabestatus nicht selbst vergeben.**
+9. **Barrierefreiheit ist Teil der Definition of Done.**
+10. **Projektstart korrekt einordnen.** Aktivitäten vor dem 01.10.2026 als Vorbereitung/Vorarbeit kennzeichnen, sofern keine andere fachliche Freigabe vorliegt.
+11. **Zeitachsen nicht vermischen.** `event.start/end` beschreibt das Ereignis; `publishedAt` die tatsächliche Veröffentlichung.
+12. **Keine künstliche Publikationsfrequenz.** Wenn kein substanzielles Ereignis vorliegt, keinen Beitrag erzeugen.
 
-## Quellenhierarchie für den Research Radar
+## Mehrsprachigkeit
+
+Deutsch ist die **redaktionelle Referenzsprache**, Englisch wird von Beginn an mitgeführt.
+
+- Sichtbare Taxonomie wird niemals als deutscher Freitext im Datenmodell gespeichert; interne Schlüssel bleiben sprachneutral.
+- DE und EN eines Beitrags teilen dieselbe `translationKey`.
+- Slugs dürfen sprachgerecht unterschiedlich sein.
+- Automatisch erstellte englische Fassungen verwenden zunächst `translationStatus: machine`.
+- Nach sprachlicher/fachlicher Prüfung kann `translationStatus: reviewed` gesetzt werden.
+- `sourceLang` und möglichst `sourceVersionHash` werden gepflegt, damit veraltete Übersetzungen erkannt werden können.
+- Unter einer englischen URL darf kein stiller deutscher Fallback erscheinen und umgekehrt.
+- Wenn eine Sprachfassung fehlt, verweist der Sprachwechsel auf einen passenden Spracheinstieg statt falschen Content auszuliefern.
+- Navigation, Seitentitel, Metadaten, Alt-Texte und ARIA-Beschriftungen werden in DE/EN konsistent gepflegt.
+
+## Quellenhierarchie
 
 Bevorzugt werden:
 
 1. peer-reviewte Originalpublikationen und DOI-Landingpages,
-2. offizielle Standards, Spezifikationen und Behörden-/Institutionenquellen,
+2. offizielle Standards und Spezifikationen,
 3. offizielle Seiten von Forschungsprojekten und Forschungsgruppen,
 4. Primärdokumentation technischer Systeme,
-5. Preprints mit klar sichtbarem Preprint-Status,
+5. Preprints mit sichtbarem Preprint-Status,
 6. Hersteller-/Projektblogs,
 7. Community- und Sekundärquellen nur ergänzend.
 
-Pressemitteilungen oder Blogbeiträge ersetzen bei wissenschaftlichen Aussagen nicht die Originalpublikation.
-
 ## Empfohlener Agentenablauf
 
-1. Seit dem letzten Lauf neue Projektänderungen und externe Quellen sammeln.
-2. Relevanz für IncluLearn.AI begründen.
-3. Primärquellen öffnen und Evidenztyp prüfen.
-4. Dubletten gegenüber bestehenden Beiträgen und der Watchlist erkennen.
-5. Fakten von redaktioneller Einordnung trennen.
-6. Nur bei ausreichender Substanz einen Markdown-Entwurf erzeugen.
-7. Beitrag mit vollständigen Quellenmetadaten und `aiAssisted: true` versehen.
-8. Technische Checks ausführen bzw. deren Ausführung durch CI abwarten.
-9. Draft Pull Request mit verständlicher Zusammenfassung und Review-Hinweisen öffnen.
-10. Menschliches fachliches, redaktionelles und Accessibility-Review abwarten.
+1. Änderungen seit dem letzten Lauf sammeln.
+2. Mehrere technische Änderungen zu fachlich verständlichen Ereignissen clustern.
+3. Relevanz für IncluLearn.AI begründen.
+4. Externe Primärquellen öffnen und Evidenztyp prüfen.
+5. Dubletten gegenüber bestehenden Beiträgen, Dossiers und dem Forschungsstand erkennen.
+6. Öffentlichkeits- und Vertraulichkeits-Gate durchführen.
+7. Deutschen Referenzbeitrag nach `templates/beitrag.md` erstellen.
+8. Englische Fassung mit derselben `translationKey` vorbereiten.
+9. Beide Fassungen und ggf. Dossieränderungen in **einem Draft-PR** bündeln.
+10. CI abwarten und menschliches fachliches, redaktionelles, sprachliches und Accessibility-Review anfordern.
 
 Die projektweite AI-Governance bleibt gegenüber diesen repository-spezifischen Regeln maßgeblich.
