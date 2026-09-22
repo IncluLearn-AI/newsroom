@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pathFor, phaseLabel, ui, type Locale } from "../lib/i18n";
+import { dossierPath, formatEventRange, publishedDossiers } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const dossiers = await publishedDossiers(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.dossiersHeading} · IncluLearn.AI Newsroom`}
+  description={copy.dossiersLead}
+  canonicalPath={pathFor(lang, "dossiers")}
+  alternatePaths={{ de: pathFor("de", "dossiers"), en: pathFor("en", "dossiers") }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.dossiers}</p>
+        <h1>{copy.dossiersHeading}</h1>
+        <p class="lead">{copy.dossiersLead}</p>
+      </div>
+      {dossiers.length === 0 ? <p>{lang === "de" ? "Noch keine freigegebenen Dossiers." : "No reviewed dossiers have been published yet."}</p> : (
+        <div class="grid">
+          {dossiers.map((dossier) => (
+            <article class="card">
+              <p class="eyebrow">{phaseLabel(lang, dossier.data.projectPhase)}</p>
+              <h2><a href={href(dossierPath(dossier))}>{dossier.data.title}</a></h2>
+              <p>{dossier.data.summary}</p>
+              <p class="meta">{formatEventRange(lang, dossier.data.from, dossier.data.to)}</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
