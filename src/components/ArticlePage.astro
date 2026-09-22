@@ -1,0 +1,108 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  evidenceLabel,
+  pathFor,
+  phaseLabel,
+  sourceKindLabel,
+  ui,
+  type Evidence,
+  type Locale,
+  type SourceKind
+} from "../lib/i18n";
+import { counterpart, formatDateTime, formatEventRange, newsPath, publishedNews } from "../lib/news";
+
+interface Props {
+  lang: Locale;
+  post: CollectionEntry<"news">;
+}
+
+const { lang, post } = Astro.props;
+const copy = ui[lang];
+const { Content } = await render(post);
+const all = await publishedNews();
+const otherLang: Locale = lang === "de" ? "en" : "de";
+const other = counterpart(all, post.data.translationKey, otherLang);
+const alternatePaths: Partial<Record<Locale, string>> = { [lang]: newsPath(post) };
+if (other) alternatePaths[otherLang] = newsPath(other);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${post.data.title} · IncluLearn.AI Newsroom`}
+  description={post.data.summary}
+  canonicalPath={newsPath(post)}
+  alternatePaths={alternatePaths}
+  ogType="article"
+>
+  <article class="shell article">
+    <div class="timeline-labels">
+      <span class="badge">{copy.categories[post.data.category]}</span>
+      <span class="badge badge-secondary">{copy.formats[post.data.format]}</span>
+      <span class="phase">{phaseLabel(lang, post.data.projectPhase)}</span>
+    </div>
+
+    <h1>{post.data.title}</h1>
+    <p class="lead">{post.data.summary}</p>
+
+    <dl class="article-meta">
+      <div>
+        <dt>{copy.event}</dt>
+        <dd>{formatEventRange(lang, post.data.event.start, post.data.event.end)}{post.data.retroactive ? ` · ${copy.retroactive}` : ""}</dd>
+      </div>
+      <div>
+        <dt>{copy.published}</dt>
+        <dd><time datetime={post.data.publishedAt.toISOString()}>{formatDateTime(lang, post.data.publishedAt)}</time></dd>
+      </div>
+      <div>
+        <dt>{lang === "de" ? "Einordnung" : "Evidence"}</dt>
+        <dd>{evidenceLabel(lang, post.data.evidence as Evidence)}</dd>
+      </div>
+    </dl>
+
+    {post.data.translationStatus === "machine" && <p class="notice">{copy.translationMachine}</p>}
+    {post.data.aiAssisted && <p class="notice">{copy.aiNotice}</p>}
+
+    <Content />
+
+    {post.data.tags.length > 0 && (
+      <section aria-labelledby="tags">
+        <h2 id="tags">{lang === "de" ? "Schlagwörter" : "Tags"}</h2>
+        <ul class="tag-list">
+          {post.data.tags.map((tag) => <li>{tag}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {post.data.sources.length > 0 && (
+      <section aria-labelledby="sources">
+        <h2 id="sources">{copy.sources}</h2>
+        <ol class="source-list">
+          {post.data.sources.map((source) => (
+            <li>
+              <a href={source.url}>{source.title}</a>
+              <span class="meta">
+                {" — "}{sourceKindLabel(lang, source.kind as SourceKind)}
+                {source.published && <>{" · "}{new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB").format(source.published)}</>}
+                {source.doi && <>{" · DOI: "}{source.doi}</>}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {!other && (
+      <p class="translation-gap">
+        {lang === "de"
+          ? "Für diesen Beitrag ist noch keine freigegebene englische Fassung verfügbar."
+          : "A reviewed German counterpart for this post is not currently available."}
+        {" "}
+        <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + pathFor(otherLang, "home")}>
+          {lang === "de" ? "Zur anderen Sprachversion des Newsrooms" : "Go to the other language version of the newsroom"}
+        </a>
+      </p>
+    )}
+  </article>
+</BaseLayout>
