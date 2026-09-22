@@ -1,8 +1,15 @@
 # Arbeitsregeln für KI-Agenten
 
-Dieses Repository ist **öffentlich**. Agenten arbeiten deshalb konservativ, quellengestützt und reviewbar.
+Dieses Repository ist **öffentlich**. Agenten arbeiten deshalb konservativ, quellengestützt, zielgruppenorientiert und reviewbar.
 
-## Zweck
+## Zweck und Zielgruppen
+
+Der Newsroom ist kein technisches Änderungsprotokoll. Er soll fachliche Erkenntnisse und Projektentwicklung so aufbereiten, dass insbesondere folgende Gruppen den Stand des Projekts verstehen und einordnen können:
+
+- Projektmitglieder – ausdrücklich auch nicht-technische Mitarbeitende,
+- Projektbeirat und assoziierte Partner,
+- blista, Dräger-Lienert, Medienzentren und weitere Praxis-/Validierungspartner,
+- interessierte externe Fachöffentlichkeit.
 
 Agenten dürfen:
 
@@ -12,6 +19,19 @@ Agenten dürfen:
 - deutsche Entwürfe und englische Übersetzungen vorbereiten,
 - Quellen und Metadaten strukturieren,
 - Draft Pull Requests für menschliches Review öffnen.
+
+## Zentrale redaktionelle Regel
+
+**Git-Aktivität ist nur ein Recherche-Signal, niemals die inhaltliche Grundlage eines Beitrags.**
+
+Ein Commit-, PR- oder Issue-Titel kann anzeigen, **wo** etwas Relevantes passiert ist. Vor einem redaktionellen Entwurf müssen die betroffenen Fachartefakte selbst gelesen werden. Bei Verweisen sind relevante Unterdokumente nachzuverfolgen.
+
+Ein Beitrag darf daher nicht bloß paraphrasieren, dass etwas „angelegt“, „strukturiert“, „ergänzt“ oder „dokumentiert“ wurde. Er muss – soweit die Quellen das tragen – die **konkreten fachlichen Ergebnisse, Befunde, Entscheidungen, Hypothesen, Grenzen und offenen Fragen** herausarbeiten.
+
+Beispiel:
+
+- schwach: „Die Bedarfsanalyse wurde strukturiert.“
+- redaktionell sinnvoll: „Öffentliche Prozessbeschreibungen von Medienzentren deuten auf lange Vorlaufzeiten, hohen manuellen Aufwand und einen Bedarf an überprüfbarer semantischer Vorverarbeitung hin; diese Ableitungen müssen noch durch eigene Interviews validiert werden.“
 
 ## Verbindliche Grenzen
 
@@ -27,6 +47,29 @@ Agenten dürfen:
 10. **Projektstart korrekt einordnen.** Aktivitäten vor dem 01.10.2026 als Vorbereitung/Vorarbeit kennzeichnen, sofern keine andere fachliche Freigabe vorliegt.
 11. **Zeitachsen nicht vermischen.** `event.start/end` beschreibt das Ereignis; `publishedAt` die tatsächliche Veröffentlichung.
 12. **Keine künstliche Publikationsfrequenz.** Wenn kein substanzielles Ereignis vorliegt, keinen Beitrag erzeugen.
+13. **Zielgruppenbezug vor Repository-Detail.** Interne Dateipfade, Branches, Commit-Mechanik oder technische Abläufe gehören nur in den Beitrag, wenn sie für Verständnis, Nachvollziehbarkeit oder Transfer relevant sind.
+14. **Ergebnisse vor Methode.** Redaktionelle Texte beginnen nicht mit der Repository-Struktur oder dem Dokumentationsprozess, wenn bereits konkrete fachliche Erkenntnisse vorliegen.
+
+## Mindestfragen für größere Beiträge
+
+Vor einem `article` muss der Agent beantworten können:
+
+1. Was wurde untersucht, erreicht oder entschieden?
+2. Was sind die konkreten Ergebnisse?
+3. Warum ist das für IncluLearn.AI relevant?
+4. Was ist belastbarer Befund, was Hypothese, Entwurf oder redaktionelle Einordnung?
+5. Welche Grenzen und offenen Fragen bleiben?
+6. Ist Feedback von Projektteam, Beirat oder Praxispartnern sinnvoll – und wenn ja, wozu?
+7. Welche öffentlichen Quellen können Leser*innen selbst nachvollziehen?
+
+Wenn diese Fragen nicht substanziell beantwortet werden können, ist ein `brief` oder gar kein Beitrag angemessener.
+
+## Formate
+
+- **`brief` – Kurzmeldung:** ein klarer, eigenständig relevanter Sachverhalt; keine künstliche Aufblähung. Typisch: eine neue Demo-Funktion, ein freigegebener Termin, ein klar abgegrenztes technisches Ergebnis.
+- **`article` – Fachbeitrag:** enthält konkrete Ergebnisse und Einordnung; in der Regel mehrere Abschnitte und nachvollziehbare Evidenz.
+- **`digest` – Rückblick/Synthese:** verdichtet mehrere bereits dokumentierte Entwicklungen für einen Zeitraum oder ein Thema; keine bloße Linkliste.
+- **Dossier:** dauerhaft kuratierte Übersicht, die Zusammenhänge erklärt und Einzelbeiträge in einen größeren Kontext stellt.
 
 ## Mehrsprachigkeit
 
@@ -54,17 +97,24 @@ Bevorzugt werden:
 6. Hersteller-/Projektblogs,
 7. Community- und Sekundärquellen nur ergänzend.
 
+Interne Projekt-Repositories können als Evidenz für **eigene Projektarbeit** dienen. Externe Recherchebefunde sollen, soweit öffentlich belegbar, mit den ursprünglichen öffentlichen Primärquellen verknüpft werden statt nur auf interne Zusammenfassungen zu verweisen.
+
 ## Empfohlener Agentenablauf
 
 1. Änderungen seit dem letzten Lauf sammeln.
-2. Mehrere technische Änderungen zu fachlich verständlichen Ereignissen clustern.
-3. Relevanz für IncluLearn.AI begründen.
-4. Externe Primärquellen öffnen und Evidenztyp prüfen.
-5. Dubletten gegenüber bestehenden Beiträgen, Dossiers und dem Forschungsstand erkennen.
-6. Öffentlichkeits- und Vertraulichkeits-Gate durchführen.
-7. Deutschen Referenzbeitrag nach `templates/beitrag.md` erstellen.
-8. Englische Fassung mit derselben `translationKey` vorbereiten.
-9. Beide Fassungen und ggf. Dossieränderungen in **einem Draft-PR** bündeln.
-10. CI abwarten und menschliches fachliches, redaktionelles, sprachliches und Accessibility-Review anfordern.
+2. Relevante Commits/PRs/Issues nur als Signale für möglicherweise geänderte Fachartefakte verwenden.
+3. Die betroffenen Fachdateien vollständig lesen; relevante Verweise und Unterdokumente nachverfolgen.
+4. Konkrete Ergebnisse, Entscheidungen, Hypothesen, Grenzen und offene Fragen extrahieren.
+5. Mehrere technische Änderungen zu fachlich verständlichen Ereignissen clustern.
+6. Relevanz für die Zielgruppen und für IncluLearn.AI begründen.
+7. Externe Primärquellen öffnen und Evidenztyp prüfen.
+8. Fakten, Aussagen der Quelle, Projektableitungen und redaktionelle Einordnung trennen.
+9. Dubletten gegenüber bestehenden Beiträgen, Dossiers, offenen Newsroom-PRs und dem Forschungsstand erkennen.
+10. Öffentlichkeits- und Vertraulichkeits-Gate durchführen.
+11. Passendes Format wählen; bei zu wenig Substanz keinen `article` erzwingen.
+12. Deutschen Referenzbeitrag nach `templates/beitrag.md` erstellen.
+13. Englische Fassung mit derselben `translationKey` vorbereiten.
+14. Beide Fassungen und ggf. Dossieränderungen in **einem Draft-PR** bündeln.
+15. CI abwarten und menschliches fachliches, redaktionelles, sprachliches und Accessibility-Review anfordern.
 
 Die projektweite AI-Governance bleibt gegenüber diesen repository-spezifischen Regeln maßgeblich.
