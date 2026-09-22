@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-processing-tts
 locale: en
 sourceLang: de
+sourceVersionHash: "a1ecd77e0e944fef84bfbcc2b464c8f44b990606"
 translationStatus: machine
 slug: service-architecture-and-first-tts-contract-prepared
 title: "Service architecture and first TTS contract prepared"
