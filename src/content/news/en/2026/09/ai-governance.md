@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-ai-governance
 locale: en
 sourceLang: de
+sourceVersionHash: "689c76e48a7a12f95d20b712b9c52bb1fdbde558"
 translationStatus: machine
 slug: ai-governance-and-human-review-established
 title: "AI governance and human review established as project foundations"
