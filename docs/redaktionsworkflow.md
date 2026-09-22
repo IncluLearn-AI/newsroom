@@ -1,47 +1,67 @@
 # Redaktions- und Veröffentlichungsworkflow
 
-## Ziel
+## Grundmodell
 
-Der Newsroom verbindet laufende Projektdokumentation, wissenschaftliches Horizon Scanning und Öffentlichkeitsarbeit. Die Automatisierung soll Recherche- und Redaktionsaufwand reduzieren, ohne die menschliche Freigabe zu ersetzen.
+Der Newsroom trennt **Erkennen**, **Einordnen**, **Übersetzen**, **Prüfen** und **Veröffentlichen**.
 
-## Workflow
-
-\`\`\`text
+```text
 Projekt-Repositories + öffentliche Quellen
                   ↓
-        News-/Research-Agent
+         Ereignisse erkennen
                   ↓
-       Recherche und Einordnung
+       Quellen und Relevanz prüfen
                   ↓
-          Markdown-Entwurf
+      deutscher Referenzentwurf
                   ↓
-             Pull Request
+       englische Sprachfassung
                   ↓
- fachliches + redaktionelles + A11y-Review
+             Draft-PR
+                  ↓
+ fachlich + redaktionell + Sprache + A11y
                   ↓
                 Merge
                   ↓
-        GitHub Pages Deployment
-\`\`\`
+      GitHub Pages Veröffentlichung
+```
 
-## Geplante Beitragsarten
+## Struktur bei vielen Beiträgen
 
-- **Projektfortschritt** – substanzielle neue Ergebnisse, Demonstratoren, Releases und Meilensteine.
-- **Forschungsradar** – neue Publikationen, Preprints, Datensätze, Methoden und relevante Forschungsprojekte.
-- **Tools & Transfer** – interessante Open-Source-Werkzeuge, Standards, Industrieentwicklungen und Transferbeispiele.
-- **Publikationen & Veranstaltungen** – eigene Publikationen, Workshops, Konferenzen, Schulungen und öffentliche Termine.
+Einzelbeiträge werden nicht nur über Rubriken organisiert. Die Website bietet vier unabhängige Sichten:
 
-## Qualitätsregeln
+- **Aktuell:** nach `publishedAt`,
+- **Archiv:** nach `event.start/end`,
+- **Themen:** nach sprachneutraler Rubrik,
+- **Dossiers:** kuratierte Verbindung mehrerer Einzelbeiträge.
 
-Öffentliche Beiträge sollen:
+Damit bleiben auch mehrere Meldungen pro Tag handhabbar.
 
-- die Relevanz für IncluLearn.AI erklären,
-- Primärquellen bevorzugen,
-- Evidenztypen sichtbar unterscheiden,
-- Unsicherheiten kenntlich machen,
-- keine internen oder sensiblen Informationen offenlegen,
-- auch ohne visuelle Gestaltung vollständig verständlich bleiben.
+## Formate
 
-## Veröffentlichungsfrequenz
+- `brief` – kurze eigenständig relevante Meldung,
+- `article` – substanzieller Beitrag,
+- `digest` – Wochen-, Monats- oder Themenrückblick,
+- Dossiers sind eine eigene kuratierte Content-Sammlung.
 
-Der Agent kann wöchentlich recherchieren und intern Änderungen sammeln. Ein öffentlicher Beitrag ist nur erforderlich, wenn genügend substanzielle Neuigkeiten vorliegen. Als redaktioneller Richtwert genügen etwa alle vier bis sechs Wochen größere Beiträge; wichtige Einzelereignisse können zusätzlich veröffentlicht werden.
+## Mehrsprachigkeit
+
+Deutsch ist Referenzsprache; Englisch wird mitgeführt. Fehlende Übersetzungen werden sichtbar als fehlend behandelt, nicht per stillem Fallback ersetzt.
+
+Übersetzungsmetadaten ermöglichen später die Erkennung veralteter Fassungen.
+
+## Qualitäts-Gates
+
+Vor Veröffentlichung prüfen:
+
+- Fakten und Primärquellen,
+- Evidenztyp,
+- Datenschutz und Vertraulichkeit,
+- Ereignisdatum vs. Veröffentlichungsdatum,
+- Projektphase,
+- DE/EN-Konsistenz,
+- verständliche Sprache,
+- Barrierefreiheit,
+- CI-Build.
+
+## Vorbereitungsphase September 2026
+
+Die Nachdokumentation der Arbeiten vor dem 01.10.2026 wird als **Vorbereitungsphase** geführt. Einzelbeiträge werden retrospektiv mit ihrem tatsächlichen Ereigniszeitraum einsortiert und in einem kuratierten Dossier zusammengeführt.

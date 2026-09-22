@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import { topicPath, ui, type Category, type Locale } from "../lib/i18n";
+import { publishedNews } from "../lib/news";
+
+interface Props {
+  lang: Locale;
+  category: Category;
+}
+const { lang, category } = Astro.props;
+const copy = ui[lang];
+const posts = (await publishedNews(lang)).filter((post) => post.data.category === category);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.categories[category]} · IncluLearn.AI Newsroom`}
+  description={lang === "de" ? `Alle Beiträge der Rubrik ${copy.categories[category]}.` : `All posts in ${copy.categories[category]}.`}
+  canonicalPath={topicPath(lang, category)}
+  alternatePaths={{ de: topicPath("de", category), en: topicPath("en", category) }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.topics}</p>
+        <h1>{copy.categories[category]}</h1>
+      </div>
+      <PostTimeline lang={lang} entries={posts} mode="publication" />
+    </div>
+  </section>
+</BaseLayout>

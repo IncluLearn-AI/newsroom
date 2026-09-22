@@ -1,22 +1,38 @@
 ---
 import "../styles/global.css";
+import { pathFor, ui, type Locale } from "../lib/i18n";
 
 interface Props {
+  lang: Locale;
   title?: string;
   description?: string;
+  canonicalPath: string;
+  alternatePaths?: Partial<Record<Locale, string>>;
+  ogType?: "website" | "article";
 }
 
 const {
+  lang,
   title = "IncluLearn.AI Newsroom",
-  description = "Projektfortschritt, Research Radar und Transfer rund um IncluLearn.AI."
+  description = lang === "de"
+    ? "Projektfortschritt, Research Radar und Transfer rund um IncluLearn.AI."
+    : "Project progress, research radar and transfer around IncluLearn.AI.",
+  canonicalPath,
+  alternatePaths = {},
+  ogType = "website"
 } = Astro.props;
 
-const base = import.meta.env.BASE_URL;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const siteRoot = Astro.site ?? Astro.url;
+const canonical = new URL(href(canonicalPath), siteRoot).toString();
+const localeMap: Record<Locale, string> = { de: "de_DE", en: "en_GB" };
+const languageOptions: Locale[] = ["de", "en"];
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -24,44 +40,81 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString(
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" type="application/rss+xml" title="IncluLearn.AI Newsroom" href={base + "feed.xml"} />
+    <link rel="alternate" type="application/rss+xml" title="IncluLearn.AI Newsroom" href={href(`/${lang}/feed.xml`)} />
+    {
+      languageOptions.map((target) => alternatePaths[target] && (
+        <link
+          rel="alternate"
+          hreflang={target}
+          href={new URL(href(alternatePaths[target]!), siteRoot).toString()}
+        />
+      ))
+    }
+    {alternatePaths.de && (
+      <link rel="alternate" hreflang="x-default" href={new URL(href(alternatePaths.de), siteRoot).toString()} />
+    )}
     <meta property="og:site_name" content="IncluLearn.AI Newsroom" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={localeMap[lang]} />
     <meta name="twitter:card" content="summary" />
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main">{copy.skip}</a>
     <header class="site-header">
       <div class="shell header-inner">
-        <a class="brand" href={base} aria-label="IncluLearn.AI Newsroom – Startseite">
+        <a class="brand" href={href(pathFor(lang, "home"))} aria-label={lang === "de" ? "IncluLearn.AI Newsroom – Startseite" : "IncluLearn.AI Newsroom – home"}>
           <span class="brand-mark" aria-hidden="true">IL</span>
           <span>
             <strong>IncluLearn.AI</strong>
             <small>Newsroom & Research Radar</small>
           </span>
         </a>
-        <nav aria-label="Hauptnavigation">
-          <a href={base + "news/"}>Beiträge</a>
-          <a href={base + "methodik/"}>Methodik</a>
-          <a href="https://inclulearn-test.owli-ai.com/">Demo</a>
-          <a href="https://github.com/IncluLearn-AI">GitHub</a>
-        </nav>
+
+        <div class="header-actions">
+          <nav aria-label={copy.mainNavigation}>
+            <a href={href(pathFor(lang, "news"))}>{copy.news}</a>
+            <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+            <a href={href(pathFor(lang, "topics"))}>{copy.topics}</a>
+            <a href={href(pathFor(lang, "dossiers"))}>{copy.dossiers}</a>
+            <a href={href(pathFor(lang, "methodology"))}>{copy.methodology}</a>
+          </nav>
+          <nav class="language-switcher" aria-label={copy.languageNavigation}>
+            {languageOptions.map((target) => {
+              const targetPath = alternatePaths[target] ?? pathFor(target, "home");
+              return (
+                <a
+                  lang={target}
+                  hreflang={target}
+                  class:list={[{ active: lang === target }]}
+                  aria-current={lang === target ? "page" : undefined}
+                  href={href(targetPath)}
+                >
+                  {target.toUpperCase()}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
       </div>
     </header>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 
     <footer>
       <div class="shell footer-inner">
-        <p><strong>IncluLearn.AI</strong> – KI-gestützte Generierung barrierefreier MINT-Lehrmaterialien.</p>
-        <p>Inhalte werden text-first, quellengestützt und nach menschlichem Review veröffentlicht.</p>
-        <p><a href={base + "feed.xml"}>RSS-Feed</a> · <a href={base + "methodik/"}>Redaktionelle Methodik</a></p>
+        <p><strong>IncluLearn.AI</strong> – {lang === "de" ? "KI-gestützte Generierung barrierefreier MINT-Lehrmaterialien." : "AI-assisted generation of accessible STEM learning materials."}</p>
+        <p>{lang === "de" ? "Inhalte werden text-first, quellengestützt und nach menschlichem Review veröffentlicht." : "Content is published text-first, source-based and after human review."}</p>
+        <p>
+          <a href={href(`/${lang}/feed.xml`)}>{copy.feed}</a>
+          {" · "}
+          <a href={href(pathFor(lang, "methodology"))}>{copy.methodologyFooter}</a>
+        </p>
       </div>
     </footer>
   </body>

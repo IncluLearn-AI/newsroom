@@ -1,0 +1,11 @@
+---
+import ArticlePage from "../../../components/ArticlePage.astro";
+import { publishedNews } from "../../../lib/news";
+
+export async function getStaticPaths() {
+  const posts = await publishedNews("en");
+  return posts.map((post) => ({ params: { slug: post.data.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+---
+<ArticlePage lang="en" post={post} />

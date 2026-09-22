@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { archiveMonthPath, pathFor, ui, type Locale } from "../lib/i18n";
+import { eventDate, publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const posts = await publishedNews(lang);
+const months = new Map<string, number>();
+
+for (const post of posts) {
+  const date = eventDate(post);
+  const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+  months.set(key, (months.get(key) ?? 0) + 1);
+}
+
+const items = [...months.entries()].sort(([a], [b]) => b.localeCompare(a));
+const monthName = (year: number, month: number) => new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC"
+}).format(new Date(Date.UTC(year, month - 1, 1)));
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.archiveHeading} · IncluLearn.AI Newsroom`}
+  description={copy.archiveLead}
+  canonicalPath={pathFor(lang, "archive")}
+  alternatePaths={{ de: pathFor("de", "archive"), en: pathFor("en", "archive") }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.archive}</p>
+        <h1>{copy.archiveHeading}</h1>
+        <p class="lead">{copy.archiveLead}</p>
+      </div>
+
+      {items.length === 0 ? <p>{copy.noPosts}</p> : (
+        <ol class="archive-list">
+          {items.map(([key, count]) => {
+            const [year, month] = key.split("-").map(Number);
+            return (
+              <li class="card">
+                <a href={href(archiveMonthPath(lang, year, month))}><strong>{monthName(year, month)}</strong></a>
+                <span class="meta">{count} {lang === "de" ? (count === 1 ? "Beitrag" : "Beiträge") : (count === 1 ? "post" : "posts")}</span>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </div>
+  </section>
+</BaseLayout>

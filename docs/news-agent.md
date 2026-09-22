@@ -2,43 +2,43 @@
 
 ## Zweck
 
-Der geplante ChatGPT-Agent unterstützt drei wiederkehrende Aufgaben:
+Der Agent unterstützt drei wiederkehrende Aufgaben:
 
-1. substanziellen Projektfortschritt aus der IncluLearn.AI-GitHub-Organisation erkennen,
-2. neue relevante Forschung, Standards, Tools und Praxisentwicklungen beobachten,
-3. veröffentlichungsfähige Entwürfe für den Newsroom vorbereiten.
+1. substanziellen Projektfortschritt repository-übergreifend erkennen,
+2. relevante Forschung, Standards, Tools und Praxisentwicklungen beobachten,
+3. DE/EN-Entwürfe für den Newsroom vorbereiten.
 
-## Empfohlener Rhythmus
+## Ereignis statt Commit
 
-Ein **wöchentlicher Recherchelauf** ist ausreichend. Öffentliche Beiträge sollen nicht künstlich wöchentlich erzeugt werden. Wenn keine substanzielle Meldung vorliegt, erstellt der Agent keinen Newsroom-PR.
+GitHub-Aktivität ist die Rohdatenebene. Mehrere Commits, Issues und Pull Requests können gemeinsam **ein** öffentlich relevantes Ereignis bilden. Der Agent soll deshalb Ergebnisse und Entscheidungen erkennen, nicht Aktivitätszahlen publizieren.
 
-## Projektfortschritt
+## Zeitmodell
 
-Der Agent betrachtet Änderungen repository-übergreifend und priorisiert:
+Jeder Beitrag besitzt zwei Zeitachsen:
 
-- abgeschlossene oder wesentlich fortgeschrittene Features,
-- Releases und Demonstratoren,
-- neue belastbare Anforderungen oder Evaluationsergebnisse,
-- relevante Architektur- oder Governance-Entscheidungen,
-- Transferaktivitäten, Publikationen und Veranstaltungen.
+- `event.start/end`: wann das beschriebene Ereignis stattgefunden hat,
+- `publishedAt`: wann der Beitrag tatsächlich veröffentlicht wurde.
 
-Commit-Anzahl und reine Dokumentationsaktivität werden nicht als eigenständige Erfolgsmessung verwendet.
+So kann z. B. die Vorbereitungsphase im September später nachdokumentiert und trotzdem historisch korrekt einsortiert werden.
 
-## Externes Monitoring
+## Sprachen
 
-Ausgangspunkt ist `research/news-watchlist.yaml`. Ergänzend darf breit recherchiert werden, wenn ein Fund klar zum Projekt passt. Originalpublikationen und offizielle Primärquellen sind bevorzugt zu öffnen und zu prüfen.
+Deutsch ist die Referenzsprache. Bei einem öffentlichen Kandidaten erstellt der Agent DE und EN im selben Draft-PR.
+
+Beide Fassungen teilen eine `translationKey`, dürfen aber sprachgerechte Slugs besitzen. Automatisch vorbereitete englische Fassungen beginnen mit `translationStatus: machine`.
 
 ## Ergebnis eines Laufs
 
-Der Agent berichtet im Chat kompakt:
+Der Agent berichtet im Chat:
 
 - wichtigste Projektänderungen,
 - wichtigste externe Funde,
-- was davon öffentlich berichtenswert ist,
-- welche Unsicherheiten oder Reviewpunkte bestehen.
+- erkannte redaktionelle Ereignisse,
+- vorgeschlagene öffentliche Beiträge oder Dossiers,
+- offene Review- und Übersetzungsfragen.
 
-Nur bei ausreichender Substanz erzeugt er einen **Draft Pull Request** mit einem oder mehreren Beiträgen. Er mergt nicht selbst.
+Nur bei ausreichender Substanz wird ein Draft-PR erzeugt. Der Agent mergt nicht.
 
-## Zeitliche Einordnung
+## Publikationsrhythmus
 
-Der geförderte Durchführungszeitraum beginnt am 01.10.2026. Aktivitäten davor werden bei öffentlichen Meldungen als Vorbereitung oder Vorarbeit bezeichnet, sofern keine andere Freigabe vorliegt.
+Recherche kann wöchentlich stattfinden. Die Website kann später mehrere Meldungen pro Tag aufnehmen; daraus folgt aber keine Pflicht, regelmäßig künstliche Meldungen zu erzeugen.

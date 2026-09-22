@@ -1,0 +1,66 @@
+---
+import type { NewsEntry } from "../lib/news";
+import { eventDate, formatDate, formatDateTime, formatEventRange, groupByDay, newsPath } from "../lib/news";
+import { phaseLabel, ui, type Locale } from "../lib/i18n";
+
+interface Props {
+  lang: Locale;
+  entries: NewsEntry[];
+  mode?: "publication" | "event";
+}
+
+const { lang, entries, mode = "publication" } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const selector = mode === "event" ? eventDate : (entry: NewsEntry) => entry.data.publishedAt;
+const groups = groupByDay(entries, selector);
+---
+
+{groups.length === 0 ? (
+  <p>{copy.noPosts}</p>
+) : (
+  <div class="timeline">
+    {groups.map(([day, posts]) => {
+      const dayDate = new Date(day + "T12:00:00Z");
+      return (
+        <section class="timeline-day" aria-labelledby={`day-${day}`}>
+          <h2 id={`day-${day}`} class="timeline-date">
+            <time datetime={day}>{formatDate(lang, dayDate)}</time>
+          </h2>
+          <ol class="timeline-list">
+            {posts.map((post) => (
+              <li>
+                <article class="timeline-card">
+                  <div class="timeline-labels">
+                    <span class="badge">{copy.categories[post.data.category]}</span>
+                    <span class="badge badge-secondary">{copy.formats[post.data.format]}</span>
+                    <span class="phase">{phaseLabel(lang, post.data.projectPhase)}</span>
+                  </div>
+                  <h3><a href={href(newsPath(post))}>{post.data.title}</a></h3>
+                  <p>{post.data.summary}</p>
+                  <p class="meta">
+                    {mode === "publication" ? (
+                      <>
+                        {copy.published}: <time datetime={post.data.publishedAt.toISOString()}>{formatDateTime(lang, post.data.publishedAt)}</time>
+                        {" · "}
+                        {copy.event}: <time datetime={post.data.event.start.toISOString().slice(0, 10)}>{formatEventRange(lang, post.data.event.start, post.data.event.end)}</time>
+                      </>
+                    ) : (
+                      <>
+                        {copy.event}: <time datetime={post.data.event.start.toISOString().slice(0, 10)}>{formatEventRange(lang, post.data.event.start, post.data.event.end)}</time>
+                        {" · "}
+                        {copy.published}: <time datetime={post.data.publishedAt.toISOString()}>{formatDateTime(lang, post.data.publishedAt)}</time>
+                      </>
+                    )}
+                    {post.data.retroactive && <>{" · "}<strong>{copy.retroactive}</strong></>}
+                  </p>
+                </article>
+              </li>
+            ))}
+          </ol>
+        </section>
+      );
+    })}
+  </div>
+)}

@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import { pathFor, ui, type Locale } from "../lib/i18n";
+import { publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const posts = (await publishedNews(lang)).slice(0, 12);
+
+const areas = lang === "de" ? [
+  ["Projektfortschritt", "Substanzielle Ergebnisse, Demonstratoren, Releases und Meilensteine."],
+  ["Forschungsradar", "Neue Publikationen, Methoden, Datensätze und Forschungsprojekte."],
+  ["Tools & Transfer", "Open-Source-Werkzeuge, Standards und Entwicklungen aus der Praxis."],
+  ["Publikationen & Veranstaltungen", "Eigene Veröffentlichungen, Workshops, Konferenzen und öffentliche Termine."]
+] : [
+  ["Project progress", "Substantial results, demonstrators, releases and milestones."],
+  ["Research radar", "New publications, methods, datasets and research projects."],
+  ["Tools & transfer", "Open-source tools, standards and developments from practice."],
+  ["Publications & events", "Our publications, workshops, conferences and public events."]
+];
+---
+
+<BaseLayout
+  lang={lang}
+  canonicalPath={pathFor(lang, "home")}
+  alternatePaths={{ de: pathFor("de", "home"), en: pathFor("en", "home") }}
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">{lang === "de" ? "Öffentliches Forschungs- und Projektjournal" : "Public research and project journal"}</p>
+      <h1>Newsroom & Research Radar</h1>
+      <p class="lead">
+        {lang === "de"
+          ? "Wir dokumentieren Fortschritte im Projekt und ordnen relevante Entwicklungen aus Forschung, Barrierefreiheit, KI und Hochschullehre verständlich und quellengestützt ein."
+          : "We document project progress and put relevant developments in research, accessibility, AI and higher education into context with clear sourcing."}
+      </p>
+      <div class="hero-links">
+        <a class="button-link" href={href(pathFor(lang, "news"))}>{copy.news}</a>
+        <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{lang === "de" ? "Vier Perspektiven" : "Four perspectives"}</p>
+        <h2>{lang === "de" ? "Mehr als ein klassischer Projektblog" : "More than a conventional project blog"}</h2>
+        <p>{lang === "de"
+          ? "Rubriken beantworten, worum es geht. Die Chronik beantwortet, wann etwas passiert ist. Dossiers verbinden zusammengehörige Entwicklungen."
+          : "Topics explain what a post is about. The timeline shows when things happened. Dossiers connect related developments."}</p>
+      </div>
+      <div class="grid">
+        {areas.map(([title, text]) => (
+          <article class="card"><h3>{title}</h3><p>{text}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.news}</p>
+        <h2>{copy.latestHeading}</h2>
+        <p>{copy.latestLead}</p>
+      </div>
+      <PostTimeline lang={lang} entries={posts} mode="publication" />
+      {posts.length > 0 && <p><a href={href(pathFor(lang, "news"))}>{lang === "de" ? "Alle aktuellen Beiträge" : "All latest posts"}</a></p>}
+    </div>
+  </section>
+</BaseLayout>

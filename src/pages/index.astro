@@ -1,98 +1,15 @@
 ---
-import { getCollection } from "astro:content";
-import BaseLayout from "../layouts/BaseLayout.astro";
-
-const base = import.meta.env.BASE_URL;
-const posts = (await getCollection("news"))
-  .filter((entry) => !entry.data.draft)
-  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf())
-  .slice(0, 6);
-
-const areas = [
-  {
-    title: "Projektfortschritt",
-    text: "Substanzielle neue Ergebnisse, Demonstratoren, Releases und Meilensteine aus IncluLearn.AI."
-  },
-  {
-    title: "Forschungsradar",
-    text: "Neue Publikationen, Methoden, Datensätze und Forschungsprojekte mit Bezug zu barrierefreien MINT-Lehrmaterialien."
-  },
-  {
-    title: "Tools & Transfer",
-    text: "Open-Source-Werkzeuge, Standards, technische Entwicklungen und Beispiele aus der Praxis."
-  },
-  {
-    title: "Publikationen & Veranstaltungen",
-    text: "Eigene Veröffentlichungen, Workshops, Konferenzen, Schulungen und öffentliche Termine."
-  }
-];
+const target = import.meta.env.BASE_URL + "de/";
 ---
-
-<BaseLayout>
-  <section class="hero">
-    <div class="shell">
-      <p class="eyebrow">IncluLearn.AI · öffentliches Forschungs- und Projektjournal</p>
-      <h1>Newsroom & Research Radar</h1>
-      <p class="lead">
-        Wir dokumentieren Fortschritte im Projekt und ordnen relevante Entwicklungen aus Forschung,
-        Barrierefreiheit, KI und Hochschullehre verständlich und quellengestützt ein.
-      </p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="shell">
-      <div class="section-head">
-        <p class="eyebrow">Vier Perspektiven</p>
-        <h2>Mehr als ein klassischer Projektblog</h2>
-        <p>
-          Der Newsroom verbindet Projektchronik, wissenschaftliches Horizon Scanning und Transfer.
-          Inhalte werden text-first aufbereitet und vor der Veröffentlichung menschlich geprüft.
-        </p>
-      </div>
-      <div class="grid">
-        {areas.map((area) => (
-          <article class="card">
-            <h3>{area.title}</h3>
-            <p>{area.text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-soft">
-    <div class="shell">
-      <div class="section-head">
-        <p class="eyebrow">Aktuell</p>
-        <h2>Neueste Beiträge</h2>
-      </div>
-      {posts.length > 0 ? (
-        <div class="grid">
-          {posts.map((post) => (
-            <article class="card">
-              <span class="badge">{post.data.category}</span>
-              <h3><a href={base + "news/" + post.id + "/"}>{post.data.title}</a></h3>
-              <p>{post.data.summary}</p>
-              <p class="meta">
-                <time datetime={post.data.published.toISOString()}>
-                  {post.data.published.toLocaleDateString("de-DE")}
-                </time>
-                {" · "}
-                {post.data.evidence}
-              </p>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div class="card">
-          <h3>Der Newsroom wird gerade aufgebaut.</h3>
-          <p>
-            Die technische Basis steht als nächster Schritt bereit. Erste redaktionell freigegebene
-            Beiträge folgen mit dem Projektstart und relevanten Forschungsergebnissen.
-          </p>
-        </div>
-      )}
-    </div>
-  </section>
-</BaseLayout>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>IncluLearn.AI Newsroom</title>
+  </head>
+  <body>
+    <p><a href={target}>Zum IncluLearn.AI Newsroom</a></p>
+  </body>
+</html>

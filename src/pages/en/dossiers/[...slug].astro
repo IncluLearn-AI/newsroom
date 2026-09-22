@@ -1,0 +1,11 @@
+---
+import DossierPage from "../../../components/DossierPage.astro";
+import { publishedDossiers } from "../../../lib/news";
+
+export async function getStaticPaths() {
+  const dossiers = await publishedDossiers("en");
+  return dossiers.map((dossier) => ({ params: { slug: dossier.data.slug }, props: { dossier } }));
+}
+const { dossier } = Astro.props;
+---
+<DossierPage lang="en" dossier={dossier} />

@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pathFor, topicPath, ui, type Category, type Locale } from "../lib/i18n";
+import { publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const posts = await publishedNews(lang);
+const categories = Object.keys(copy.categories) as Category[];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.topicsHeading} · IncluLearn.AI Newsroom`}
+  description={copy.topicsLead}
+  canonicalPath={pathFor(lang, "topics")}
+  alternatePaths={{ de: pathFor("de", "topics"), en: pathFor("en", "topics") }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.topics}</p>
+        <h1>{copy.topicsHeading}</h1>
+        <p class="lead">{copy.topicsLead}</p>
+      </div>
+      <div class="grid">
+        {categories.map((category) => {
+          const count = posts.filter((post) => post.data.category === category).length;
+          return (
+            <article class="card">
+              <h2><a href={href(topicPath(lang, category))}>{copy.categories[category]}</a></h2>
+              <p class="meta">{count} {lang === "de" ? (count === 1 ? "Beitrag" : "Beiträge") : (count === 1 ? "post" : "posts")}</p>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

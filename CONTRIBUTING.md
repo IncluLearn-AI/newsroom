@@ -1,30 +1,44 @@
 # Beiträge zum IncluLearn.AI Newsroom
 
-Der Newsroom ist öffentlich. Beiträge müssen deshalb sowohl redaktionell belastbar als auch für eine öffentliche Veröffentlichung geeignet sein.
+Der Newsroom ist öffentlich und zweisprachig (DE/EN). Beiträge müssen fachlich belastbar, öffentlich geeignet, sprachlich nachvollziehbar und barrierearm sein.
 
 ## Redaktionelle Beiträge
 
-Neue Artikel werden aus `templates/beitrag.md` abgeleitet und zunächst mit `draft: true` angelegt. Vor Veröffentlichung werden mindestens geprüft:
+Neue Meldungen werden aus `templates/beitrag.md` abgeleitet und zunächst mit `draft: true` angelegt.
+
+Vor Veröffentlichung werden mindestens geprüft:
 
 - fachliche Richtigkeit,
 - Qualität und Typ der Quellen,
-- Trennung von Fakten und Einordnung,
-- Datenschutz und Vertraulichkeit,
-- verständliche deutsche Sprache,
+- Trennung von Fakten und redaktioneller Einordnung,
+- Datenschutz, Vertraulichkeit und Sicherheitsrelevanz,
+- korrekter Ereigniszeitraum und Veröffentlichungszeitpunkt,
+- Projektphase,
+- verständliche Sprache,
 - Barrierefreiheit,
-- korrekte Metadaten.
+- DE/EN-Konsistenz.
+
+## Übersetzungen
+
+Deutsch ist die Referenzsprache. Deutsche und englische Fassungen verwenden dieselbe `translationKey`.
+
+Eine automatisch vorbereitete Übersetzung bleibt `translationStatus: machine`, bis eine sprachliche oder fachliche Prüfung erfolgt ist. Ein fehlender englischer Beitrag wird nicht durch deutschen Inhalt unter einer englischen URL ersetzt.
+
+Wenn der deutsche Ausgangstext geändert wird, ist zu prüfen, ob `sourceVersionHash` der englischen Fassung noch aktuell ist.
 
 ## Pull Requests
 
-Ein Pull Request beschreibt kurz:
+Ein redaktioneller Pull Request beschreibt:
 
-- was veröffentlicht oder technisch geändert werden soll,
-- auf welchen Quellen die Änderung beruht,
-- ob KI bei Recherche oder Redaktion eingesetzt wurde,
+- welches Ereignis oder Dossier dokumentiert wird,
+- welchen Zeitraum es betrifft,
+- welche Projektphase gilt,
+- auf welchen Quellen die Darstellung beruht,
+- ob KI bei Recherche, Redaktion oder Übersetzung eingesetzt wurde,
 - welche Reviews noch erforderlich sind.
 
-Redaktionelle Pull Requests werden nicht durch den erstellenden Agenten selbst gemergt.
+Agenten erstellen Draft-PRs und mergen ihre Arbeit nicht selbst.
 
 ## Externe Hinweise
 
-Öffentliche Hinweise auf neue Publikationen, Tools oder relevante Entwicklungen können über ein Research-Tipp-Issue eingereicht werden. Ein Hinweis garantiert keine Aufnahme in den Newsroom.
+Öffentliche Hinweise auf Publikationen, Standards, Forschungsprojekte oder Tools können über das Research-Tipp-Issue eingereicht werden. Ein Hinweis garantiert keine Aufnahme.
