@@ -15,6 +15,7 @@ export const ui = {
     localeName: "Deutsch",
     skip: "Zum Hauptinhalt springen",
     home: "Start",
+    project: "Projekt verstehen",
     news: "Aktuell",
     archive: "Archiv",
     topics: "Themen",
@@ -60,6 +61,7 @@ export const ui = {
     localeName: "English",
     skip: "Skip to main content",
     home: "Home",
+    project: "About the project",
     news: "Latest",
     archive: "Archive",
     topics: "Topics",
@@ -107,12 +109,14 @@ export const routeSegments = {
   de: {
     archive: "archiv",
     topics: "themen",
-    methodology: "methodik"
+    methodology: "methodik",
+    project: "projekt"
   },
   en: {
     archive: "archive",
     topics: "topics",
-    methodology: "methodology"
+    methodology: "methodology",
+    project: "project"
   }
 } as const;
 
@@ -144,7 +148,7 @@ export function phaseLabel(lang: Locale, phase: ProjectPhase): string {
   return phase === "preparation" ? copy.preparation : phase === "funded" ? copy.funded : copy.postProject;
 }
 
-export function pathFor(lang: Locale, target: "home" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
+export function pathFor(lang: Locale, target: "home" | "project" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
   if (target === "home") return `/${lang}/`;
   if (target === "news") return `/${lang}/news/`;
   if (target === "dossiers") return `/${lang}/dossiers/`;

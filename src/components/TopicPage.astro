@@ -1,30 +1,93 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostTimeline from "./PostTimeline.astro";
+import { categoryEditorial } from "../lib/editorial";
 import { topicPath, ui, type Category, type Locale } from "../lib/i18n";
-import { publishedNews } from "../lib/news";
+import { newsPath, publishedNews } from "../lib/news";
 
 interface Props {
   lang: Locale;
   category: Category;
 }
+
 const { lang, category } = Astro.props;
 const copy = ui[lang];
+const area = categoryEditorial[lang][category];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
 const posts = (await publishedNews(lang)).filter((post) => post.data.category === category);
+const highlights = posts.filter((post) => post.data.featured).slice(0, 3);
 ---
 
 <BaseLayout
   lang={lang}
-  title={`${copy.categories[category]} · IncluLearn.AI Newsroom`}
-  description={lang === "de" ? `Alle Beiträge der Rubrik ${copy.categories[category]}.` : `All posts in ${copy.categories[category]}.`}
+  title={`${area.title} · IncluLearn.AI Newsroom`}
+  description={area.lead}
   canonicalPath={topicPath(lang, category)}
   alternatePaths={{ de: topicPath("de", category), en: topicPath("en", category) }}
 >
-  <section class="section">
+  <section class="topic-hero">
+    <div class="shell">
+      <p class="eyebrow">{copy.topics}</p>
+      <h1>{area.title}</h1>
+      <p class="lead">{area.lead}</p>
+      <p class="topic-purpose">{area.purpose}</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="guiding-questions">
+    <div class="shell two-column-content">
+      <div>
+        <p class="eyebrow">{lang === "de" ? "Leitfragen" : "Guiding questions"}</p>
+        <h2 id="guiding-questions">{lang === "de" ? "Was wir in dieser Rubrik verfolgen" : "What we follow in this topic"}</h2>
+        <ul class="question-list">
+          {area.questions.map((question) => <li>{question}</li>)}
+        </ul>
+      </div>
+      <aside class="focus-panel" aria-labelledby="focus-areas">
+        <h2 id="focus-areas">{lang === "de" ? "Schwerpunkte" : "Focus areas"}</h2>
+        <ul class="compact-list">
+          {area.subtopics.map((topic) => <li>{topic}</li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  {highlights.length > 0 && (
+    <section class="section section-soft" aria-labelledby="topic-highlights">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">{lang === "de" ? "Ausgewählt" : "Selected"}</p>
+          <h2 id="topic-highlights">{lang === "de" ? "Wichtige Einstiege" : "Key starting points"}</h2>
+          <p>{lang === "de"
+            ? "Redaktionell hervorgehobene Beiträge, die zentrale Fragen dieser Rubrik besonders gut erschließen."
+            : "Editorially highlighted posts that provide useful entry points into the central questions of this topic."}</p>
+        </div>
+        <div class="grid grid-three">
+          {highlights.map((post) => (
+            <article class="card">
+              <h3><a href={href(newsPath(post))}>{post.data.title}</a></h3>
+              <p>{post.data.summary}</p>
+              <p class="card-link"><a href={href(newsPath(post))}>{lang === "de" ? "Beitrag lesen" : "Read post"} <span aria-hidden="true">→</span></a></p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="topic-posts">
     <div class="shell">
       <div class="section-head">
-        <p class="eyebrow">{copy.topics}</p>
-        <h1>{copy.categories[category]}</h1>
+        <p class="eyebrow">{copy.news}</p>
+        <h2 id="topic-posts">{lang === "de" ? "Beiträge in dieser Rubrik" : "Posts in this topic"}</h2>
+        <p>{posts.length > 0
+          ? (lang === "de"
+              ? "Nach Veröffentlichung sortiert. Die fachliche Überarbeitung älterer Beiträge erfolgt schrittweise."
+              : "Sorted by publication time. Older posts are being editorially revised step by step.")
+          : (lang === "de"
+              ? "Für diese Rubrik sind noch keine freigegebenen Beiträge veröffentlicht. Die Leitfragen zeigen bereits, welche Inhalte hier künftig gebündelt werden."
+              : "No reviewed posts have been published in this topic yet. The guiding questions already show what will be collected here.")}</p>
       </div>
       <PostTimeline lang={lang} entries={posts} mode="publication" />
     </div>

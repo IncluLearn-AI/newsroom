@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { categoryEditorial } from "../lib/editorial";
+import { pathFor, topicPath, type Category, type Locale } from "../lib/i18n";
+import { dossierPath, publishedDossiers } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
+const dossiers = await publishedDossiers(lang);
+const currentDossier = dossiers[0];
+const isDe = lang === "de";
+---
+
+<BaseLayout
+  lang={lang}
+  title={isDe ? "Projekt verstehen · IncluLearn.AI Newsroom" : "About the project · IncluLearn.AI Newsroom"}
+  description={isDe
+    ? "Ein verständlicher Einstieg in Ziel, Ansatz, Zielgruppen und aktuellen Stand von IncluLearn.AI."
+    : "An accessible introduction to the goals, approach, audiences and current status of IncluLearn.AI."}
+  canonicalPath={pathFor(lang, "project")}
+  alternatePaths={{ de: pathFor("de", "project"), en: pathFor("en", "project") }}
+>
+  <section class="hero project-hero">
+    <div class="shell">
+      <p class="eyebrow">{isDe ? "Projekt verstehen" : "About the project"}</p>
+      <h1>IncluLearn.AI</h1>
+      <p class="lead">
+        {isDe
+          ? "IncluLearn.AI untersucht, wie visuell geprägte MINT-Lehrmaterialien so semantisch erschlossen werden können, dass daraus überprüfbare und unterschiedliche barrierefreie Repräsentationen entstehen."
+          : "IncluLearn.AI investigates how visually dominated STEM learning materials can be semantically reconstructed so that they can produce reviewable and different accessible representations."}
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="problem">
+    <div class="shell two-column-content">
+      <div>
+        <p class="eyebrow">{isDe ? "Ausgangsproblem" : "Starting point"}</p>
+        <h2 id="problem">{isDe ? "MINT-Inhalte sind mehr als Bilder mit Alt-Text" : "STEM content is more than images with alt text"}</h2>
+        <p>{isDe
+          ? "Diagramme, mathematische Ausdrücke, Schaltungen, Tabellen, Plots und andere technische Darstellungen tragen fachliche Struktur. Eine kurze Bildbeschreibung reicht deshalb häufig nicht aus, um dieselbe Information zugänglich, navigierbar und didaktisch sinnvoll bereitzustellen."
+          : "Diagrams, mathematical expressions, circuits, tables, plots and other technical representations carry subject-matter structure. A short image description is therefore often insufficient to make the same information accessible, navigable and educationally useful."}</p>
+        <p>{isDe
+          ? "Das Projekt betrachtet Barrierefreiheit deshalb nicht als nachträgliches Exportproblem, sondern als Frage danach, wie fachliche Bedeutung zuverlässig erfasst, geprüft und in passende Darstellungen überführt werden kann."
+          : "The project therefore treats accessibility not as a late export problem but as a question of how subject meaning can be captured, reviewed and transformed into suitable representations."}</p>
+      </div>
+      <aside class="focus-panel">
+        <h2>{isDe ? "Aktueller Status" : "Current status"}</h2>
+        <p>{isDe
+          ? "Der geförderte Projektzeitraum beginnt am 1. Oktober 2026. Der Newsroom dokumentiert bereits die Vorbereitungsphase und trennt diese sichtbar von späteren Projektergebnissen."
+          : "The funded project period starts on 1 October 2026. The newsroom already documents the preparation phase and clearly separates it from later project results."}</p>
+        {currentDossier && <p><a href={href(dossierPath(currentDossier))}>{isDe ? "Dossier zur Vorbereitungsphase öffnen" : "Open the preparation-phase dossier"} <span aria-hidden="true">→</span></a></p>}
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-soft" aria-labelledby="approach">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{isDe ? "Ansatz" : "Approach"}</p>
+        <h2 id="approach">{isDe ? "Semantic first: erst Bedeutung prüfen, dann Darstellungen erzeugen" : "Semantic first: review meaning before generating representations"}</h2>
+        <p>{isDe
+          ? "Der Kernansatz trennt die fachliche Semantik von einzelnen Ausgabeformen. Eine geprüfte semantische Grundlage soll später mehrere zugängliche Darstellungen ermöglichen, ohne dieselbe fachliche Interpretation für jedes Format neu durchführen zu müssen."
+          : "The core approach separates subject semantics from individual output formats. A reviewed semantic basis is intended to support multiple accessible representations without repeating the same subject interpretation for every format."}</p>
+      </div>
+      <ol class="process-list">
+        <li>
+          <strong>{isDe ? "1. Ausgangsmaterial verstehen" : "1. Understand the source material"}</strong>
+          <span>{isDe ? "Dokumentstruktur und relevante MINT-Artefakte erkennen." : "Identify document structure and relevant STEM artefacts."}</span>
+        </li>
+        <li>
+          <strong>{isDe ? "2. Semantik rekonstruieren" : "2. Reconstruct semantics"}</strong>
+          <span>{isDe ? "Objekte, Relationen, Werte und fachliche Struktur explizit modellieren." : "Model objects, relations, values and subject structure explicitly."}</span>
+        </li>
+        <li>
+          <strong>{isDe ? "3. Menschlich prüfen" : "3. Human review"}</strong>
+          <span>{isDe ? "Unsicherheiten sichtbar machen, korrigieren und fachlich freigeben." : "Make uncertainty visible, correct it and approve the subject meaning."}</span>
+        </li>
+        <li>
+          <strong>{isDe ? "4. Passende Repräsentationen erzeugen" : "4. Generate suitable representations"}</strong>
+          <span>{isDe ? "Zum Beispiel strukturierter Text, Mathematikrepräsentationen, Audio oder taktile Ausgaben – abhängig von Inhalt und Nutzungskontext." : "For example structured text, mathematical representations, audio or tactile outputs, depending on the content and usage context."}</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="audiences-project">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{isDe ? "Nutzer- und Stakeholderperspektiven" : "User and stakeholder perspectives"}</p>
+        <h2 id="audiences-project">{isDe ? "Für wen das Projekt relevant ist" : "Who the project is relevant to"}</h2>
+        <p>{isDe
+          ? "Die konkrete Anforderungsanalyse wird im Projekt weiter validiert. Bereits betrachtet werden mehrere Gruppen mit unterschiedlichen Arbeitsabläufen und Qualitätsanforderungen."
+          : "The concrete requirements analysis will continue to be validated during the project. Several groups with different workflows and quality needs are already being considered."}</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>{isDe ? "Blinde und sehbehinderte Lernende" : "Blind and visually impaired learners"}</h3>
+          <p>{isDe ? "Benötigen verständliche, navigierbare und mit ihren Hilfsmitteln nutzbare Zugänge zu fachlich komplexen Lehrmaterialien." : "Need understandable, navigable access to complex subject material that works with their assistive technologies."}</p>
+        </article>
+        <article class="card">
+          <h3>{isDe ? "Lehrende und Materialautor*innen" : "Teachers and material authors"}</h3>
+          <p>{isDe ? "Müssen bestehende Materialien aufbereiten oder neue Inhalte von Anfang an zugänglicher gestalten können." : "Need to adapt existing materials or create new content accessibly from the outset."}</p>
+        </article>
+        <article class="card">
+          <h3>{isDe ? "Medienzentren und Umsetzungsdienste" : "Media centres and conversion services"}</h3>
+          <p>{isDe ? "Bringen professionelle Erfahrung in fachlicher Adaption, Qualitätssicherung und unterschiedlichen Zielmedien ein." : "Bring professional expertise in subject adaptation, quality assurance and multiple target media."}</p>
+        </article>
+        <article class="card">
+          <h3>{isDe ? "Hochschulische Accessibility- und E-Learning-Stellen" : "Higher-education accessibility and e-learning services"}</h3>
+          <p>{isDe ? "Sind wichtig für institutionelle Workflows, Lernplattformen, Prüfungen und nachhaltige Integration." : "Are important for institutional workflows, learning platforms, examinations and sustainable integration."}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft" aria-labelledby="newsroom-map">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">Newsroom</p>
+        <h2 id="newsroom-map">{isDe ? "So kannst du den Projektstand verfolgen" : "How to follow the project"}</h2>
+        <p>{isDe
+          ? "Die vier Rubriken trennen Projektentwicklung, wissenschaftliche Einordnung, Transfer und öffentliche Aktivitäten. Dossiers fassen größere Zusammenhänge zusammen."
+          : "The four topics separate project development, scientific context, transfer and public activities. Dossiers provide broader syntheses."}</p>
+      </div>
+      <div class="grid">
+        {categories.map((category) => {
+          const area = categoryEditorial[lang][category];
+          return (
+            <article class="card">
+              <h3><a href={href(topicPath(lang, category))}>{area.title}</a></h3>
+              <p>{area.lead}</p>
+            </article>
+          );
+        })}
+      </div>
+      <p class="section-link"><a href={href(pathFor(lang, "topics"))}>{isDe ? "Alle Themen im Überblick" : "Browse all topics"} <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="partners">
+    <div class="shell narrow">
+      <p class="eyebrow">{isDe ? "Für Beirat und Partner" : "For the advisory board and partners"}</p>
+      <h2 id="partners">{isDe ? "Offene Fragen sind Teil der Dokumentation" : "Open questions are part of the documentation"}</h2>
+      <p>{isDe
+        ? "Der Newsroom soll nicht nur fertige Ergebnisse präsentieren. Bei fachlich geeigneten Themen machen Beiträge auch sichtbar, welche Annahmen noch validiert werden müssen und wo Rückmeldung aus Praxis, Lehre oder Accessibility-Arbeit besonders hilfreich ist."
+        : "The newsroom is not intended to present finished results only. Where appropriate, posts also show which assumptions still need validation and where feedback from practice, teaching or accessibility work would be particularly useful."}</p>
+      <p><a href={href(pathFor(lang, "dossiers"))}>{isDe ? "Zu den Dossiers" : "Go to dossiers"} <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+</BaseLayout>

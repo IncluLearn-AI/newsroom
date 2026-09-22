@@ -76,10 +76,11 @@ const languageOptions: Locale[] = ["de", "en"];
 
         <div class="header-actions">
           <nav aria-label={copy.mainNavigation}>
-            <a href={href(pathFor(lang, "news"))}>{copy.news}</a>
-            <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+            <a href={href(pathFor(lang, "project"))}>{copy.project}</a>
             <a href={href(pathFor(lang, "topics"))}>{copy.topics}</a>
+            <a href={href(pathFor(lang, "news"))}>{copy.news}</a>
             <a href={href(pathFor(lang, "dossiers"))}>{copy.dossiers}</a>
+            <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
             <a href={href(pathFor(lang, "methodology"))}>{copy.methodology}</a>
           </nav>
           <nav class="language-switcher" aria-label={copy.languageNavigation}>
