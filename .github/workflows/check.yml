@@ -1,0 +1,26 @@
+name: Validate Newsroom
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Abhängigkeiten installieren
+        run: npm install
+
+      - name: Astro prüfen und bauen
+        run: npm run build
