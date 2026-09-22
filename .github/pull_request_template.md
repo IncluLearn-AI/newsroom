@@ -10,13 +10,29 @@
 - [ ] Technik / Layout
 - [ ] Prozess / Dokumentation
 
+## Fachliche Grundlage
+
+<!-- Bei Redaktion:
+- Welche tatsächlichen Fachartefakte wurden ausgewertet?
+- Was sind die konkreten Ergebnisse/Befunde?
+- Was ist ggf. noch Hypothese oder unvalidiert?
+Git-/PR-Titel allein sind keine ausreichende Inhaltsgrundlage.
+-->
+
+## Zielgruppenbezug
+
+<!-- Für wen ist dieser Inhalt besonders relevant?
+Projektteam / Beirat / Praxispartner / externe Fachöffentlichkeit.
+Gibt es konkrete offene Fragen an diese Gruppen?
+-->
+
 ## Zeit und Projektphase
 
 <!-- Bei Redaktion: Ereigniszeitraum und Projektphase nennen. -->
 
 ## Quellen und Evidenz
 
-<!-- Bei externen Tatsachenbehauptungen Primärquellen nennen. -->
+<!-- Bei externen Tatsachenbehauptungen öffentliche Primärquellen nennen. -->
 
 ## Mehrsprachigkeit
 
@@ -35,11 +51,14 @@
 
 ## Review vor Merge
 
+- [ ] Tatsächliche Fachartefakte gelesen, nicht nur Commit-/PR-Titel
+- [ ] Konkrete Ergebnisse stehen vor Prozess-/Repository-Details
 - [ ] Fakten und Quellen geprüft
+- [ ] Befund, Hypothese, Entwurf und redaktionelle Einordnung sauber getrennt
 - [ ] Vertraulichkeit / Datenschutz geprüft
 - [ ] Ereigniszeitraum und Projektphase geprüft
 - [ ] Preprints und Herstellerangaben korrekt gekennzeichnet
-- [ ] Sprache und Verständlichkeit geprüft
+- [ ] Zielgruppenbezug und Verständlichkeit geprüft
 - [ ] DE/EN-Konsistenz geprüft
 - [ ] Accessibility-Review durchgeführt
 - [ ] CI erfolgreich
