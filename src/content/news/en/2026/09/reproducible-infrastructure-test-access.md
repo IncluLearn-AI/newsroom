@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-infrastructure
 locale: en
 sourceLang: de
+sourceVersionHash: "bb7afd71f0d989dcb72a3ba89f0e496e5bff19d3"
 translationStatus: machine
 slug: reproducible-infrastructure-and-test-access-prepared
 title: "Reproducible infrastructure and test access prepared"
