@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { categoryEditorial } from "../lib/editorial";
 import { pathFor, topicPath, ui, type Category, type Locale } from "../lib/i18n";
 import { publishedNews } from "../lib/news";
 
@@ -9,7 +10,7 @@ const copy = ui[lang];
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const href = (path: string) => `${base}${path}`;
 const posts = await publishedNews(lang);
-const categories = Object.keys(copy.categories) as Category[];
+const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
 ---
 
 <BaseLayout
@@ -24,15 +25,32 @@ const categories = Object.keys(copy.categories) as Category[];
       <div class="section-head">
         <p class="eyebrow">{copy.topics}</p>
         <h1>{copy.topicsHeading}</h1>
-        <p class="lead">{copy.topicsLead}</p>
+        <p class="lead">
+          {lang === "de"
+            ? "Vier redaktionelle Perspektiven helfen dabei, fachliche Ergebnisse, Forschungsentwicklungen, Transferfragen und öffentliche Aktivitäten gezielt zu verfolgen."
+            : "Four editorial perspectives help you follow substantive project results, research developments, transfer questions and public activities."}
+        </p>
       </div>
-      <div class="grid">
+
+      <div class="topic-index">
         {categories.map((category) => {
+          const area = categoryEditorial[lang][category];
           const count = posts.filter((post) => post.data.category === category).length;
           return (
-            <article class="card">
-              <h2><a href={href(topicPath(lang, category))}>{copy.categories[category]}</a></h2>
-              <p class="meta">{count} {lang === "de" ? (count === 1 ? "Beitrag" : "Beiträge") : (count === 1 ? "post" : "posts")}</p>
+            <article class="topic-index-card">
+              <div>
+                <p class="eyebrow">{copy.categories[category]}</p>
+                <h2><a href={href(topicPath(lang, category))}>{area.title}</a></h2>
+                <p>{area.lead}</p>
+              </div>
+              <div>
+                <h3>{lang === "de" ? "Schwerpunkte" : "Focus areas"}</h3>
+                <ul class="compact-list">
+                  {area.subtopics.slice(0, 4).map((topic) => <li>{topic}</li>)}
+                </ul>
+                <p class="meta">{count} {lang === "de" ? (count === 1 ? "veröffentlichter Beitrag" : "veröffentlichte Beiträge") : (count === 1 ? "published post" : "published posts")}</p>
+                <p class="card-link"><a href={href(topicPath(lang, category))}>{lang === "de" ? "Rubrik öffnen" : "Open topic"} <span aria-hidden="true">→</span></a></p>
+              </div>
             </article>
           );
         })}
