@@ -8,9 +8,35 @@ Der Agent unterstützt drei wiederkehrende Aufgaben:
 2. relevante Forschung, Standards, Tools und Praxisentwicklungen beobachten,
 3. DE/EN-Entwürfe für den Newsroom vorbereiten.
 
-## Ereignis statt Commit
+Der Newsroom richtet sich nicht nur an Entwickler*innen. Projektmitglieder, Beirat, Praxispartner und interessierte externe Fachleute sollen die fachlichen Ergebnisse ohne Kenntnis der internen Repository-Struktur verstehen können.
 
-GitHub-Aktivität ist die Rohdatenebene. Mehrere Commits, Issues und Pull Requests können gemeinsam **ein** öffentlich relevantes Ereignis bilden. Der Agent soll deshalb Ergebnisse und Entscheidungen erkennen, nicht Aktivitätszahlen publizieren.
+## Git-Signal statt Git-Zusammenfassung
+
+GitHub-Aktivität ist die Rohdatenebene. Ein Commit oder Pull Request zeigt, **wo** sich möglicherweise etwas Relevantes verändert hat.
+
+Vor einem Artikel muss der Agent die betroffenen Fachartefakte selbst lesen und relevante Verweise nachverfolgen. Mehrere Commits, Issues und Pull Requests können gemeinsam **ein** öffentlich relevantes Ereignis bilden.
+
+Nicht zulässig ist der verkürzte Ablauf:
+
+`Commit-Titel → Paraphrase → News`
+
+Vorgesehen ist:
+
+`Git-Signal → Fachartefakte → konkrete Ergebnisse → Evidenz/Quellen → redaktionelle Synthese`
+
+## Was der Agent extrahieren soll
+
+Aus den Fachartefakten werden – soweit vorhanden – insbesondere extrahiert:
+
+- konkrete Ergebnisse und Recherchebefunde,
+- Zahlen und beobachtete Engpässe,
+- Entscheidungen und Begründungen,
+- Hypothesen und noch unvalidierte Ableitungen,
+- offene Forschungs-/Validierungsfragen,
+- Bedeutung für IncluLearn.AI,
+- mögliche Fragen an Projektteam, Beirat oder Praxispartner.
+
+Interne Dateipfade und Commit-Details sind dabei normalerweise keine Nachricht.
 
 ## Zeitmodell
 
@@ -27,6 +53,15 @@ Deutsch ist die Referenzsprache. Bei einem öffentlichen Kandidaten erstellt der
 
 Beide Fassungen teilen eine `translationKey`, dürfen aber sprachgerechte Slugs besitzen. Automatisch vorbereitete englische Fassungen beginnen mit `translationStatus: machine`.
 
+## Formatwahl
+
+- `brief`: ein eigenständig relevanter, eng begrenzter Sachverhalt,
+- `article`: konkrete Ergebnisse plus Einordnung und Evidenzstatus,
+- `digest`: Synthese mehrerer Entwicklungen,
+- Dossier: kuratierter Einstieg und längerfristige Synthese.
+
+Der Agent soll einen langen Artikel nicht erzwingen, wenn der Inhalt dafür nicht reicht.
+
 ## Ergebnis eines Laufs
 
 Der Agent berichtet im Chat:
@@ -35,7 +70,7 @@ Der Agent berichtet im Chat:
 - wichtigste externe Funde,
 - erkannte redaktionelle Ereignisse,
 - vorgeschlagene öffentliche Beiträge oder Dossiers,
-- offene Review- und Übersetzungsfragen.
+- offene Review-, Evidenz- und Übersetzungsfragen.
 
 Nur bei ausreichender Substanz wird ein Draft-PR erzeugt. Der Agent mergt nicht.
 
