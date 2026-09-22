@@ -13,8 +13,41 @@ Der Newsroom bündelt künftig:
 
 Automatisierte Recherche und KI-gestützte Redaktion dürfen Entwürfe vorbereiten. Öffentliche Inhalte werden jedoch erst nach menschlicher Prüfung und Freigabe veröffentlicht.
 
-## Technische Zielstruktur
+Der geplante Workflow lautet:
 
-Die Website wird als statische, barrierearme Astro-Seite umgesetzt und über GitHub Pages veröffentlicht. Inhalte werden möglichst text-first in Markdown gepflegt.
+`Recherche → Einordnung → Markdown-Entwurf → Pull Request → menschliches Review → Merge → Veröffentlichung`
 
-Weitere Struktur und der erste Website-Prototyp werden über Pull Requests aufgebaut.
+## Technik
+
+- Astro als statischer Site Generator
+- Markdown/MDX für redaktionelle Inhalte
+- GitHub Actions für Build und GitHub-Pages-Deployment
+- barrierearme, responsive und text-first aufgebaute Oberfläche
+- Deutsch als Referenzsprache
+
+Lokaler Einstieg:
+
+```bash
+npm install
+npm run dev
+```
+
+Qualitätsprüfung:
+
+```bash
+npm run check
+npm run build
+```
+
+## Repository-Struktur
+
+- `src/content/news/` – Newsroom-Beiträge
+- `src/pages/` – öffentliche Seiten
+- `research/news-watchlist.yaml` – kuratierte Themen und Quellenklassen für den Research Radar
+- `docs/redaktionsworkflow.md` – Redaktions- und Veröffentlichungsprozess
+- `AGENTS.md` – verbindliche Regeln für automatisierte Agenten
+- `.github/workflows/` – CI und Pages-Deployment
+
+## Wichtige Grenze
+
+Dieses Repository ist **öffentlich**. Interne, personenbezogene, vertrauliche oder förderadministrative Informationen gehören nicht hierher. Die privaten IncluLearn.AI-Repositories dienen nur als kontrollierte Quellen für öffentlich freigabefähige Zusammenfassungen.
