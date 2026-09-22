@@ -2,8 +2,8 @@
 import TopicPage from "../../../components/TopicPage.astro";
 import { categorySlug, type Category } from "../../../lib/i18n";
 
-const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
 export function getStaticPaths() {
+  const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
   return categories.map((category) => ({
     params: { category: categorySlug("en", category) },
     props: { category }
