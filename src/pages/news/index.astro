@@ -22,7 +22,7 @@ const posts = (await getCollection("news"))
           {posts.map((post) => (
             <article class="card">
               <span class="badge">{post.data.category}</span>
-              <h2><a href={\`\${base}news/\${post.id}/\`}>{post.data.title}</a></h2>
+              <h2><a href={base + "news/" + post.id + "/"}>{post.data.title}</a></h2>
               <p>{post.data.summary}</p>
               <p class="meta">
                 <time datetime={post.data.published.toISOString()}>
