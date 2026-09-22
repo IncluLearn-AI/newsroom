@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-demo-deployment
 locale: en
 sourceLang: de
+sourceVersionHash: "e8e86ff24afc4e1e824bcce8cde4037a17a7179f"
 translationStatus: machine
 slug: automated-demo-deployment-path-prepared
 title: "Automated demo deployment path prepared"
