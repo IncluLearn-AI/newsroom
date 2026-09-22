@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { categoryEditorial } from "../lib/editorial";
-import { pathFor, topicPath, ui, type Category, type Locale } from "../lib/i18n";
+import { pathFor, topicPath, type Category, type Locale } from "../lib/i18n";
 import { dossierPath, publishedDossiers } from "../lib/news";
 
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
-const copy = ui[lang];
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const href = (path: string) => `${base}${path}`;
 const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
