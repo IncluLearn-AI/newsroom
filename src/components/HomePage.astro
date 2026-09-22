@@ -1,27 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostTimeline from "./PostTimeline.astro";
-import { pathFor, ui, type Locale } from "../lib/i18n";
-import { publishedNews } from "../lib/news";
+import { categoryEditorial, audienceEditorial } from "../lib/editorial";
+import { pathFor, topicPath, ui, type Category, type Locale } from "../lib/i18n";
+import { dossierPath, formatEventRange, newsPath, publishedDossiers, publishedNews } from "../lib/news";
 
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
 const copy = ui[lang];
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const href = (path: string) => `${base}${path}`;
-const posts = (await publishedNews(lang)).slice(0, 12);
 
-const areas = lang === "de" ? [
-  ["Projektfortschritt", "Substanzielle Ergebnisse, Demonstratoren, Releases und Meilensteine."],
-  ["Forschungsradar", "Neue Publikationen, Methoden, Datensätze und Forschungsprojekte."],
-  ["Tools & Transfer", "Open-Source-Werkzeuge, Standards und Entwicklungen aus der Praxis."],
-  ["Publikationen & Veranstaltungen", "Eigene Veröffentlichungen, Workshops, Konferenzen und öffentliche Termine."]
-] : [
-  ["Project progress", "Substantial results, demonstrators, releases and milestones."],
-  ["Research radar", "New publications, methods, datasets and research projects."],
-  ["Tools & transfer", "Open-source tools, standards and developments from practice."],
-  ["Publications & events", "Our publications, workshops, conferences and public events."]
-];
+const posts = await publishedNews(lang);
+const dossiers = await publishedDossiers(lang);
+const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
+const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 4);
+const featuredIds = new Set(featuredPosts.map((post) => post.id));
+const latestPosts = posts.filter((post) => !featuredIds.has(post.id)).slice(0, 4);
+const currentDossier = dossiers[0];
 ---
 
 <BaseLayout
@@ -35,42 +31,113 @@ const areas = lang === "de" ? [
       <h1>Newsroom & Research Radar</h1>
       <p class="lead">
         {lang === "de"
-          ? "Wir dokumentieren Fortschritte im Projekt und ordnen relevante Entwicklungen aus Forschung, Barrierefreiheit, KI und Hochschullehre verständlich und quellengestützt ein."
-          : "We document project progress and put relevant developments in research, accessibility, AI and higher education into context with clear sourcing."}
+          ? "IncluLearn.AI erforscht, wie visuell geprägte MINT-Lehrmaterialien in überprüfbare semantische Strukturen und daraus in unterschiedliche barrierefreie Repräsentationen überführt werden können. Hier dokumentieren wir, was wir lernen, entwickeln und noch klären müssen."
+          : "IncluLearn.AI explores how visually dominated STEM learning materials can be transformed into reviewable semantic structures and then into different accessible representations. This newsroom documents what we learn, build and still need to resolve."}
       </p>
       <div class="hero-links">
-        <a class="button-link" href={href(pathFor(lang, "news"))}>{copy.news}</a>
-        <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+        <a class="button-link" href={href(pathFor(lang, "project"))}>{copy.project}</a>
+        <a href={href(pathFor(lang, "topics"))}>{copy.topics}</a>
+        <a href={href(pathFor(lang, "news"))}>{copy.news}</a>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" aria-labelledby="audiences">
     <div class="shell">
       <div class="section-head">
-        <p class="eyebrow">{lang === "de" ? "Vier Perspektiven" : "Four perspectives"}</p>
-        <h2>{lang === "de" ? "Mehr als ein klassischer Projektblog" : "More than a conventional project blog"}</h2>
+        <p class="eyebrow">{lang === "de" ? "Für wen dieser Newsroom gedacht ist" : "Who this newsroom is for"}</p>
+        <h2 id="audiences">{lang === "de" ? "Projektstand verstehen, ohne alle Repositories lesen zu müssen" : "Understand the project without reading every repository"}</h2>
         <p>{lang === "de"
-          ? "Rubriken beantworten, worum es geht. Die Chronik beantwortet, wann etwas passiert ist. Dossiers verbinden zusammengehörige Entwicklungen."
-          : "Topics explain what a post is about. The timeline shows when things happened. Dossiers connect related developments."}</p>
+          ? "Der Newsroom richtet sich besonders an Projektmitglieder, Beirat und Praxispartner sowie an die interessierte Fachöffentlichkeit."
+          : "The newsroom is designed especially for project members, the advisory board and practice partners, and the wider professional community."}</p>
       </div>
-      <div class="grid">
-        {areas.map(([title, text]) => (
-          <article class="card"><h3>{title}</h3><p>{text}</p></article>
+      <div class="grid grid-three">
+        {audienceEditorial[lang].map((audience) => (
+          <article class="card">
+            <h3>{audience.title}</h3>
+            <p>{audience.text}</p>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="section section-soft">
+  <section class="section section-soft" aria-labelledby="topics-home">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.topics}</p>
+        <h2 id="topics-home">{lang === "de" ? "Vier Einstiege in das Projekt" : "Four ways into the project"}</h2>
+        <p>{lang === "de"
+          ? "Die Rubriken sind keine bloßen Filter. Jede bündelt eigene Leitfragen, Schwerpunkte und ausgewählte Beiträge."
+          : "The topics are more than filters. Each one brings together its own guiding questions, focus areas and selected posts."}</p>
+      </div>
+      <div class="grid">
+        {categories.map((category) => {
+          const area = categoryEditorial[lang][category];
+          const count = posts.filter((post) => post.data.category === category).length;
+          return (
+            <article class="card topic-card">
+              <p class="eyebrow">{copy.categories[category]}</p>
+              <h3><a href={href(topicPath(lang, category))}>{area.title}</a></h3>
+              <p>{area.lead}</p>
+              <p class="meta">{count} {lang === "de" ? (count === 1 ? "veröffentlichter Beitrag" : "veröffentlichte Beiträge") : (count === 1 ? "published post" : "published posts")}</p>
+              <p class="card-link"><a href={href(topicPath(lang, category))}>{lang === "de" ? "Rubrik erkunden" : "Explore topic"} <span aria-hidden="true">→</span></a></p>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  {featuredPosts.length > 0 && (
+    <section class="section" aria-labelledby="highlights">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">{lang === "de" ? "Ausgewählt" : "Selected"}</p>
+          <h2 id="highlights">{lang === "de" ? "Wichtige Einstiege" : "Key starting points"}</h2>
+          <p>{lang === "de"
+            ? "Diese Beiträge sind derzeit besonders hilfreich, um zentrale Projektfragen und Entscheidungen zu verstehen."
+            : "These posts currently provide useful entry points to central project questions and decisions."}</p>
+        </div>
+        <div class="grid">
+          {featuredPosts.map((post) => (
+            <article class="card highlight-card">
+              <p class="eyebrow">{copy.categories[post.data.category]}</p>
+              <h3><a href={href(newsPath(post))}>{post.data.title}</a></h3>
+              <p>{post.data.summary}</p>
+              <p class="card-link"><a href={href(newsPath(post))}>{lang === "de" ? "Beitrag lesen" : "Read post"} <span aria-hidden="true">→</span></a></p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {currentDossier && (
+    <section class="section section-soft" aria-labelledby="current-dossier">
+      <div class="shell split-callout">
+        <div>
+          <p class="eyebrow">{copy.dossiers}</p>
+          <h2 id="current-dossier">{currentDossier.data.title}</h2>
+          <p class="lead compact-lead">{currentDossier.data.summary}</p>
+          <p class="meta">{formatEventRange(lang, currentDossier.data.from, currentDossier.data.to)}</p>
+        </div>
+        <div class="callout-action">
+          <a class="button-link" href={href(dossierPath(currentDossier))}>{lang === "de" ? "Dossier öffnen" : "Open dossier"}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="latest-home">
     <div class="shell">
       <div class="section-head">
         <p class="eyebrow">{copy.news}</p>
-        <h2>{copy.latestHeading}</h2>
+        <h2 id="latest-home">{copy.latestHeading}</h2>
         <p>{copy.latestLead}</p>
       </div>
-      <PostTimeline lang={lang} entries={posts} mode="publication" />
-      {posts.length > 0 && <p><a href={href(pathFor(lang, "news"))}>{lang === "de" ? "Alle aktuellen Beiträge" : "All latest posts"}</a></p>}
+      <PostTimeline lang={lang} entries={latestPosts.length > 0 ? latestPosts : posts.slice(0, 4)} mode="publication" />
+      {posts.length > 4 && <p class="section-link"><a href={href(pathFor(lang, "news"))}>{lang === "de" ? "Alle aktuellen Beiträge anzeigen" : "Show all latest posts"} <span aria-hidden="true">→</span></a></p>}
     </div>
   </section>
 </BaseLayout>
