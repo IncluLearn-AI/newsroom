@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-research-evaluation
 locale: en
 sourceLang: de
+sourceVersionHash: "6cd48a247686c026c6a5fc24c791839f32a194a7"
 translationStatus: machine
 slug: research-and-evaluation-methodology-established-as-living-review
 title: "Research and evaluation methodology established as a living review"
