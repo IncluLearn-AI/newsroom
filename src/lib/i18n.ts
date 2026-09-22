@@ -158,3 +158,68 @@ export function topicPath(lang: Locale, category: Category): string {
 export function archiveMonthPath(lang: Locale, year: number, month: number): string {
   return `${pathFor(lang, "archive")}${year}/${String(month).padStart(2, "0")}/`;
 }
+
+export type Evidence =
+  | "project-source"
+  | "peer-reviewed"
+  | "preprint"
+  | "official-primary"
+  | "vendor-project"
+  | "editorial-analysis";
+
+export type SourceKind =
+  | "peer-reviewed"
+  | "preprint"
+  | "official-primary"
+  | "standard-specification"
+  | "research-project"
+  | "vendor-project"
+  | "community-secondary";
+
+const evidenceLabels: Record<Locale, Record<Evidence, string>> = {
+  de: {
+    "project-source": "Eigene Projektmeldung",
+    "peer-reviewed": "Peer Review",
+    preprint: "Preprint",
+    "official-primary": "Offizielle Primärquelle",
+    "vendor-project": "Hersteller-/Projektinformation",
+    "editorial-analysis": "Redaktionelle Einordnung"
+  },
+  en: {
+    "project-source": "Own project report",
+    "peer-reviewed": "Peer reviewed",
+    preprint: "Preprint",
+    "official-primary": "Official primary source",
+    "vendor-project": "Vendor / project information",
+    "editorial-analysis": "Editorial analysis"
+  }
+};
+
+const sourceKindLabels: Record<Locale, Record<SourceKind, string>> = {
+  de: {
+    "peer-reviewed": "Peer Review",
+    preprint: "Preprint",
+    "official-primary": "Offizielle Primärquelle",
+    "standard-specification": "Standard / Spezifikation",
+    "research-project": "Forschungsprojekt",
+    "vendor-project": "Hersteller- / Projektinformation",
+    "community-secondary": "Community / Sekundärquelle"
+  },
+  en: {
+    "peer-reviewed": "Peer reviewed",
+    preprint: "Preprint",
+    "official-primary": "Official primary source",
+    "standard-specification": "Standard / specification",
+    "research-project": "Research project",
+    "vendor-project": "Vendor / project information",
+    "community-secondary": "Community / secondary source"
+  }
+};
+
+export function evidenceLabel(lang: Locale, evidence: Evidence): string {
+  return evidenceLabels[lang][evidence];
+}
+
+export function sourceKindLabel(lang: Locale, kind: SourceKind): string {
+  return sourceKindLabels[lang][kind];
+}
