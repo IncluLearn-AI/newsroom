@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-project-organisation
 locale: en
 sourceLang: de
+sourceVersionHash: "1a475ceb866e88bde1ed2fa6a4c206df35326d10"
 translationStatus: machine
 slug: project-organisation-and-working-structure-prepared
 title: "Project organisation and working structure prepared"
