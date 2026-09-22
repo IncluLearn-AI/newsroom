@@ -1,0 +1,40 @@
+# Startpunkt für den automatisierten Research Radar.
+# Die Liste wird kuratiert und darf vom Agenten nur über Review erweitert werden.
+
+topics:
+  - accessible STEM education
+  - accessible diagrams
+  - tactile graphics
+  - sonification
+  - accessible mathematics
+  - MathML accessibility
+  - document understanding
+  - multimodal document AI
+  - vision-language models
+  - digital accessibility higher education
+  - AI-assisted accessibility
+
+source_types:
+  preferred:
+    - peer-reviewed publication
+    - official standard or specification
+    - official research project page
+    - primary-source technical documentation
+  supplementary:
+    - preprint
+    - research-group blog
+    - company engineering blog
+    - community discussion
+
+venues:
+  - ASSETS
+  - CHI
+  - W4A
+  - ICCHP
+  - Universal Access in the Information Society
+
+rules:
+  - "Relevanz für IncluLearn.AI explizit begründen."
+  - "Peer Review und Preprint unterscheiden."
+  - "Bei Produkt- oder Firmenaussagen möglichst Primärquelle plus unabhängige Einordnung verwenden."
+  - "Neue Watchlist-Einträge nur per Pull Request ergänzen."
