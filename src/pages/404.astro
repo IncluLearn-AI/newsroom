@@ -1,15 +1,20 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
-
-<BaseLayout title="Seite nicht gefunden · IncluLearn.AI Newsroom">
-  <section class="section">
-    <div class="shell section-head">
-      <p class="eyebrow">404</p>
-      <h1>Seite nicht gefunden</h1>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <title>404 · IncluLearn.AI Newsroom</title>
+  </head>
+  <body>
+    <main style="max-width: 48rem; margin: 4rem auto; padding: 1rem; font-family: system-ui, sans-serif;">
+      <h1>Seite nicht gefunden / Page not found</h1>
       <p>Die angeforderte Seite existiert nicht oder wurde verschoben.</p>
-      <p><a href={base}>Zur Startseite des Newsrooms</a></p>
-    </div>
-  </section>
-</BaseLayout>
+      <p>The requested page does not exist or has moved.</p>
+      <p><a href={base + "/de/"}>Deutsch</a> · <a href={base + "/en/"} lang="en">English</a></p>
+    </main>
+  </body>
+</html>
