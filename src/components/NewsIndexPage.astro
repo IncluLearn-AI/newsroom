@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import { pathFor, ui, type Locale } from "../lib/i18n";
+import { publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const posts = (await publishedNews(lang)).slice(0, 60);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.news} · IncluLearn.AI Newsroom`}
+  description={copy.latestLead}
+  canonicalPath={pathFor(lang, "news")}
+  alternatePaths={{ de: pathFor("de", "news"), en: pathFor("en", "news") }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">Newsroom</p>
+        <h1>{copy.latestHeading}</h1>
+        <p class="lead">{copy.latestLead}</p>
+        <p>{lang === "de"
+          ? "Diese Ansicht zeigt maximal die 60 zuletzt veröffentlichten Meldungen. Die vollständige historische Struktur liegt im Archiv."
+          : "This view shows up to the 60 most recently published posts. The full historical structure is available in the archive."}</p>
+      </div>
+      <PostTimeline lang={lang} entries={posts} mode="publication" />
+    </div>
+  </section>
+</BaseLayout>
