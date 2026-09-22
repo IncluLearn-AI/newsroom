@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const base = import.meta.env.BASE_URL;
+const posts = (await getCollection("news"))
+  .filter((entry) => !entry.data.draft)
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+---
+
+<BaseLayout title="Beiträge · IncluLearn.AI Newsroom" description="Alle veröffentlichten Beiträge des IncluLearn.AI Newsroom.">
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">Archiv</p>
+        <h1>Beiträge</h1>
+        <p>Projektfortschritt, Research Radar, Tools, Transfer, Publikationen und Veranstaltungen.</p>
+      </div>
+
+      {posts.length > 0 ? (
+        <div class="grid">
+          {posts.map((post) => (
+            <article class="card">
+              <span class="badge">{post.data.category}</span>
+              <h2><a href={\`\${base}news/\${post.id}/\`}>{post.data.title}</a></h2>
+              <p>{post.data.summary}</p>
+              <p class="meta">
+                <time datetime={post.data.published.toISOString()}>
+                  {post.data.published.toLocaleDateString("de-DE")}
+                </time>
+                {" · "}
+                {post.data.evidence}
+              </p>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p>Noch keine freigegebenen Beiträge.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
