@@ -2,6 +2,7 @@
 translationKey: prep-2026-09-community-communication
 locale: en
 sourceLang: de
+sourceVersionHash: "a2df06a18bf780e60f9396e458a4f29668541840"
 translationStatus: machine
 slug: collaboration-and-communication-channels-prepared
 title: "Collaboration and communication channels prepared"
