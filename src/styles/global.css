@@ -186,3 +186,23 @@ footer {
   .grid { grid-template-columns: 1fr; }
   nav { gap: .8rem 1rem; }
 }
+
+
+.notice {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  border-left: .3rem solid var(--accent);
+  background: var(--surface-soft);
+}
+
+.source-list {
+  padding-left: 1.4rem;
+}
+
+.source-list li + li {
+  margin-top: .8rem;
+}
+
+footer a {
+  color: #d9eaff;
+}
