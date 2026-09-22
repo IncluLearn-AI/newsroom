@@ -1,54 +1,13 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+const target = import.meta.env.BASE_URL + "de/methodik/";
 ---
-
-<BaseLayout
-  title="Methodik · IncluLearn.AI Newsroom"
-  description="Wie der IncluLearn.AI Newsroom Projektfortschritt und externe Forschung recherchiert, einordnet und veröffentlicht."
->
-  <article class="shell article">
-    <p class="eyebrow">Transparenz</p>
-    <h1>Redaktionelle Methodik</h1>
-    <p class="lead">
-      Der Newsroom verbindet Projektchronik, wissenschaftliches Horizon Scanning und Transfer.
-      Automatisierung unterstützt Recherche und Redaktion, ersetzt aber nicht die menschliche Freigabe.
-    </p>
-
-    <h2>Projektfortschritt</h2>
-    <p>
-      Öffentliche Fortschrittsmeldungen werden aus nachvollziehbaren Projektartefakten abgeleitet.
-      Einzelne Commits oder hohe Aktivitätszahlen gelten nicht automatisch als Fortschritt. Entscheidend
-      sind substanzielle Ergebnisse wie neue Demonstratoren, Releases, validierte Anforderungen,
-      dokumentierte Entscheidungen oder erreichte Meilensteine.
-    </p>
-
-    <h2>Research Radar</h2>
-    <p>
-      Bei wissenschaftlichen Aussagen werden Originalpublikationen und Primärquellen bevorzugt.
-      Peer-reviewte Arbeiten, Preprints, Standards, Projektseiten und Herstellerinformationen werden
-      sichtbar voneinander unterschieden. Eine Aufnahme in den Research Radar bedeutet nicht automatisch,
-      dass eine Methode als belastbar oder für IncluLearn.AI geeignet bewertet wurde.
-    </p>
-
-    <h2>KI-Unterstützung</h2>
-    <p>
-      Ein automatisierter Agent kann neue Entwicklungen finden, Quellen strukturieren und Artikelentwürfe
-      vorbereiten. KI-gestützt vorbereitete Beiträge werden gekennzeichnet. Der Agent darf seine eigenen
-      Inhalte nicht freigeben oder direkt veröffentlichen.
-    </p>
-
-    <h2>Freigabeprozess</h2>
-    <p>
-      Neue Beiträge werden als Pull Request vorbereitet. Vor dem Merge werden fachliche Richtigkeit,
-      Quellenlage, mögliche Vertraulichkeitsprobleme, Verständlichkeit und Barrierefreiheit geprüft.
-      Erst der Merge in den Hauptbranch löst die Veröffentlichung aus.
-    </p>
-
-    <h2>Barrierefreiheit</h2>
-    <p>
-      Kerninformationen werden textuell bereitgestellt. Die Seite verwendet semantische Überschriften,
-      Tastaturfokus, aussagekräftige Linktexte und möglichst einfache Strukturen. Relevante visuelle
-      Inhalte benötigen eine textuelle Alternative.
-    </p>
-  </article>
-</BaseLayout>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <meta name="robots" content="noindex" />
+    <title>Weiterleitung · IncluLearn.AI Newsroom</title>
+  </head>
+  <body><p><a href={target}>Zur redaktionellen Methodik</a></p></body>
+</html>
