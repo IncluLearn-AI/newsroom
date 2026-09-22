@@ -10,13 +10,13 @@ const category = z.enum([
 ]);
 const projectPhase = z.enum(["preparation", "funded", "post-project"]);
 const sourceKind = z.enum([
-  "Peer Review",
-  "Preprint",
-  "Offizielle Primärquelle",
-  "Standard / Spezifikation",
-  "Forschungsprojekt",
-  "Hersteller- / Projektinformation",
-  "Community / Sekundärquelle"
+  "peer-reviewed",
+  "preprint",
+  "official-primary",
+  "standard-specification",
+  "research-project",
+  "vendor-project",
+  "community-secondary"
 ]);
 const translationStatus = z.enum(["source", "machine", "reviewed"]);
 
@@ -49,12 +49,12 @@ const news = defineCollection({
     tags: z.array(z.string()).default([]),
     authors: z.array(z.string()).default([]),
     evidence: z.enum([
-      "Eigene Projektmeldung",
-      "Peer Review",
-      "Preprint",
-      "Offizielle Primärquelle",
-      "Hersteller-/Projektinformation",
-      "Redaktionelle Einordnung"
+      "project-source",
+      "peer-reviewed",
+      "preprint",
+      "official-primary",
+      "vendor-project",
+      "editorial-analysis"
     ]),
     sources: z.array(z.object({
       title: z.string(),
