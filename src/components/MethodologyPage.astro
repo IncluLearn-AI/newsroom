@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pathFor, type Locale } from "../lib/i18n";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const isDe = lang === "de";
+---
+
+<BaseLayout
+  lang={lang}
+  title={isDe ? "Methodik · IncluLearn.AI Newsroom" : "Methodology · IncluLearn.AI Newsroom"}
+  description={isDe
+    ? "Wie der IncluLearn.AI Newsroom Projektfortschritt und externe Forschung recherchiert, einordnet, übersetzt und veröffentlicht."
+    : "How the IncluLearn.AI Newsroom researches, contextualises, translates and publishes project progress and external research."}
+  canonicalPath={pathFor(lang, "methodology")}
+  alternatePaths={{ de: pathFor("de", "methodology"), en: pathFor("en", "methodology") }}
+>
+  <article class="shell article">
+    <p class="eyebrow">{isDe ? "Transparenz" : "Transparency"}</p>
+    <h1>{isDe ? "Redaktionelle Methodik" : "Editorial methodology"}</h1>
+    <p class="lead">{isDe
+      ? "Der Newsroom verbindet Projektchronik, wissenschaftliches Horizon Scanning und Transfer. Automatisierung unterstützt Recherche, Übersetzung und Redaktion, ersetzt aber nicht die menschliche Freigabe."
+      : "The newsroom combines a project timeline, scientific horizon scanning and transfer. Automation supports research, translation and editing but does not replace human approval."}</p>
+
+    <h2>{isDe ? "Zwei Zeitachsen" : "Two timelines"}</h2>
+    <p>{isDe
+      ? "Jeder Beitrag unterscheidet zwischen dem tatsächlichen Ereigniszeitraum und dem Zeitpunkt der Veröffentlichung. Dadurch können Vorarbeiten nachdokumentiert werden, ohne ein falsches Veröffentlichungsdatum vorzutäuschen."
+      : "Each post distinguishes the actual event period from the publication time. This allows preparatory work to be documented retrospectively without pretending it was published earlier."}</p>
+
+    <h2>{isDe ? "Projektfortschritt" : "Project progress"}</h2>
+    <p>{isDe
+      ? "Öffentliche Fortschrittsmeldungen werden aus nachvollziehbaren Projektartefakten abgeleitet. Einzelne Commits oder hohe Aktivitätszahlen gelten nicht automatisch als Fortschritt."
+      : "Public progress reports are derived from traceable project artefacts. Individual commits or high activity counts are not treated as progress by themselves."}</p>
+
+    <h2>Research Radar</h2>
+    <p>{isDe
+      ? "Bei wissenschaftlichen Aussagen werden Originalpublikationen und Primärquellen bevorzugt. Peer Review, Preprints, Standards, Projektseiten und Herstellerinformationen werden sichtbar unterschieden."
+      : "Scientific claims prioritise original publications and primary sources. Peer-reviewed work, preprints, standards, project pages and vendor information are clearly distinguished."}</p>
+
+    <h2>{isDe ? "Deutsch und Englisch" : "German and English"}</h2>
+    <p>{isDe
+      ? "Deutsch ist die redaktionelle Referenzsprache; Englisch wird als eigenständige Sprachversion mitgeführt. Automatisch vorbereitete Übersetzungen werden als solche gekennzeichnet, bis sie sprachlich oder fachlich geprüft wurden. Fehlende Übersetzungen werden nicht still durch Inhalte in der falschen Sprache ersetzt."
+      : "German is the editorial reference language; English is maintained as a separate language version. Machine-prepared translations are marked until language or subject review has taken place. Missing translations are not silently replaced with content in the wrong language."}</p>
+
+    <h2>{isDe ? "KI-Unterstützung und Freigabe" : "AI assistance and approval"}</h2>
+    <p>{isDe
+      ? "Ein Agent kann Quellen finden, Ereignisse clustern, Entwürfe erstellen und Übersetzungen vorbereiten. Neue Inhalte werden als Pull Request geprüft. Erst der menschlich freigegebene Merge veröffentlicht sie."
+      : "An agent may find sources, cluster events, draft posts and prepare translations. New content is reviewed in a pull request. Publication happens only after a human-approved merge."}</p>
+
+    <h2>{isDe ? "Barrierefreiheit" : "Accessibility"}</h2>
+    <p>{isDe
+      ? "Kerninformationen werden textuell bereitgestellt. Navigation, Sprachwechsel, Zeitstruktur und Metadaten sollen semantisch verständlich und per Tastatur sowie assistiven Technologien nutzbar sein."
+      : "Core information is provided in text. Navigation, language switching, timeline structure and metadata are intended to remain semantically clear and usable by keyboard and assistive technologies."}</p>
+  </article>
+</BaseLayout>
