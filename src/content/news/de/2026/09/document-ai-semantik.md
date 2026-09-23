@@ -48,7 +48,7 @@ sources:
     kind: peer-reviewed
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Kurz gesagt
