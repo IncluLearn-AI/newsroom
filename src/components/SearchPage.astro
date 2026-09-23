@@ -185,7 +185,8 @@ const periodLabel = (key: string) => {
 
       async function getPagefind() {
         if (!pagefind) {
-          pagefind = await import(base + "/_pagefind/pagefind.js");
+          pagefind = await import(base + "/pagefind/pagefind.js");
+          await pagefind.options({ baseUrl: (base || "") + "/" });
         }
         return pagefind;
       }
