@@ -2,12 +2,12 @@
 translationKey: prep-2026-09-media-centre-bottlenecks
 locale: en
 sourceLang: de
-sourceVersionHash: "a53b76b594e087f2c7b53aaf24e43ded8ff6aebf"
+sourceVersionHash: "e5540b1f2058bd2bc7418370f6f7f6d2456e4f14"
 translationStatus: machine
 slug: what-slows-media-centres-down
 title: "What slows media centres down: five findings from public research"
 summary: "Public workflow descriptions point to high manual effort, long lead times, subject-specific transformation, established reuse practices and special examination requirements. For IncluLearn.AI, these are concrete signals of where semantic AI support may be useful."
-publishedAt: 2026-09-23T08:00:00+02:00
+publishedAt: 2026-09-23T07:45:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -65,7 +65,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
