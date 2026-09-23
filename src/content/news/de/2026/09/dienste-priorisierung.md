@@ -6,7 +6,7 @@ translationStatus: source
 slug: welche-dienste-aus-der-recherche-entstehen-koennten
 title: "Welche IncluLearn.AI-Dienste aus der Recherche entstehen könnten"
 summary: "Aus den Bedarfshypothesen haben wir eine erste Lösungshypothese abgeleitet: fünf Kernbausteine mit hohem strategischem Wert, fünf anschließende Produktions- und Integrationsdienste sowie drei spezialisierte spätere Optionen."
-publishedAt: 2026-09-23T08:02:00+02:00
+publishedAt: 2026-09-23T07:47:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -57,7 +57,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Kurz gesagt
