@@ -6,7 +6,7 @@ translationStatus: source
 slug: was-medienzentren-heute-ausbremst
 title: "Was Medienzentren heute ausbremst: fünf Befunde aus der öffentlichen Recherche"
 summary: "Öffentliche Prozessbeschreibungen zeigen hohe manuelle Aufwände, lange Vorlaufzeiten, fachlich komplexe Transformationen, etablierte Wiederverwendung und besondere Prüfungsanforderungen. Für IncluLearn.AI sind das konkrete Hinweise darauf, wo semantische KI-Unterstützung nützlich sein könnte."
-publishedAt: 2026-09-23T08:00:00+02:00
+publishedAt: 2026-09-23T07:45:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -64,7 +64,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Kurz gesagt
