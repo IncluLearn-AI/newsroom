@@ -2,7 +2,7 @@
 translationKey: prior-work-textual-representations
 locale: en
 sourceLang: de
-sourceVersionHash: "07275863b0b2c44e662a97861f72ac3c9a752675"
+sourceVersionHash: "97ee8b891a0dec1bf90db122cf7cfaccfd00e21a"
 translationStatus: machine
 slug: plantuml-netlists-and-structured-text-in-technical-education
 title: "PlantUML, netlists and structured text: prior work from technical education"
@@ -45,7 +45,7 @@ authors:
 evidence: peer-reviewed
 sources:
   - title: "Accessible Representations of Visual Artifacts in Technical Informatics Education"
-    url: "https://www.thinkmind.org/index.php?view=article&articleid=smart_accessibility_2025_1_10_88001"
+    url: "https://personales.upv.es/thinkmind/SMART_ACCESSIBILITY/SMART_ACCESSIBILITY_2025/smart_accessibility_2025_1_10_88001.html"
     kind: peer-reviewed
     published: 2025-05-18
 aiAssisted: true
