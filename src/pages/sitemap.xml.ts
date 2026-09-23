@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { archiveMonthPath, locales, pathFor, topicPath, type Category } from "../lib/i18n";
-import { dossierPath, eventDate, newsPath, publishedDossiers, publishedNews } from "../lib/news";
+import { archiveYearPath, dossierPath, eventDate, newsPagePath, newsPath, publishedDossiers, publishedNews } from "../lib/news";
 
 const escapeXml = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -14,18 +14,25 @@ export const GET: APIRoute = async ({ site }) => {
   const paths = new Set<string>();
 
   for (const lang of locales) {
-    for (const target of ["home", "project", "partners", "news", "archive", "topics", "dossiers", "methodology"] as const) {
+    for (const target of ["home", "project", "partners", "news", "search", "archive", "topics", "dossiers", "methodology"] as const) {
       paths.add(pathFor(lang, target));
     }
     for (const category of categories) paths.add(topicPath(lang, category));
 
     const langPosts = posts.filter((post) => post.data.locale === lang);
+    const pageSize = 20;
+    const totalPages = Math.max(1, Math.ceil(langPosts.length / pageSize));
+    for (let page = 2; page <= totalPages; page += 1) paths.add(newsPagePath(lang, page));
+
+    const years = new Set<number>();
     const months = new Set<string>();
     for (const post of langPosts) {
       paths.add(newsPath(post));
       const date = eventDate(post);
+      years.add(date.getUTCFullYear());
       months.add(`${date.getUTCFullYear()}-${date.getUTCMonth() + 1}`);
     }
+    for (const year of years) paths.add(archiveYearPath(lang, year));
     for (const key of months) {
       const [year, month] = key.split("-").map(Number);
       paths.add(archiveMonthPath(lang, year, month));
