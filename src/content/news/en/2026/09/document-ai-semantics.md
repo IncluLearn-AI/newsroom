@@ -2,7 +2,7 @@
 translationKey: prep-2026-09-document-ai-semantics
 locale: en
 sourceLang: de
-sourceVersionHash: "3c9036210085f6f12aee9230621dedebc00f7f46"
+sourceVersionHash: "1ac41269cc0b72c5f3f792e81cd9738d8a5227fa"
 translationStatus: machine
 slug: from-document-ai-to-reviewed-subject-semantics
 title: "From Document AI to reviewed subject semantics"
