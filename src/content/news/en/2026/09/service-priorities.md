@@ -2,12 +2,12 @@
 translationKey: prep-2026-09-service-priorities
 locale: en
 sourceLang: de
-sourceVersionHash: "6833bb00052e12dd570c257ce4d403132995b0c8"
+sourceVersionHash: "9742aac03e61197d601135746006e06a5d4a4fe7"
 translationStatus: machine
 slug: which-services-could-emerge-from-the-research
 title: "Which IncluLearn.AI services could emerge from the research"
 summary: "From the needs hypotheses, we derived a first solution hypothesis: five core components with high strategic value, five subsequent production and integration services, and three specialised later options."
-publishedAt: 2026-09-23T08:02:00+02:00
+publishedAt: 2026-09-23T07:47:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -58,7 +58,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
