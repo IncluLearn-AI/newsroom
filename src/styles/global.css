@@ -700,3 +700,52 @@ footer a {
     grid-template-columns: 1fr;
   }
 }
+
+
+.partner-question-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.partner-question-card {
+  display: grid;
+  grid-template-columns: minmax(12rem, .75fr) minmax(0, 1.25fr);
+  column-gap: 2rem;
+  align-items: start;
+}
+
+.partner-question-card .eyebrow,
+.partner-question-card h3 {
+  grid-column: 1;
+}
+
+.partner-question-card ul,
+.partner-question-card .card-link {
+  grid-column: 2;
+}
+
+.partner-question-card ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.partner-question-card .card-link {
+  margin-top: .7rem;
+}
+
+.partner-hero h1 {
+  max-width: 16ch;
+}
+
+@media (max-width: 46rem) {
+  .partner-question-card {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-question-card .eyebrow,
+  .partner-question-card h3,
+  .partner-question-card ul,
+  .partner-question-card .card-link {
+    grid-column: 1;
+  }
+}
