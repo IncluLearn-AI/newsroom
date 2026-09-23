@@ -6,7 +6,7 @@ translationStatus: source
 slug: fuenf-design-patterns-fuer-barrierefreie-mint-lehrmaterialien
 title: "Fünf Design Patterns für barrierefreie MINT-Lehrmaterialien"
 summary: "Die 2026 veröffentlichte Pattern Collection von Diethelm Bienhaus und Michael Kreutzer bündelt praktische Erfahrungen aus der Lehre in fünf wiederverwendbare Muster – von text-first Kerninhalten über Diagramme und taktile Ausgaben bis zu Sonifikation und Human-in-the-loop-Erklärungen."
-publishedAt: 2026-09-23T08:45:00+02:00
+publishedAt: 2026-09-23T08:31:00+02:00
 event:
   start: 2026-05-01
 projectPhase: prior-work
@@ -49,7 +49,7 @@ sources:
     doi: "10.1007/978-3-032-19157-1_12"
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Worum es in der Publikation geht
