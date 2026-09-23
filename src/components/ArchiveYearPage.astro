@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { archiveMonthPath, pathFor, ui, type Locale } from "../lib/i18n";
+import { archiveYearPath, eventDate, publishedNews } from "../lib/news";
+
+interface Props {
+  lang: Locale;
+  year: number;
+}
+
+const { lang, year } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const all = await publishedNews();
+const posts = all.filter((post) => {
+  if (post.data.locale !== lang) return false;
+  return eventDate(post).getUTCFullYear() === year;
+});
+
+const monthCounts = new Map<number, number>();
+for (const post of posts) {
+  const month = eventDate(post).getUTCMonth() + 1;
+  monthCounts.set(month, (monthCounts.get(month) ?? 0) + 1);
+}
+
+const months = [...monthCounts.entries()].sort(([a], [b]) => b - a);
+const monthName = (month: number) => new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+  month: "long",
+  timeZone: "UTC"
+}).format(new Date(Date.UTC(year, month - 1, 1)));
+
+const otherLang: Locale = lang === "de" ? "en" : "de";
+const otherExists = all.some((post) =>
+  post.data.locale === otherLang && eventDate(post).getUTCFullYear() === year
+);
+const alternatePaths: Partial<Record<Locale, string>> = {
+  [lang]: archiveYearPath(lang, year),
+  [otherLang]: otherExists ? archiveYearPath(otherLang, year) : pathFor(otherLang, "archive")
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${year} · ${copy.archiveHeading} · IncluLearn.AI Newsroom`}
+  description={copy.archiveLead}
+  canonicalPath={archiveYearPath(lang, year)}
+  alternatePaths={alternatePaths}
+>
+  <section class="section">
+    <div class="shell">
+      <nav class="breadcrumbs" aria-label={lang === "de" ? "Archivpfad" : "Archive path"}>
+        <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{year}</span>
+      </nav>
+
+      <div class="section-head">
+        <p class="eyebrow">{copy.archiveHeading}</p>
+        <h1>{year}</h1>
+        <p class="lead">{lang === "de"
+          ? "Wähle einen Monat, um die Beiträge nach ihrem tatsächlichen Ereigniszeitraum zu lesen."
+          : "Choose a month to browse posts by their actual event period."}</p>
+        <p class="meta">{posts.length} {lang === "de" ? (posts.length === 1 ? "Beitrag" : "Beiträge") : (posts.length === 1 ? "post" : "posts")}</p>
+      </div>
+
+      {months.length === 0 ? <p>{copy.noPosts}</p> : (
+        <ol class="archive-list">
+          {months.map(([month, count]) => (
+            <li class="card">
+              <a href={href(archiveMonthPath(lang, year, month))}><strong>{monthName(month)}</strong></a>
+              <span class="meta">{count} {lang === "de" ? (count === 1 ? "Beitrag" : "Beiträge") : (count === 1 ? "post" : "posts")}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  </section>
+</BaseLayout>
