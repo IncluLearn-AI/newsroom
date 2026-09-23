@@ -84,6 +84,7 @@ const evidenceDescriptions: Record<Locale, Record<Evidence, string>> = {
 };
 
 const noPublicSources = post.data.sources.length === 0;
+const eventDateForIndex = `${post.data.event.start.getUTCFullYear()}-${String(post.data.event.start.getUTCMonth() + 1).padStart(2, "0")}`;
 ---
 
 <BaseLayout
@@ -94,7 +95,16 @@ const noPublicSources = post.data.sources.length === 0;
   alternatePaths={alternatePaths}
   ogType="article"
 >
-  <article class="shell article article-wide">
+  <article class="shell article article-wide" data-pagefind-body>
+    <div class="pagefind-index-data" data-pagefind-ignore aria-hidden="true">
+      <span data-pagefind-filter="locale">{lang}</span>
+      <span data-pagefind-filter="category">{post.data.category}</span>
+      <span data-pagefind-filter="period">{eventDateForIndex}</span>
+      {post.data.tags.map((tag) => <span data-pagefind-filter="tag">{tag}</span>)}
+      <span data-pagefind-meta="summary">{post.data.summary}</span>
+      <span data-pagefind-meta="categoryLabel">{copy.categories[post.data.category]}</span>
+      <span data-pagefind-meta="eventLabel">{formatEventRange(lang, post.data.event.start, post.data.event.end)}</span>
+    </div>
     <nav class="article-context" aria-label={lang === "de" ? "Beitragskontext" : "Article context"}>
       <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + topicPath(lang, post.data.category)}>
         {copy.categories[post.data.category]}
