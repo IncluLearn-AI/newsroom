@@ -2,12 +2,12 @@
 translationKey: prep-2026-09-open-standards-tools
 locale: en
 sourceLang: de
-sourceVersionHash: "e2e0d31adf0493842fdce61745c9f7d64e14f67b"
+sourceVersionHash: "89a221cd5d71f96308bd57b3add4463927ef2589"
 translationStatus: machine
 slug: which-open-standards-and-tools-matter-for-transfer
 title: "Which open standards and tools are interesting for transfer"
 summary: "IncluLearn.AI does not need to reinvent every target format and transformation. MathML, EPUB Accessibility, DAISY Pipeline, Pandoc and PlantUML illustrate different building blocks for open, interoperable and reusable workflows — without implying a final tool choice."
-publishedAt: 2026-09-23T08:47:00+02:00
+publishedAt: 2026-09-23T08:31:40+02:00
 event:
   start: 2026-09-23
 projectPhase: preparation
@@ -61,7 +61,7 @@ sources:
     kind: vendor-project
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
