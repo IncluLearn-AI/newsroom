@@ -78,6 +78,7 @@ Dauerhaft gepflegte thematische oder zeitliche Synthese. Ein Dossier bietet eine
 Vor Veröffentlichung werden mindestens geprüft:
 
 - fachliche Richtigkeit,
+- ob ein bestehender Beitrag oder ein Dossier statt einer Neuanlage aktualisiert werden sollte,
 - ob die tatsächlichen Fachartefakte gelesen wurden,
 - ob Ergebnisse statt bloßer Git-/Prozessaktivität dargestellt werden,
 - Qualität und Typ der Quellen,
@@ -102,13 +103,18 @@ Wenn der deutsche Ausgangstext geändert wird, ist zu prüfen, ob `sourceVersion
 Ein redaktioneller Pull Request beschreibt:
 
 - welches fachliche Ergebnis, Ereignis oder Dossier dokumentiert wird,
-- welche Fachartefakte dafür ausgewertet wurden,
+- welches Änderungssignal die Recherche ausgelöst hat,
+- welche **tatsächlichen Fachartefakte** dafür ausgewertet wurden,
+- welche vorhandenen Beiträge, Dossiers und offenen PRs auf Dubletten geprüft wurden,
+- warum ein neuer Beitrag nötig ist oder warum ein bestehender Beitrag aktualisiert wird,
 - welchen Zeitraum es betrifft,
 - welche Projektphase gilt,
-- auf welchen öffentlichen Quellen externe Aussagen beruhen,
+- auf welchen öffentlichen Primärquellen externe Aussagen beruhen,
 - was Befund und was noch Hypothese/Entwurf ist,
 - ob KI bei Recherche, Redaktion oder Übersetzung eingesetzt wurde,
 - welche Reviews noch erforderlich sind.
+
+Für Agenten-PRs reicht „Commit X umgesetzt“ ausdrücklich nicht als fachliche Grundlage. Der PR muss nachvollziehbar machen, welches Artefakt die öffentliche Aussage trägt.
 
 Agenten erstellen Draft-PRs und mergen ihre Arbeit nicht selbst.
 
