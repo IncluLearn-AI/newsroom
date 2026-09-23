@@ -28,8 +28,7 @@ related:
   - prior-work-pattern-collection
   - prep-2026-09-alt-text-not-enough
   - prep-2026-09-diagram-ai
-dossiers:
-  - prep-2026-09
+dossiers: []
 tags:
   - Publikation
   - PlantUML
