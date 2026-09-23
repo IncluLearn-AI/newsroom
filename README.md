@@ -30,8 +30,9 @@ Dadurch können vorbereitende Arbeiten retrospektiv dokumentiert werden, ohne ei
 
 Die Website stellt Inhalte deshalb in mehreren Sichten bereit:
 
-- **Aktuell** – nach Veröffentlichungszeitpunkt,
-- **Archiv / Project timeline** – nach Ereigniszeitraum,
+- **Aktuell** – nach Veröffentlichungszeitpunkt, statisch paginiert,
+- **Suche & Filter** – statische Volltextsuche nach Rubrik, Schlagwort und Ereigniszeitraum,
+- **Archiv / Project timeline** – nach Ereigniszeitraum mit Jahres- und Monatsnavigation,
 - **Themen / Topics** – nach inhaltlicher Rubrik,
 - **Dossiers** – kuratierte Zusammenfassungen zusammengehöriger Beiträge.
 
@@ -54,6 +55,7 @@ Formate:
 
 Projektphasen:
 
+- `prior-work`
 - `preparation`
 - `funded`
 - `post-project`
@@ -81,11 +83,14 @@ Automatisierte Recherche und KI-gestützte Redaktion dürfen Entwürfe und Über
 
 - Astro als statischer Site Generator
 - Markdown/MDX für redaktionelle Inhalte
+- Pagefind für statische Volltextsuche ohne Such-Backend
 - GitHub Actions für Build und GitHub Pages
 - sprachspezifische RSS-Feeds
 - Sitemap mit beiden Sprachversionen
 - Canonical- und `hreflang`-Metadaten
 - text-first und barrierearm
+- native Formularelemente für Such-/Filtersteuerung
+- Suche als JavaScript-Erweiterung; Themen, paginierte News und Archiv bleiben ohne JavaScript navigierbar
 
 Lokal:
 
