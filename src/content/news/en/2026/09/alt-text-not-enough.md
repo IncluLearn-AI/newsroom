@@ -54,7 +54,7 @@ sources:
     kind: standard-specification
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
