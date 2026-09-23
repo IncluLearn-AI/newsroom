@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ site }) => {
   const paths = new Set<string>();
 
   for (const lang of locales) {
-    for (const target of ["home", "project", "news", "archive", "topics", "dossiers", "methodology"] as const) {
+    for (const target of ["home", "project", "partners", "news", "archive", "topics", "dossiers", "methodology"] as const) {
       paths.add(pathFor(lang, target));
     }
     for (const category of categories) paths.add(topicPath(lang, category));

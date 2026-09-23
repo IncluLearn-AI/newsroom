@@ -8,7 +8,7 @@ const category = z.enum([
   "tools-transfer",
   "publications-events"
 ]);
-const projectPhase = z.enum(["preparation", "funded", "post-project"]);
+const projectPhase = z.enum(["prior-work", "preparation", "funded", "post-project"]);
 const sourceKind = z.enum([
   "peer-reviewed",
   "preprint",

@@ -8,7 +8,7 @@ export type Category =
   | "publications-events";
 
 export type PostFormat = "brief" | "article" | "digest";
-export type ProjectPhase = "preparation" | "funded" | "post-project";
+export type ProjectPhase = "prior-work" | "preparation" | "funded" | "post-project";
 
 export const ui = {
   de: {
@@ -16,6 +16,7 @@ export const ui = {
     skip: "Zum Hauptinhalt springen",
     home: "Start",
     project: "Projekt verstehen",
+    partners: "Beirat & Partner",
     news: "Aktuell",
     archive: "Archiv",
     topics: "Themen",
@@ -42,6 +43,7 @@ export const ui = {
     translationMachine: "Diese englische Fassung wurde maschinell vorbereitet und ist noch nicht sprachlich/fachlich geprüft.",
     feed: "RSS-Feed",
     methodologyFooter: "Redaktionelle Methodik",
+    priorWork: "Vorarbeit",
     preparation: "Vorbereitungsphase",
     funded: "Geförderter Projektzeitraum",
     postProject: "Nachprojektphase",
@@ -62,6 +64,7 @@ export const ui = {
     skip: "Skip to main content",
     home: "Home",
     project: "About the project",
+    partners: "Advisory board & partners",
     news: "Latest",
     archive: "Archive",
     topics: "Topics",
@@ -88,6 +91,7 @@ export const ui = {
     translationMachine: "This English version was machine-prepared and has not yet received language/subject review.",
     feed: "RSS feed",
     methodologyFooter: "Editorial methodology",
+    priorWork: "Prior work",
     preparation: "Preparation phase",
     funded: "Funded project period",
     postProject: "Post-project phase",
@@ -110,13 +114,15 @@ export const routeSegments = {
     archive: "archiv",
     topics: "themen",
     methodology: "methodik",
-    project: "projekt"
+    project: "projekt",
+    partners: "partner"
   },
   en: {
     archive: "archive",
     topics: "topics",
     methodology: "methodology",
-    project: "project"
+    project: "project",
+    partners: "partners"
   }
 } as const;
 
@@ -145,10 +151,10 @@ export function categoryFromSlug(lang: Locale, slug: string): Category | undefin
 
 export function phaseLabel(lang: Locale, phase: ProjectPhase): string {
   const copy = ui[lang];
-  return phase === "preparation" ? copy.preparation : phase === "funded" ? copy.funded : copy.postProject;
+  return phase === "prior-work" ? copy.priorWork : phase === "preparation" ? copy.preparation : phase === "funded" ? copy.funded : copy.postProject;
 }
 
-export function pathFor(lang: Locale, target: "home" | "project" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
+export function pathFor(lang: Locale, target: "home" | "project" | "partners" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
   if (target === "home") return `/${lang}/`;
   if (target === "news") return `/${lang}/news/`;
   if (target === "dossiers") return `/${lang}/dossiers/`;
