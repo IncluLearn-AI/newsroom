@@ -16,6 +16,7 @@ export const ui = {
     skip: "Zum Hauptinhalt springen",
     home: "Start",
     project: "Projekt verstehen",
+    partners: "Beirat & Partner",
     news: "Aktuell",
     archive: "Archiv",
     topics: "Themen",
@@ -62,6 +63,7 @@ export const ui = {
     skip: "Skip to main content",
     home: "Home",
     project: "About the project",
+    partners: "Advisory board & partners",
     news: "Latest",
     archive: "Archive",
     topics: "Topics",
@@ -110,13 +112,15 @@ export const routeSegments = {
     archive: "archiv",
     topics: "themen",
     methodology: "methodik",
-    project: "projekt"
+    project: "projekt",
+    partners: "partner"
   },
   en: {
     archive: "archive",
     topics: "topics",
     methodology: "methodology",
-    project: "project"
+    project: "project",
+    partners: "partners"
   }
 } as const;
 
@@ -148,7 +152,7 @@ export function phaseLabel(lang: Locale, phase: ProjectPhase): string {
   return phase === "preparation" ? copy.preparation : phase === "funded" ? copy.funded : copy.postProject;
 }
 
-export function pathFor(lang: Locale, target: "home" | "project" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
+export function pathFor(lang: Locale, target: "home" | "project" | "partners" | "news" | "archive" | "topics" | "dossiers" | "methodology"): string {
   if (target === "home") return `/${lang}/`;
   if (target === "news") return `/${lang}/news/`;
   if (target === "dossiers") return `/${lang}/dossiers/`;
