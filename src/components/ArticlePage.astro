@@ -15,6 +15,7 @@ import {
 import {
   counterpart,
   dossierPath,
+  eventDate,
   formatDateTime,
   formatEventRange,
   newsPath,
@@ -84,7 +85,8 @@ const evidenceDescriptions: Record<Locale, Record<Evidence, string>> = {
 };
 
 const noPublicSources = post.data.sources.length === 0;
-const eventDateForIndex = `${post.data.event.start.getUTCFullYear()}-${String(post.data.event.start.getUTCMonth() + 1).padStart(2, "0")}`;
+const indexedEventDate = eventDate(post);
+const eventDateForIndex = `${indexedEventDate.getUTCFullYear()}-${String(indexedEventDate.getUTCMonth() + 1).padStart(2, "0")}`;
 ---
 
 <BaseLayout
