@@ -61,7 +61,7 @@ sources:
     kind: preprint
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
