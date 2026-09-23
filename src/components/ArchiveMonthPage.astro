@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostTimeline from "./PostTimeline.astro";
 import { archiveMonthPath, pathFor, ui, type Locale } from "../lib/i18n";
-import { eventDate, publishedNews } from "../lib/news";
+import { archiveYearPath, eventDate, publishedNews } from "../lib/news";
 
 interface Props {
   lang: Locale;
@@ -47,6 +47,13 @@ const monthTitle = new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
 >
   <section class="section">
     <div class="shell">
+      <nav class="breadcrumbs" aria-label={lang === "de" ? "Archivpfad" : "Archive path"}>
+        <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + pathFor(lang, "archive")}>{copy.archive}</a>
+        <span aria-hidden="true">/</span>
+        <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + archiveYearPath(lang, year)}>{year}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{monthTitle}</span>
+      </nav>
       <div class="section-head">
         <p class="eyebrow">{copy.archiveHeading}</p>
         <h1>{monthTitle}</h1>
