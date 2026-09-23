@@ -6,7 +6,7 @@ translationStatus: source
 slug: plantuml-netlists-und-strukturierter-text-in-der-technischen-lehre
 title: "PlantUML, Netlists und strukturierter Text: Vorarbeiten aus der technischen Lehre"
 summary: "Eine 2025 veröffentlichte Arbeit beschreibt, wie visuelle Artefakte aus Software Engineering und Technischer Informatik durch textbasierte Repräsentationen zugänglich und gemeinsam bearbeitbar werden können – darunter UML, elektronische Schaltungen und KV-Diagramme."
-publishedAt: 2026-09-23T08:46:00+02:00
+publishedAt: 2026-09-23T08:31:20+02:00
 event:
   start: 2025-05-18
   end: 2025-05-22
@@ -49,7 +49,7 @@ sources:
     published: 2025-05-18
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Ausgangspunkt: gemeinsame Lehrveranstaltungen statt separater Sonderwege
