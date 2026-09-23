@@ -6,7 +6,7 @@ translationStatus: source
 slug: welche-offenen-standards-und-tools-fuer-den-transfer-interessant-sind
 title: "Welche offenen Standards und Tools für den Transfer interessant sind"
 summary: "IncluLearn.AI muss nicht jedes Zielformat und jede Transformation neu erfinden. MathML, EPUB Accessibility, DAISY Pipeline, Pandoc und PlantUML zeigen unterschiedliche Bausteine für offene, interoperable und wiederverwendbare Workflows – ohne dass damit bereits eine endgültige Toolauswahl getroffen ist."
-publishedAt: 2026-09-23T08:47:00+02:00
+publishedAt: 2026-09-23T08:31:40+02:00
 event:
   start: 2026-09-23
 projectPhase: preparation
@@ -60,7 +60,7 @@ sources:
     kind: vendor-project
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Kurz gesagt
