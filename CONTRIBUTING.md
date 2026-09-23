@@ -46,6 +46,15 @@ Für größere Fachbeiträge sollen – soweit für das Thema sinnvoll – folge
 
 Nicht jeder Beitrag benötigt jeden Abschnitt. Die Struktur darf dem Inhalt folgen; Ergebnisse dürfen aber nicht hinter Prozessbeschreibung verschwinden.
 
+Für schnell erfassbare Fachbeiträge stehen zusätzlich optionale strukturierte Felder zur Verfügung:
+
+- `keyFindings` für wenige prägnante Kernergebnisse am Beitragsanfang,
+- `openQuestions` für konkrete noch zu klärende Punkte,
+- `partnerQuestions` für konkrete Fragen an Beirat oder Praxispartner,
+- `related` für explizit kuratierte verwandte Beiträge über deren `translationKey`.
+
+Diese Felder sind kein Ersatz für Begründung und Evidenz im Fließtext. Leere Pflichtlisten sollen nicht künstlich befüllt werden.
+
 ## Formate
 
 ### `brief`

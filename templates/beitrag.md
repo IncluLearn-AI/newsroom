@@ -14,6 +14,14 @@ projectPhase: preparation
 retroactive: false
 category: project-progress
 format: article
+keyFindings:
+  - "Erste konkrete Kernaussage."
+  - "Zweite Kernaussage mit erkennbarem Evidenzstatus."
+openQuestions:
+  - "Welche Frage muss im Projekt noch validiert werden?"
+partnerQuestions:
+  - "Welche konkrete Erfahrung aus der Praxis wäre für diese Frage hilfreich?"
+related: []
 dossiers: []
 tags:
   - Beispiel
@@ -33,6 +41,8 @@ draft: true
 ## Kurz gesagt
 
 2–4 Sätze: Was sollten Projektmitglieder, Beirat oder externe Fachleute nach kurzer Lektüre verstanden haben?
+
+Die wichtigsten Punkte können zusätzlich strukturiert in `keyFindings` stehen. Diese erscheinen oben im Beitrag als schnell erfassbare Zusammenfassung und ersetzen nicht die fachliche Begründung im Fließtext.
 
 ## Ausgangsfrage und Kontext
 
@@ -56,11 +66,11 @@ Was ist belastbar belegt? Was ist noch Hypothese, Entwurf, Preprint-Befund oder 
 
 ## Offene Fragen
 
-Nur wenn inhaltlich sinnvoll: Welche Fragen müssen im Projekt noch beantwortet werden?
+Nur wenn inhaltlich sinnvoll: Welche Fragen müssen im Projekt noch beantwortet werden? Für kurze, konkrete Fragen bevorzugt das Frontmatter-Feld `openQuestions` verwenden; ausführliche Begründungen bleiben im Text.
 
 ## Wo Partnerfeedback hilfreich ist
 
-Optional: konkrete Fragen an Beirat, Medienzentren, Praxispartner oder Projektteam. Keine allgemeine Call-to-Action ohne fachlichen Anlass.
+Optional: konkrete Fragen an Beirat, Medienzentren, Praxispartner oder Projektteam. Für prägnante Fragen `partnerQuestions` verwenden. Keine allgemeine Call-to-Action ohne fachlichen Anlass.
 
 ## Nächste Konsequenz für das Projekt
 
@@ -76,3 +86,8 @@ Welche nächste Untersuchung, Validierung, technische Entscheidung oder Transfer
 - Dossier: kuratierter Einstieg mit eigener Synthese.
 
 Für die englische Fassung wird eine separate Datei unter `src/content/news/en/...` mit derselben `translationKey` angelegt. Automatisch vorbereitete Fassungen verwenden `translationStatus: machine` und `sourceVersionHash`.
+
+
+### Related Content
+
+Mit `related` können explizit die `translationKey`s besonders passender Beiträge angegeben werden. Ohne explizite Angabe schlägt die Artikelseite automatisch bis zu drei Beiträge aus demselben Dossier bzw. derselben Rubrik vor.

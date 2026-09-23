@@ -6,12 +6,21 @@ import {
   pathFor,
   phaseLabel,
   sourceKindLabel,
+  topicPath,
   ui,
   type Evidence,
   type Locale,
   type SourceKind
 } from "../lib/i18n";
-import { counterpart, formatDateTime, formatEventRange, newsPath, publishedNews } from "../lib/news";
+import {
+  counterpart,
+  dossierPath,
+  formatDateTime,
+  formatEventRange,
+  newsPath,
+  publishedDossiers,
+  publishedNews
+} from "../lib/news";
 
 interface Props {
   lang: Locale;
@@ -22,10 +31,59 @@ const { lang, post } = Astro.props;
 const copy = ui[lang];
 const { Content } = await render(post);
 const all = await publishedNews();
+const allDossiers = await publishedDossiers(lang);
+const langPosts = all.filter((entry) => entry.data.locale === lang);
 const otherLang: Locale = lang === "de" ? "en" : "de";
 const other = counterpart(all, post.data.translationKey, otherLang);
 const alternatePaths: Partial<Record<Locale, string>> = { [lang]: newsPath(post) };
 if (other) alternatePaths[otherLang] = newsPath(other);
+
+const relatedDossiers = allDossiers.filter((dossier) =>
+  post.data.dossiers.includes(dossier.data.translationKey)
+);
+
+const explicitRelated = post.data.related
+  .map((key) => langPosts.find((entry) => entry.data.translationKey === key))
+  .filter((entry): entry is CollectionEntry<"news"> => Boolean(entry));
+
+const fallbackRelated = langPosts
+  .filter((entry) => entry.data.translationKey !== post.data.translationKey)
+  .map((entry) => {
+    const sharedDossier = entry.data.dossiers.some((key) => post.data.dossiers.includes(key));
+    const sameCategory = entry.data.category === post.data.category;
+    return { entry, score: sharedDossier ? 2 : sameCategory ? 1 : 0 };
+  })
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score || b.entry.data.publishedAt.valueOf() - a.entry.data.publishedAt.valueOf())
+  .map(({ entry }) => entry);
+
+const relatedPosts = (explicitRelated.length > 0 ? explicitRelated : fallbackRelated)
+  .filter((entry, index, entries) =>
+    entry.data.translationKey !== post.data.translationKey &&
+    entries.findIndex((candidate) => candidate.data.translationKey === entry.data.translationKey) === index
+  )
+  .slice(0, 3);
+
+const evidenceDescriptions: Record<Locale, Record<Evidence, string>> = {
+  de: {
+    "project-source": "Der Beitrag berichtet über eigene Projektarbeit. Aussagen werden aus den zugrunde liegenden Projektartefakten abgeleitet; externe Recherchebefunde sollen zusätzlich über öffentliche Primärquellen nachvollziehbar sein.",
+    "peer-reviewed": "Die zentrale externe Evidenz stammt aus peer-reviewter wissenschaftlicher Literatur. Die Übertragbarkeit auf IncluLearn.AI wird separat eingeordnet.",
+    preprint: "Die zentrale externe Evidenz stammt aus einem Preprint und hat noch kein abgeschlossenes Peer Review. Ergebnisse werden entsprechend vorsichtig eingeordnet.",
+    "official-primary": "Die zentralen Tatsachenbehauptungen stützen sich auf offizielle Primärquellen, etwa Standards, Institutionen oder Originaldokumentation.",
+    "vendor-project": "Zentrale Angaben stammen von Hersteller- oder Projektseiten und werden als Aussagen dieser Quelle behandelt, nicht als unabhängige Evaluation.",
+    "editorial-analysis": "Der Beitrag verbindet mehrere Quellen oder Projektartefakte zu einer redaktionellen Synthese. Ableitungen und Grenzen sollen sichtbar von Quellenbefunden getrennt bleiben."
+  },
+  en: {
+    "project-source": "This post reports on our own project work. Claims are derived from the underlying project artefacts; external research findings should additionally be traceable to public primary sources.",
+    "peer-reviewed": "The central external evidence comes from peer-reviewed research. Its applicability to IncluLearn.AI is considered separately.",
+    preprint: "The central external evidence comes from a preprint that has not completed peer review. Findings are therefore interpreted cautiously.",
+    "official-primary": "Central factual claims rely on official primary sources such as standards, institutions or original documentation.",
+    "vendor-project": "Central information comes from vendor or project pages and is treated as claims by that source, not as independent evaluation.",
+    "editorial-analysis": "The post synthesises several sources or project artefacts. Editorial conclusions and limitations should remain distinct from source findings."
+  }
+};
+
+const noPublicSources = post.data.sources.length === 0;
 ---
 
 <BaseLayout
@@ -36,7 +94,19 @@ if (other) alternatePaths[otherLang] = newsPath(other);
   alternatePaths={alternatePaths}
   ogType="article"
 >
-  <article class="shell article">
+  <article class="shell article article-wide">
+    <nav class="article-context" aria-label={lang === "de" ? "Beitragskontext" : "Article context"}>
+      <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + topicPath(lang, post.data.category)}>
+        {copy.categories[post.data.category]}
+      </a>
+      {relatedDossiers.map((dossier) => (
+        <>
+          <span aria-hidden="true">/</span>
+          <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + dossierPath(dossier)}>{dossier.data.title}</a>
+        </>
+      ))}
+    </nav>
+
     <div class="timeline-labels">
       <span class="badge">{copy.categories[post.data.category]}</span>
       <span class="badge badge-secondary">{copy.formats[post.data.format]}</span>
@@ -56,15 +126,98 @@ if (other) alternatePaths[otherLang] = newsPath(other);
         <dd><time datetime={post.data.publishedAt.toISOString()}>{formatDateTime(lang, post.data.publishedAt)}</time></dd>
       </div>
       <div>
-        <dt>{lang === "de" ? "Einordnung" : "Evidence"}</dt>
+        <dt>{lang === "de" ? "Evidenztyp" : "Evidence type"}</dt>
         <dd>{evidenceLabel(lang, post.data.evidence as Evidence)}</dd>
       </div>
+      {post.data.authors.length > 0 && (
+        <div>
+          <dt>{lang === "de" ? "Autor*innen" : "Authors"}</dt>
+          <dd>{post.data.authors.join(", ")}</dd>
+        </div>
+      )}
     </dl>
 
-    {post.data.translationStatus === "machine" && <p class="notice">{copy.translationMachine}</p>}
-    {post.data.aiAssisted && <p class="notice">{copy.aiNotice}</p>}
+    {post.data.translationStatus === "machine" && <p class="notice translation-notice">{copy.translationMachine}</p>}
 
-    <Content />
+    {post.data.keyFindings.length > 0 && (
+      <section class="key-findings" aria-labelledby="key-findings">
+        <p class="eyebrow">{lang === "de" ? "Auf einen Blick" : "At a glance"}</p>
+        <h2 id="key-findings">{lang === "de" ? "Kernergebnisse" : "Key findings"}</h2>
+        <ul>
+          {post.data.keyFindings.map((finding) => <li>{finding}</li>)}
+        </ul>
+      </section>
+    )}
+
+    <aside class="evidence-panel" aria-labelledby="evidence-heading">
+      <div>
+        <p class="eyebrow">{lang === "de" ? "Einordnung" : "Evidence"}</p>
+        <h2 id="evidence-heading">{evidenceLabel(lang, post.data.evidence as Evidence)}</h2>
+        <p>{evidenceDescriptions[lang][post.data.evidence as Evidence]}</p>
+      </div>
+      <div>
+        <strong>{lang === "de" ? "Öffentliche Quellen" : "Public sources"}</strong>
+        {noPublicSources ? (
+          <p class="meta">
+            {lang === "de"
+              ? "Für diesen Projektbeitrag sind derzeit keine öffentlichen externen Quellen hinterlegt."
+              : "No public external sources are currently listed for this project post."}
+          </p>
+        ) : (
+          <p><a href="#sources">{post.data.sources.length} {lang === "de" ? (post.data.sources.length === 1 ? "Quelle ansehen" : "Quellen ansehen") : (post.data.sources.length === 1 ? "source" : "sources")}</a></p>
+        )}
+      </div>
+    </aside>
+
+    <div class="article-body">
+      <Content />
+    </div>
+
+    {post.data.openQuestions.length > 0 && (
+      <section class="editorial-section editorial-section-open" aria-labelledby="open-questions">
+        <p class="eyebrow">{lang === "de" ? "Noch zu klären" : "Still open"}</p>
+        <h2 id="open-questions">{lang === "de" ? "Offene Fragen" : "Open questions"}</h2>
+        <ul>
+          {post.data.openQuestions.map((question) => <li>{question}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {post.data.partnerQuestions.length > 0 && (
+      <section class="editorial-section partner-questions" aria-labelledby="partner-questions">
+        <p class="eyebrow">{lang === "de" ? "Austausch erwünscht" : "Feedback welcome"}</p>
+        <h2 id="partner-questions">{lang === "de" ? "Fragen an Beirat und Praxispartner" : "Questions for the advisory board and practice partners"}</h2>
+        <p>{lang === "de"
+          ? "Diese Punkte möchten wir nicht allein aus der Projektperspektive beantworten:"
+          : "We do not want to answer these points from the project perspective alone:"}</p>
+        <ul>
+          {post.data.partnerQuestions.map((question) => <li>{question}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {post.data.sources.length > 0 && (
+      <section class="sources-section" aria-labelledby="sources">
+        <p class="eyebrow">{lang === "de" ? "Nachvollziehbarkeit" : "Traceability"}</p>
+        <h2 id="sources">{copy.sources}</h2>
+        <p>{lang === "de"
+          ? "Die folgenden öffentlichen Quellen stützen externe Aussagen oder ermöglichen die weitere fachliche Prüfung."
+          : "The following public sources support external claims or enable further subject-matter review."}</p>
+        <ol class="source-list">
+          {post.data.sources.map((source) => (
+            <li class="source-card">
+              <a href={source.url}><strong>{source.title}</strong></a>
+              <span class="source-kind">{sourceKindLabel(lang, source.kind as SourceKind)}</span>
+              <span class="meta">
+                {source.published && <>{new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB").format(source.published)}</>}
+                {source.published && source.doi && <>{" · "}</>}
+                {source.doi && <>DOI: {source.doi}</>}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
 
     {post.data.tags.length > 0 && (
       <section aria-labelledby="tags">
@@ -75,22 +228,27 @@ if (other) alternatePaths[otherLang] = newsPath(other);
       </section>
     )}
 
-    {post.data.sources.length > 0 && (
-      <section aria-labelledby="sources">
-        <h2 id="sources">{copy.sources}</h2>
-        <ol class="source-list">
-          {post.data.sources.map((source) => (
-            <li>
-              <a href={source.url}>{source.title}</a>
-              <span class="meta">
-                {" — "}{sourceKindLabel(lang, source.kind as SourceKind)}
-                {source.published && <>{" · "}{new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB").format(source.published)}</>}
-                {source.doi && <>{" · DOI: "}{source.doi}</>}
-              </span>
-            </li>
+    {relatedPosts.length > 0 && (
+      <section class="related-section" aria-labelledby="related">
+        <p class="eyebrow">{lang === "de" ? "Weiterlesen" : "Continue reading"}</p>
+        <h2 id="related">{lang === "de" ? "Verwandte Beiträge" : "Related posts"}</h2>
+        <div class="grid grid-three">
+          {relatedPosts.map((entry) => (
+            <article class="card">
+              <p class="meta">{copy.categories[entry.data.category]}</p>
+              <h3><a href={import.meta.env.BASE_URL.replace(/\/$/, "") + newsPath(entry)}>{entry.data.title}</a></h3>
+              <p>{entry.data.summary}</p>
+            </article>
           ))}
-        </ol>
+        </div>
       </section>
+    )}
+
+    {post.data.aiAssisted && (
+      <details class="transparency-details">
+        <summary>{lang === "de" ? "Transparenz zur KI-Unterstützung" : "Transparency about AI assistance"}</summary>
+        <p>{copy.aiNotice}</p>
+      </details>
     )}
 
     {!other && (
