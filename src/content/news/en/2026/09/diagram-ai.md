@@ -2,7 +2,7 @@
 translationKey: prep-2026-09-diagram-ai
 locale: en
 sourceLang: de
-sourceVersionHash: "d7af61edb76c76471894b6f87c5187dea1fdbad1"
+sourceVersionHash: "688de0bc7c85db1655de926a1d534fb81847d96b"
 translationStatus: machine
 slug: what-current-diagram-ai-can-do-and-where-it-still-fails
 title: "What current diagram AI can already do — and where it still fails"
