@@ -2,7 +2,7 @@
 translationKey: prior-work-textual-representations
 locale: en
 sourceLang: de
-sourceVersionHash: "ad0e70feace795d541b3d30c4115728875327933"
+sourceVersionHash: "40d3f60378749a1124adc3cba4b21aeca0bcd8f6"
 translationStatus: machine
 slug: plantuml-netlists-and-structured-text-in-technical-education
 title: "PlantUML, netlists and structured text: prior work from technical education"
@@ -29,8 +29,7 @@ related:
   - prior-work-pattern-collection
   - prep-2026-09-alt-text-not-enough
   - prep-2026-09-diagram-ai
-dossiers:
-  - prep-2026-09
+dossiers: []
 tags:
   - Publication
   - PlantUML
