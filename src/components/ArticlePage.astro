@@ -52,13 +52,15 @@ const fallbackRelated = langPosts
   .map((entry) => {
     const sharedDossier = entry.data.dossiers.some((key) => post.data.dossiers.includes(key));
     const sameCategory = entry.data.category === post.data.category;
-    return { entry, score: sharedDossier ? 2 : sameCategory ? 1 : 0 };
+    const sharedTags = entry.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+    const score = (sharedDossier ? 4 : 0) + (sameCategory ? 2 : 0) + Math.min(sharedTags, 3);
+    return { entry, score };
   })
   .filter(({ score }) => score > 0)
   .sort((a, b) => b.score - a.score || b.entry.data.publishedAt.valueOf() - a.entry.data.publishedAt.valueOf())
   .map(({ entry }) => entry);
 
-const relatedPosts = (explicitRelated.length > 0 ? explicitRelated : fallbackRelated)
+const relatedPosts = [...explicitRelated, ...fallbackRelated]
   .filter((entry, index, entries) =>
     entry.data.translationKey !== post.data.translationKey &&
     entries.findIndex((candidate) => candidate.data.translationKey === entry.data.translationKey) === index
@@ -235,7 +237,9 @@ const eventDateForIndex = `${indexedEventDate.getUTCFullYear()}-${String(indexed
       <section aria-labelledby="tags">
         <h2 id="tags">{lang === "de" ? "Schlagwörter" : "Tags"}</h2>
         <ul class="tag-list">
-          {post.data.tags.map((tag) => <li>{tag}</li>)}
+          {post.data.tags.map((tag) => (
+            <li><a href={import.meta.env.BASE_URL.replace(/\/$/, "") + pathFor(lang, "search") + `?tag=${encodeURIComponent(tag)}`}>{tag}</a></li>
+          ))}
         </ul>
       </section>
     )}
