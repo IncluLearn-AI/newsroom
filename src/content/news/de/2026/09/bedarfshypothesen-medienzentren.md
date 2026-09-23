@@ -6,7 +6,7 @@ translationStatus: source
 slug: zwoelf-bedarfshypothesen-fuer-inclulearn-ai
 title: "Zwölf Bedarfshypothesen für IncluLearn.AI – und warum sie noch keine Anforderungen sind"
 summary: "Aus den recherchierten Arbeitsabläufen haben wir zwölf konkrete Bedarfshypothesen abgeleitet: von semantischer Voraufbereitung und Expert Review über Wiederverwendung und Prüfungen bis zu Provenienz, Ausgabeprofilen und inklusiver Zusammenarbeit."
-publishedAt: 2026-09-23T08:01:00+02:00
+publishedAt: 2026-09-23T07:46:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -57,7 +57,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Kurz gesagt
