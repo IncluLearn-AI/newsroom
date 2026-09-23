@@ -85,6 +85,7 @@ const dossiers = defineCollection({
     projectPhase,
     updatedAt: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    featuredItems: z.array(z.string()).default([]),
     aiAssisted: z.boolean().default(false),
     draft: z.boolean().default(true)
   })
