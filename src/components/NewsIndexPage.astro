@@ -2,20 +2,33 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostTimeline from "./PostTimeline.astro";
 import { pathFor, ui, type Locale } from "../lib/i18n";
-import { publishedNews } from "../lib/news";
+import { newsPagePath, publishedNews } from "../lib/news";
 
-interface Props { lang: Locale; }
-const { lang } = Astro.props;
+interface Props {
+  lang: Locale;
+  page?: number;
+  pageSize?: number;
+}
+
+const { lang, page = 1, pageSize = 20 } = Astro.props;
 const copy = ui[lang];
-const posts = (await publishedNews(lang)).slice(0, 60);
+const allPosts = await publishedNews(lang);
+const totalPages = Math.max(1, Math.ceil(allPosts.length / pageSize));
+const safePage = Math.min(Math.max(page, 1), totalPages);
+const start = (safePage - 1) * pageSize;
+const posts = allPosts.slice(start, start + pageSize);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const canonicalPath = newsPagePath(lang, safePage);
+const counterpartPath = newsPagePath(lang === "de" ? "en" : "de", safePage);
 ---
 
 <BaseLayout
   lang={lang}
-  title={`${copy.news} · IncluLearn.AI Newsroom`}
+  title={safePage === 1 ? `${copy.news} · IncluLearn.AI Newsroom` : `${copy.news} · ${lang === "de" ? "Seite" : "Page"} ${safePage} · IncluLearn.AI Newsroom`}
   description={copy.latestLead}
-  canonicalPath={pathFor(lang, "news")}
-  alternatePaths={{ de: pathFor("de", "news"), en: pathFor("en", "news") }}
+  canonicalPath={canonicalPath}
+  alternatePaths={{ de: lang === "de" ? canonicalPath : counterpartPath, en: lang === "en" ? canonicalPath : counterpartPath }}
 >
   <section class="section">
     <div class="shell">
@@ -24,10 +37,32 @@ const posts = (await publishedNews(lang)).slice(0, 60);
         <h1>{copy.latestHeading}</h1>
         <p class="lead">{copy.latestLead}</p>
         <p>{lang === "de"
-          ? "Diese Ansicht zeigt maximal die 60 zuletzt veröffentlichten Meldungen. Die vollständige historische Struktur liegt im Archiv."
-          : "This view shows up to the 60 most recently published posts. The full historical structure is available in the archive."}</p>
+          ? "Je Seite werden 20 Beiträge angezeigt. Ältere Veröffentlichungen bleiben über die Folgeseiten, die thematischen Rubriken, die Suche und die historische Projektchronik erreichbar."
+          : "Each page shows 20 posts. Older publications remain available through subsequent pages, topic pages, search and the historical project timeline."}</p>
+        <p><a href={href(pathFor(lang, "search"))}>{lang === "de" ? "Beiträge durchsuchen und filtern" : "Search and filter posts"} <span aria-hidden="true">→</span></a></p>
       </div>
+
       <PostTimeline lang={lang} entries={posts} mode="publication" />
+
+      {totalPages > 1 && (
+        <nav class="pagination" aria-label={lang === "de" ? "Seitennavigation der Beiträge" : "Post pagination"}>
+          {safePage > 1 ? (
+            <a class="button-secondary" rel="prev" href={href(newsPagePath(lang, safePage - 1))}>
+              <span aria-hidden="true">←</span> {lang === "de" ? "Neuere Beiträge" : "Newer posts"}
+            </a>
+          ) : <span></span>}
+
+          <p class="meta" aria-current="page">
+            {lang === "de" ? "Seite" : "Page"} {safePage} {lang === "de" ? "von" : "of"} {totalPages}
+          </p>
+
+          {safePage < totalPages ? (
+            <a class="button-secondary" rel="next" href={href(newsPagePath(lang, safePage + 1))}>
+              {lang === "de" ? "Ältere Beiträge" : "Older posts"} <span aria-hidden="true">→</span>
+            </a>
+          ) : <span></span>}
+        </nav>
+      )}
     </div>
   </section>
 </BaseLayout>
