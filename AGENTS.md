@@ -33,6 +33,30 @@ Beispiel:
 - schwach: „Die Bedarfsanalyse wurde strukturiert.“
 - redaktionell sinnvoll: „Öffentliche Prozessbeschreibungen von Medienzentren deuten auf lange Vorlaufzeiten, hohen manuellen Aufwand und einen Bedarf an überprüfbarer semantischer Vorverarbeitung hin; diese Ableitungen müssen noch durch eigene Interviews validiert werden.“
 
+## Fachartefakt-Gate
+
+Vor jedem redaktionellen Entwurf muss der Agent intern benennen können:
+
+1. welches Git-/Issue-/Release-Signal die Recherche ausgelöst hat,
+2. welche tatsächlichen Fachartefakte die öffentliche Aussage tragen,
+3. welche konkrete neue oder wesentlich veränderte Erkenntnis darin steckt,
+4. was Befund, Hypothese/Entwurf und redaktionelle Ableitung ist,
+5. welche öffentliche Primärquelle externe Aussagen stützt,
+6. ob derselbe Inhalt bereits veröffentlicht oder in einem offenen PR enthalten ist.
+
+Ein README, Repo-Map, Committext oder PR-Beschreibung darf zur Orientierung dienen, ersetzt aber nicht das tragende Fachartefakt.
+
+Kann Punkt 2 oder 3 nicht substanziell beantwortet werden, entsteht aus dem Signal kein öffentlicher Beitrag.
+
+## Dubletten- und Update-Gate
+
+Vor einem neuen Artikel werden veröffentlichte Beiträge, Dossiers, offene Newsroom-PRs und bestehende `translationKey`s geprüft.
+
+- Neue Evidenz zu einem bestehenden Thema kann ein Update statt eines neuen Artikels rechtfertigen.
+- Mehrere kleine Änderungen zum selben fachlichen Ergebnis werden zusammengeführt.
+- Reine Pflege-, Refactoring- oder Dokumentationsaktivität ohne neue öffentliche Aussage erzeugt keine Meldung.
+- Newsroom-eigene Redaktionscommits sind grundsätzlich kein neues Projekt-Ereignis.
+
 ## Verbindliche Grenzen
 
 1. **Kein direkter Merge durch den Agenten.**
@@ -109,12 +133,14 @@ Interne Projekt-Repositories können als Evidenz für **eigene Projektarbeit** d
 6. Relevanz für die Zielgruppen und für IncluLearn.AI begründen.
 7. Externe Primärquellen öffnen und Evidenztyp prüfen.
 8. Fakten, Aussagen der Quelle, Projektableitungen und redaktionelle Einordnung trennen.
-9. Dubletten gegenüber bestehenden Beiträgen, Dossiers, offenen Newsroom-PRs und dem Forschungsstand erkennen.
-10. Öffentlichkeits- und Vertraulichkeits-Gate durchführen.
-11. Passendes Format wählen; bei zu wenig Substanz keinen `article` erzwingen.
-12. Deutschen Referenzbeitrag nach `templates/beitrag.md` erstellen.
-13. Englische Fassung mit derselben `translationKey` vorbereiten.
-14. Beide Fassungen und ggf. Dossieränderungen in **einem Draft-PR** bündeln.
-15. CI abwarten und menschliches fachliches, redaktionelles, sprachliches und Accessibility-Review anfordern.
+9. Dubletten gegenüber bestehenden Beiträgen, Dossiers, offenen Newsroom-PRs, vorhandenen `translationKey`s und dem Forschungsstand erkennen; Update statt Neuanlage ausdrücklich prüfen.
+10. Für jeden verbleibenden Kandidaten das Fachartefakt-Gate dokumentierbar erfüllen.
+11. Öffentlichkeits- und Vertraulichkeits-Gate durchführen.
+12. Passendes Format wählen; bei zu wenig Substanz keinen `article` erzwingen.
+13. Deutschen Referenzbeitrag nach `templates/beitrag.md` erstellen.
+14. Englische Fassung mit derselben `translationKey` vorbereiten.
+15. Beide Fassungen und ggf. Dossieränderungen in **einem Draft-PR** bündeln.
+16. Im PR die tatsächlich ausgewerteten Fachartefakte, Dublettenprüfung und Evidenztypen nennen.
+17. CI abwarten und menschliches fachliches, redaktionelles, sprachliches und Accessibility-Review anfordern.
 
 Die projektweite AI-Governance bleibt gegenüber diesen repository-spezifischen Regeln maßgeblich.

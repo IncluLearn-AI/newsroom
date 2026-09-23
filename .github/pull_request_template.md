@@ -13,10 +13,17 @@
 ## Fachliche Grundlage
 
 <!-- Bei Redaktion:
+- Welches Änderungssignal hat die Recherche ausgelöst?
 - Welche tatsächlichen Fachartefakte wurden ausgewertet?
 - Was sind die konkreten Ergebnisse/Befunde?
 - Was ist ggf. noch Hypothese oder unvalidiert?
 Git-/PR-Titel allein sind keine ausreichende Inhaltsgrundlage.
+-->
+
+## Dubletten- / Update-Prüfung
+
+<!-- Welche bestehenden Beiträge, Dossiers und offenen Newsroom-PRs wurden geprüft?
+Warum ist ein neuer Beitrag nötig bzw. warum wird ein bestehender Beitrag aktualisiert?
 -->
 
 ## Zielgruppenbezug
@@ -52,6 +59,8 @@ Gibt es konkrete offene Fragen an diese Gruppen?
 ## Review vor Merge
 
 - [ ] Tatsächliche Fachartefakte gelesen, nicht nur Commit-/PR-Titel
+- [ ] Bestehende Beiträge, Dossiers und offene PRs auf Dubletten geprüft
+- [ ] Update eines bestehenden Beitrags/Dossiers vor Neuanlage geprüft
 - [ ] Konkrete Ergebnisse stehen vor Prozess-/Repository-Details
 - [ ] Fakten und Quellen geprüft
 - [ ] Befund, Hypothese, Entwurf und redaktionelle Einordnung sauber getrennt

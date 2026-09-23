@@ -48,6 +48,22 @@ function bool(frontmatter, key) {
   return undefined;
 }
 
+function listHasItems(frontmatter, key) {
+  const inline = frontmatter.match(new RegExp(`^${key}:\\s*\\[(.*?)\\]\\s*$`, "m"));
+  if (inline) return inline[1].trim().length > 0;
+
+  const lines = frontmatter.split("\n");
+  const start = lines.findIndex((line) => new RegExp(`^${key}:\\s*$`).test(line));
+  if (start === -1) return false;
+
+  for (let i = start + 1; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (/^[A-Za-z][A-Za-z0-9_-]*:\s*/.test(line)) break;
+    if (/^\s+-\s+/.test(line)) return true;
+  }
+  return false;
+}
+
 function gitBlobSha(content) {
   const body = Buffer.from(content, "utf8");
   return createHash("sha1")
@@ -75,17 +91,43 @@ for (const collection of collections) {
       translationStatus: scalar(frontmatter, "translationStatus"),
       sourceVersionHash: scalar(frontmatter, "sourceVersionHash"),
       slug: scalar(frontmatter, "slug"),
+      category: scalar(frontmatter, "category"),
+      evidence: scalar(frontmatter, "evidence"),
+      format: scalar(frontmatter, "format"),
+      hasSources: listHasItems(frontmatter, "sources"),
       draft: bool(frontmatter, "draft")
     };
 
     for (const field of ["translationKey", "locale", "sourceLang", "translationStatus", "slug"]) {
       if (!record[field]) errors.push(`${relative}: Pflichtfeld ${field} fehlt.`);
     }
-    if (record.draft === undefined) errors.push(`${relative}: draft muss explizit true oder false sein.`);
-    if (!["de", "en"].includes(record.locale)) errors.push(`${relative}: unbekannte locale ${record.locale}.`);
+
+    if (record.draft === undefined) {
+      errors.push(`${relative}: draft muss explizit true oder false sein.`);
+    }
+
+    if (!["de", "en"].includes(record.locale)) {
+      errors.push(`${relative}: unbekannte locale ${record.locale}.`);
+    }
+
     if (record.locale && !relative.includes(`/${record.locale}/`)) {
       errors.push(`${relative}: locale stimmt nicht mit dem Sprachverzeichnis überein.`);
     }
+
+    if (collection === "news" && record.draft === false) {
+      if (record.category === "research-radar" && !record.hasSources) {
+        errors.push(`${relative}: veröffentlichte Research-Radar-Beiträge benötigen mindestens eine öffentliche Quelle.`);
+      }
+
+      if (record.category === "publications-events" && !record.hasSources) {
+        errors.push(`${relative}: veröffentlichte Publikations-/Veranstaltungsbeiträge benötigen mindestens eine öffentliche Quelle.`);
+      }
+
+      if (["peer-reviewed", "preprint", "official-primary", "vendor-project"].includes(record.evidence) && !record.hasSources) {
+        errors.push(`${relative}: Evidenztyp ${record.evidence} benötigt mindestens eine nachvollziehbare öffentliche Quelle.`);
+      }
+    }
+
     records.push(record);
   }
 }
@@ -121,12 +163,18 @@ for (const [pairKey, pair] of pairMap) {
   }
 
   if (de) {
-    if (de.sourceLang !== "de") errors.push(`${de.file}: deutsche Referenzfassung muss sourceLang: de verwenden.`);
-    if (de.translationStatus !== "source") errors.push(`${de.file}: deutsche Referenzfassung muss translationStatus: source verwenden.`);
+    if (de.sourceLang !== "de") {
+      errors.push(`${de.file}: deutsche Referenzfassung muss sourceLang: de verwenden.`);
+    }
+    if (de.translationStatus !== "source") {
+      errors.push(`${de.file}: deutsche Referenzfassung muss translationStatus: source verwenden.`);
+    }
   }
 
   if (en) {
-    if (en.sourceLang !== "de") errors.push(`${en.file}: englische Fassung muss sourceLang: de verwenden.`);
+    if (en.sourceLang !== "de") {
+      errors.push(`${en.file}: englische Fassung muss sourceLang: de verwenden.`);
+    }
     if (!["machine", "reviewed"].includes(en.translationStatus)) {
       errors.push(`${en.file}: translationStatus muss machine oder reviewed sein.`);
     }
