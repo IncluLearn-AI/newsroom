@@ -2,7 +2,7 @@
 translationKey: prior-work-pattern-collection
 locale: en
 sourceLang: de
-sourceVersionHash: "01b51e751cf474c1ed746d7b916e6e55cba17bca"
+sourceVersionHash: "35701e0395f31ca0a0f128013c7e050c6a533cb3"
 translationStatus: machine
 slug: five-design-patterns-for-accessible-stem-learning-materials
 title: "Five design patterns for accessible STEM learning materials"
@@ -29,8 +29,7 @@ related:
   - prior-work-textual-representations
   - prep-2026-09-alt-text-not-enough
   - prep-2026-09-service-priorities
-dossiers:
-  - prep-2026-09
+dossiers: []
 tags:
   - Publication
   - Design patterns
