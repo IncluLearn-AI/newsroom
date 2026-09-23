@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "content:check": "node scripts/validate-content.mjs",
-    "build": "npm run content:check && astro check && astro build && pagefind --site dist",
+    "build": "npm run content:check && astro check && astro build && pagefind --site dist && node scripts/validate-search-build.mjs",
     "preview": "astro preview",
     "check": "npm run content:check && astro check"
   },
