@@ -28,8 +28,7 @@ related:
   - prior-work-textual-representations
   - prep-2026-09-alt-text-not-enough
   - prep-2026-09-service-priorities
-dossiers:
-  - prep-2026-09
+dossiers: []
 tags:
   - Publikation
   - Design Patterns
