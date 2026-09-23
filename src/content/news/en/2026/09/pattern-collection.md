@@ -2,12 +2,12 @@
 translationKey: prior-work-pattern-collection
 locale: en
 sourceLang: de
-sourceVersionHash: "ee5f3355f2f788f57e105886610ae919cb55ee7e"
+sourceVersionHash: "01b51e751cf474c1ed746d7b916e6e55cba17bca"
 translationStatus: machine
 slug: five-design-patterns-for-accessible-stem-learning-materials
 title: "Five design patterns for accessible STEM learning materials"
 summary: "The Pattern Collection published in 2026 by Diethelm Bienhaus and Michael Kreutzer turns practical teaching experience into five reusable patterns — from text-first core content and diagrams to tactile output, sonification and human-in-the-loop explanations."
-publishedAt: 2026-09-23T08:45:00+02:00
+publishedAt: 2026-09-23T08:31:00+02:00
 event:
   start: 2026-05-01
 projectPhase: prior-work
@@ -50,7 +50,7 @@ sources:
     doi: "10.1007/978-3-032-19157-1_12"
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## What the publication is about
