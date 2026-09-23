@@ -2,12 +2,12 @@
 translationKey: prior-work-textual-representations
 locale: en
 sourceLang: de
-sourceVersionHash: "97ee8b891a0dec1bf90db122cf7cfaccfd00e21a"
+sourceVersionHash: "ad0e70feace795d541b3d30c4115728875327933"
 translationStatus: machine
 slug: plantuml-netlists-and-structured-text-in-technical-education
 title: "PlantUML, netlists and structured text: prior work from technical education"
 summary: "A 2025 publication describes how visual artefacts from software engineering and technical informatics can become accessible and collaboratively editable through textual representations, including UML, electronic circuits and Karnaugh maps."
-publishedAt: 2026-09-23T08:46:00+02:00
+publishedAt: 2026-09-23T08:31:20+02:00
 event:
   start: 2025-05-18
   end: 2025-05-22
@@ -50,7 +50,7 @@ sources:
     published: 2025-05-18
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## Starting point: shared teaching rather than separate special workflows
