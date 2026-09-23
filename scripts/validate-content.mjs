@@ -49,97 +49,11 @@ function bool(frontmatter, key) {
 }
 
 function listHasItems(frontmatter, key) {
-  const inline = frontmatter.match(new RegExp(`^${key}:\\s*\\[(.*?)\\]\\s*import { createHash } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
-
-const root = process.cwd();
-const contentRoot = path.join(root, "src", "content");
-const collections = ["news", "dossiers"];
-const errors = [];
-
-async function walk(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const target = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...await walk(target));
-    else if (/\.mdx?$/.test(entry.name)) files.push(target);
-  }
-  return files;
-}
-
-function frontmatterOf(content, file) {
-  if (!content.startsWith("---\n")) {
-    errors.push(`${file}: Frontmatter fehlt.`);
-    return "";
-  }
-  const end = content.indexOf("\n---", 4);
-  if (end === -1) {
-    errors.push(`${file}: Frontmatter ist nicht geschlossen.`);
-    return "";
-  }
-  return content.slice(4, end);
-}
-
-function scalar(frontmatter, key) {
-  const match = frontmatter.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"));
-  if (!match) return undefined;
-  const value = match[1].trim();
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-    return value.slice(1, -1);
-  }
-  return value;
-}
-
-, "m"));
+  const inline = frontmatter.match(new RegExp(`^${key}:\\s*\\[(.*?)\\]\\s*$`, "m"));
   if (inline) return inline[1].trim().length > 0;
 
   const lines = frontmatter.split("\n");
-  const start = lines.findIndex((line) => new RegExp(`^${key}:\\s*import { createHash } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
-
-const root = process.cwd();
-const contentRoot = path.join(root, "src", "content");
-const collections = ["news", "dossiers"];
-const errors = [];
-
-async function walk(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const target = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...await walk(target));
-    else if (/\.mdx?$/.test(entry.name)) files.push(target);
-  }
-  return files;
-}
-
-function frontmatterOf(content, file) {
-  if (!content.startsWith("---\n")) {
-    errors.push(`${file}: Frontmatter fehlt.`);
-    return "";
-  }
-  const end = content.indexOf("\n---", 4);
-  if (end === -1) {
-    errors.push(`${file}: Frontmatter ist nicht geschlossen.`);
-    return "";
-  }
-  return content.slice(4, end);
-}
-
-function scalar(frontmatter, key) {
-  const match = frontmatter.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"));
-  if (!match) return undefined;
-  const value = match[1].trim();
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-    return value.slice(1, -1);
-  }
-  return value;
-}
-
-).test(line));
+  const start = lines.findIndex((line) => new RegExp(`^${key}:\\s*$`).test(line));
   if (start === -1) return false;
 
   for (let i = start + 1; i < lines.length; i += 1) {
@@ -187,23 +101,33 @@ for (const collection of collections) {
     for (const field of ["translationKey", "locale", "sourceLang", "translationStatus", "slug"]) {
       if (!record[field]) errors.push(`${relative}: Pflichtfeld ${field} fehlt.`);
     }
-    if (record.draft === undefined) errors.push(`${relative}: draft muss explizit true oder false sein.`);
-    if (!["de", "en"].includes(record.locale)) errors.push(`${relative}: unbekannte locale ${record.locale}.`);
+
+    if (record.draft === undefined) {
+      errors.push(`${relative}: draft muss explizit true oder false sein.`);
+    }
+
+    if (!["de", "en"].includes(record.locale)) {
+      errors.push(`${relative}: unbekannte locale ${record.locale}.`);
+    }
+
+    if (record.locale && !relative.includes(`/${record.locale}/`)) {
+      errors.push(`${relative}: locale stimmt nicht mit dem Sprachverzeichnis überein.`);
+    }
 
     if (collection === "news" && record.draft === false) {
       if (record.category === "research-radar" && !record.hasSources) {
         errors.push(`${relative}: veröffentlichte Research-Radar-Beiträge benötigen mindestens eine öffentliche Quelle.`);
       }
+
       if (record.category === "publications-events" && !record.hasSources) {
         errors.push(`${relative}: veröffentlichte Publikations-/Veranstaltungsbeiträge benötigen mindestens eine öffentliche Quelle.`);
       }
+
       if (["peer-reviewed", "preprint", "official-primary", "vendor-project"].includes(record.evidence) && !record.hasSources) {
         errors.push(`${relative}: Evidenztyp ${record.evidence} benötigt mindestens eine nachvollziehbare öffentliche Quelle.`);
       }
     }
-    if (record.locale && !relative.includes(`/${record.locale}/`)) {
-      errors.push(`${relative}: locale stimmt nicht mit dem Sprachverzeichnis überein.`);
-    }
+
     records.push(record);
   }
 }
@@ -239,12 +163,18 @@ for (const [pairKey, pair] of pairMap) {
   }
 
   if (de) {
-    if (de.sourceLang !== "de") errors.push(`${de.file}: deutsche Referenzfassung muss sourceLang: de verwenden.`);
-    if (de.translationStatus !== "source") errors.push(`${de.file}: deutsche Referenzfassung muss translationStatus: source verwenden.`);
+    if (de.sourceLang !== "de") {
+      errors.push(`${de.file}: deutsche Referenzfassung muss sourceLang: de verwenden.`);
+    }
+    if (de.translationStatus !== "source") {
+      errors.push(`${de.file}: deutsche Referenzfassung muss translationStatus: source verwenden.`);
+    }
   }
 
   if (en) {
-    if (en.sourceLang !== "de") errors.push(`${en.file}: englische Fassung muss sourceLang: de verwenden.`);
+    if (en.sourceLang !== "de") {
+      errors.push(`${en.file}: englische Fassung muss sourceLang: de verwenden.`);
+    }
     if (!["machine", "reviewed"].includes(en.translationStatus)) {
       errors.push(`${en.file}: translationStatus muss machine oder reviewed sein.`);
     }
