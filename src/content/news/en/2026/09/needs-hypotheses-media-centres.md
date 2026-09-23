@@ -2,12 +2,12 @@
 translationKey: prep-2026-09-needs-hypotheses
 locale: en
 sourceLang: de
-sourceVersionHash: "568f7a9e1ad8462c6c48ce800520efdf8bfe501e"
+sourceVersionHash: "df4e31d20a999845a8251bbc61c370c0977ecb39"
 translationStatus: machine
 slug: twelve-needs-hypotheses-for-inclulearn-ai
 title: "Twelve needs hypotheses for IncluLearn.AI — and why they are not requirements yet"
 summary: "From the researched workflows, we derived twelve concrete needs hypotheses: from semantic preparation and expert review to reuse, examinations, provenance, output profiles and inclusive collaboration."
-publishedAt: 2026-09-23T08:01:00+02:00
+publishedAt: 2026-09-23T07:46:00+02:00
 event:
   start: 2026-09-16
   end: 2026-09-16
@@ -58,7 +58,7 @@ sources:
     kind: official-primary
 aiAssisted: true
 featured: true
-draft: true
+draft: false
 ---
 
 ## In brief
