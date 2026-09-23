@@ -24,6 +24,14 @@ export function newsPath(entry: NewsEntry): string {
   return `/${entry.data.locale}/news/${entry.data.slug}/`;
 }
 
+export function newsPagePath(lang: Locale, page: number): string {
+  return page <= 1 ? `/${lang}/news/` : `/${lang}/news/page/${page}/`;
+}
+
+export function archiveYearPath(lang: Locale, year: number): string {
+  return `/${lang}/${lang === "de" ? "archiv" : "archive"}/${year}/`;
+}
+
 export function dossierPath(entry: DossierEntry): string {
   return `/${entry.data.locale}/dossiers/${entry.data.slug}/`;
 }

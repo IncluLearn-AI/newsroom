@@ -1,0 +1,11 @@
+---
+import ArchiveYearPage from "../../../../components/ArchiveYearPage.astro";
+import { eventDate, publishedNews } from "../../../../lib/news";
+
+export async function getStaticPaths() {
+  const years = [...new Set((await publishedNews("en")).map((post) => eventDate(post).getUTCFullYear()))];
+  return years.map((year) => ({ params: { year: String(year) }, props: { year } }));
+}
+const { year } = Astro.props;
+---
+<ArchiveYearPage lang="en" year={year} />

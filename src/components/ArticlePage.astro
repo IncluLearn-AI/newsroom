@@ -15,6 +15,7 @@ import {
 import {
   counterpart,
   dossierPath,
+  eventDate,
   formatDateTime,
   formatEventRange,
   newsPath,
@@ -51,13 +52,15 @@ const fallbackRelated = langPosts
   .map((entry) => {
     const sharedDossier = entry.data.dossiers.some((key) => post.data.dossiers.includes(key));
     const sameCategory = entry.data.category === post.data.category;
-    return { entry, score: sharedDossier ? 2 : sameCategory ? 1 : 0 };
+    const sharedTags = entry.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+    const score = (sharedDossier ? 4 : 0) + (sameCategory ? 2 : 0) + Math.min(sharedTags, 3);
+    return { entry, score };
   })
   .filter(({ score }) => score > 0)
   .sort((a, b) => b.score - a.score || b.entry.data.publishedAt.valueOf() - a.entry.data.publishedAt.valueOf())
   .map(({ entry }) => entry);
 
-const relatedPosts = (explicitRelated.length > 0 ? explicitRelated : fallbackRelated)
+const relatedPosts = [...explicitRelated, ...fallbackRelated]
   .filter((entry, index, entries) =>
     entry.data.translationKey !== post.data.translationKey &&
     entries.findIndex((candidate) => candidate.data.translationKey === entry.data.translationKey) === index
@@ -84,6 +87,8 @@ const evidenceDescriptions: Record<Locale, Record<Evidence, string>> = {
 };
 
 const noPublicSources = post.data.sources.length === 0;
+const indexedEventDate = eventDate(post);
+const eventDateForIndex = `${indexedEventDate.getUTCFullYear()}-${String(indexedEventDate.getUTCMonth() + 1).padStart(2, "0")}`;
 ---
 
 <BaseLayout
@@ -94,7 +99,16 @@ const noPublicSources = post.data.sources.length === 0;
   alternatePaths={alternatePaths}
   ogType="article"
 >
-  <article class="shell article article-wide">
+  <article class="shell article article-wide" data-pagefind-body>
+    <div class="pagefind-index-data" data-pagefind-ignore aria-hidden="true">
+      <span data-pagefind-filter="locale">{lang}</span>
+      <span data-pagefind-filter="category">{post.data.category}</span>
+      <span data-pagefind-filter="period">{eventDateForIndex}</span>
+      {post.data.tags.map((tag) => <span data-pagefind-filter="tag">{tag}</span>)}
+      <span data-pagefind-meta="summary">{post.data.summary}</span>
+      <span data-pagefind-meta="categoryLabel">{copy.categories[post.data.category]}</span>
+      <span data-pagefind-meta="eventLabel">{formatEventRange(lang, post.data.event.start, post.data.event.end)}</span>
+    </div>
     <nav class="article-context" aria-label={lang === "de" ? "Beitragskontext" : "Article context"}>
       <a href={import.meta.env.BASE_URL.replace(/\/$/, "") + topicPath(lang, post.data.category)}>
         {copy.categories[post.data.category]}
@@ -223,7 +237,9 @@ const noPublicSources = post.data.sources.length === 0;
       <section aria-labelledby="tags">
         <h2 id="tags">{lang === "de" ? "Schlagwörter" : "Tags"}</h2>
         <ul class="tag-list">
-          {post.data.tags.map((tag) => <li>{tag}</li>)}
+          {post.data.tags.map((tag) => (
+            <li><a href={import.meta.env.BASE_URL.replace(/\/$/, "") + pathFor(lang, "search") + `?tag=${encodeURIComponent(tag)}`}>{tag}</a></li>
+          ))}
         </ul>
       </section>
     )}

@@ -1,0 +1,322 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pathFor, ui, type Category, type Locale } from "../lib/i18n";
+import { eventDate, publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+
+const { lang } = Astro.props;
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+const posts = await publishedNews(lang);
+
+const categories: Category[] = ["project-progress", "research-radar", "tools-transfer", "publications-events"];
+const usedCategories = categories.filter((category) => posts.some((post) => post.data.category === category));
+
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))]
+  .sort((a, b) => a.localeCompare(b, lang === "de" ? "de" : "en"));
+
+const periodKeys = [...new Set(posts.map((post) => {
+  const date = eventDate(post);
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+}))].sort((a, b) => b.localeCompare(a));
+
+const periodLabel = (key: string) => {
+  const [year, month] = key.split("-").map(Number);
+  return new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${copy.search} · IncluLearn.AI Newsroom`}
+  description={lang === "de"
+    ? "Volltextsuche und Filter für veröffentlichte IncluLearn.AI-Beiträge."
+    : "Full-text search and filters for published IncluLearn.AI posts."}
+  canonicalPath={pathFor(lang, "search")}
+  alternatePaths={{ de: pathFor("de", "search"), en: pathFor("en", "search") }}
+>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{copy.search}</p>
+        <h1>{lang === "de" ? "Beiträge durchsuchen und filtern" : "Search and filter posts"}</h1>
+        <p class="lead">
+          {lang === "de"
+            ? "Durchsuche die veröffentlichten Fachbeiträge im Volltext oder grenze sie nach Rubrik, Schlagwort und Ereigniszeitraum ein. Die Suche läuft vollständig statisch im Browser; es gibt keinen Such-Backend-Dienst."
+            : "Search published subject posts in full text or narrow them by topic, tag and event period. Search runs entirely as a static browser feature; no search backend service is required."}
+        </p>
+      </div>
+
+      <form
+        id="newsroom-search"
+        class="search-panel"
+        role="search"
+        data-base={base}
+        data-lang={lang}
+        aria-describedby="search-help"
+      >
+        <div class="search-query">
+          <label for="search-query"><strong>{lang === "de" ? "Suchbegriff" : "Search term"}</strong></label>
+          <input
+            id="search-query"
+            name="q"
+            type="search"
+            autocomplete="off"
+            placeholder={lang === "de" ? "z. B. Diagramme, TTS, Medienzentren" : "e.g. diagrams, TTS, media centres"}
+          />
+        </div>
+
+        <div class="filter-grid">
+          <div>
+            <label for="search-category">{lang === "de" ? "Rubrik" : "Topic"}</label>
+            <select id="search-category" name="category">
+              <option value="">{lang === "de" ? "Alle Rubriken" : "All topics"}</option>
+              {usedCategories.map((category) => <option value={category}>{copy.categories[category]}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label for="search-tag">{lang === "de" ? "Schlagwort" : "Tag"}</label>
+            <select id="search-tag" name="tag">
+              <option value="">{lang === "de" ? "Alle Schlagwörter" : "All tags"}</option>
+              {tags.map((tag) => <option value={tag}>{tag}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label for="search-period">{lang === "de" ? "Ereigniszeitraum" : "Event period"}</label>
+            <select id="search-period" name="period">
+              <option value="">{lang === "de" ? "Alle Zeiträume" : "All periods"}</option>
+              {periodKeys.map((period) => <option value={period}>{periodLabel(period)}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <p id="search-help" class="meta">
+          {lang === "de"
+            ? "Ohne Suchbegriff kannst du auch nur über die Filter suchen. Die Ergebnisliste wird nach jeder Suche aktualisiert."
+            : "You can search using filters only, without entering a term. The result list updates after each search."}
+        </p>
+
+        <div class="search-actions">
+          <button class="button-link" type="submit">{lang === "de" ? "Suchen" : "Search"}</button>
+          <button class="button-secondary" type="reset">{lang === "de" ? "Zurücksetzen" : "Reset"}</button>
+        </div>
+      </form>
+
+      <noscript>
+        <div class="notice">
+          <p>{lang === "de"
+            ? "Die Volltextsuche benötigt JavaScript. Alle Beiträge bleiben ohne JavaScript über Aktuell, Themen und das Archiv erreichbar."
+            : "Full-text search requires JavaScript. All posts remain available without JavaScript through Latest, Topics and the archive."}</p>
+          <p>
+            <a href={href(pathFor(lang, "news"))}>{copy.news}</a>
+            {" · "}
+            <a href={href(pathFor(lang, "topics"))}>{copy.topics}</a>
+            {" · "}
+            <a href={href(pathFor(lang, "archive"))}>{copy.archive}</a>
+          </p>
+        </div>
+      </noscript>
+
+      <section class="search-results-section" aria-labelledby="search-results-heading">
+        <div class="section-head compact-section-head">
+          <h2 id="search-results-heading">{lang === "de" ? "Suchergebnisse" : "Search results"}</h2>
+          <p id="search-status" class="meta" role="status" aria-live="polite">
+            {lang === "de"
+              ? "Suchbegriff eingeben oder Filter auswählen."
+              : "Enter a search term or choose a filter."}
+          </p>
+        </div>
+        <ol id="search-results" class="search-results" aria-busy="false"></ol>
+        <button id="search-more" class="button-secondary" type="button" hidden>
+          {lang === "de" ? "Weitere Ergebnisse anzeigen" : "Show more results"}
+        </button>
+      </section>
+    </div>
+  </section>
+
+  <script is:inline type="module">
+    const form = document.querySelector("#newsroom-search");
+    const resultsList = document.querySelector("#search-results");
+    const status = document.querySelector("#search-status");
+    const moreButton = document.querySelector("#search-more");
+
+    if (form && resultsList && status && moreButton) {
+      const base = form.dataset.base || "";
+      const lang = form.dataset.lang || "de";
+      const labels = lang === "de"
+        ? {
+            initial: "Suchbegriff eingeben oder Filter auswählen.",
+            loading: "Suche läuft …",
+            none: "Keine passenden Beiträge gefunden.",
+            one: "1 passender Beitrag",
+            many: (count) => `${count} passende Beiträge`,
+            error: "Die Suche konnte nicht geladen werden. Bitte nutze Aktuell, Themen oder das Archiv.",
+            read: "Beitrag lesen"
+          }
+        : {
+            initial: "Enter a search term or choose a filter.",
+            loading: "Searching …",
+            none: "No matching posts found.",
+            one: "1 matching post",
+            many: (count) => `${count} matching posts`,
+            error: "Search could not be loaded. Please use Latest, Topics or the archive.",
+            read: "Read post"
+          };
+
+      let pagefind;
+      let currentResults = [];
+      let visibleCount = 0;
+      const pageSize = 20;
+
+      function siteUrl(url) {
+        if (!url) return base + "/" + lang + "/news/";
+        if (/^https?:\/\//.test(url)) return url;
+        if (base && url.startsWith(base + "/")) return url;
+        return base + (url.startsWith("/") ? url : "/" + url);
+      }
+
+      async function getPagefind() {
+        if (!pagefind) {
+          pagefind = await import(base + "/pagefind/pagefind.js");
+          await pagefind.options({ baseUrl: (base || "") + "/" });
+        }
+        return pagefind;
+      }
+
+      function selectedFilters() {
+        const data = new FormData(form);
+        const filters = { locale: lang };
+        for (const key of ["category", "tag", "period"]) {
+          const value = String(data.get(key) || "").trim();
+          if (value) filters[key] = value;
+        }
+        return filters;
+      }
+
+      function syncUrl() {
+        const data = new FormData(form);
+        const params = new URLSearchParams();
+        for (const key of ["q", "category", "tag", "period"]) {
+          const value = String(data.get(key) || "").trim();
+          if (value) params.set(key, value);
+        }
+        const next = params.size > 0 ? `?${params.toString()}` : window.location.pathname;
+        history.replaceState(null, "", next);
+      }
+
+      function resultCard(data) {
+        const li = document.createElement("li");
+        const article = document.createElement("article");
+        article.className = "search-result-card";
+
+        const meta = document.createElement("p");
+        meta.className = "meta";
+        const bits = [data.meta?.categoryLabel, data.meta?.eventLabel].filter(Boolean);
+        meta.textContent = bits.join(" · ");
+
+        const heading = document.createElement("h3");
+        const link = document.createElement("a");
+        link.href = siteUrl(data.url);
+        link.textContent = data.meta?.title || data.title || data.url;
+        heading.append(link);
+
+        const excerpt = document.createElement("p");
+        excerpt.className = "search-excerpt";
+        excerpt.innerHTML = data.excerpt || data.meta?.summary || "";
+
+        const action = document.createElement("p");
+        action.className = "card-link";
+        const actionLink = link.cloneNode(true);
+        actionLink.textContent = labels.read + " →";
+        action.append(actionLink);
+
+        if (bits.length) article.append(meta);
+        article.append(heading, excerpt, action);
+        li.append(article);
+        return li;
+      }
+
+      async function renderMore() {
+        const next = currentResults.slice(visibleCount, visibleCount + pageSize);
+        const records = await Promise.all(next.map((result) => result.data()));
+        for (const data of records) resultsList.append(resultCard(data));
+        visibleCount += next.length;
+        moreButton.hidden = visibleCount >= currentResults.length;
+      }
+
+      async function runSearch() {
+        const data = new FormData(form);
+        const term = String(data.get("q") || "").trim();
+        const hasOptionalFilter = ["category", "tag", "period"].some((key) => String(data.get(key) || "").trim());
+
+        syncUrl();
+        resultsList.replaceChildren();
+        moreButton.hidden = true;
+        visibleCount = 0;
+
+        if (!term && !hasOptionalFilter) {
+          currentResults = [];
+          status.textContent = labels.initial;
+          return;
+        }
+
+        resultsList.setAttribute("aria-busy", "true");
+        status.textContent = labels.loading;
+
+        try {
+          const api = await getPagefind();
+          const search = await api.search(term || null, { filters: selectedFilters() });
+          currentResults = search.results;
+          status.textContent = currentResults.length === 0
+            ? labels.none
+            : currentResults.length === 1
+              ? labels.one
+              : labels.many(currentResults.length);
+          await renderMore();
+        } catch (error) {
+          console.error(error);
+          currentResults = [];
+          status.textContent = labels.error;
+        } finally {
+          resultsList.setAttribute("aria-busy", "false");
+        }
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      for (const key of ["q", "category", "tag", "period"]) {
+        const control = form.elements.namedItem(key);
+        if (control && params.has(key)) control.value = params.get(key);
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        runSearch();
+      });
+
+      form.addEventListener("reset", () => {
+        setTimeout(() => {
+          history.replaceState(null, "", window.location.pathname);
+          resultsList.replaceChildren();
+          moreButton.hidden = true;
+          status.textContent = labels.initial;
+          currentResults = [];
+          visibleCount = 0;
+        }, 0);
+      });
+
+      moreButton.addEventListener("click", renderMore);
+
+      if ([...params.keys()].some((key) => ["q", "category", "tag", "period"].includes(key))) {
+        runSearch();
+      }
+    }
+  </script>
+</BaseLayout>

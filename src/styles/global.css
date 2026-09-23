@@ -749,3 +749,226 @@ footer a {
     grid-column: 1;
   }
 }
+
+
+/* Search, filters, pagination and scalable archive navigation */
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 3px;
+}
+
+.button-secondary {
+  display: inline-block;
+  padding: .68rem .95rem;
+  border: 1px solid var(--accent-strong);
+  border-radius: .65rem;
+  background: var(--surface);
+  color: var(--accent-strong);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-secondary:hover {
+  background: var(--surface-soft);
+}
+
+.search-panel {
+  max-width: 62rem;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface-soft);
+}
+
+.search-query {
+  display: grid;
+  gap: .45rem;
+}
+
+.search-query input {
+  width: 100%;
+  min-height: 3rem;
+  padding: .65rem .8rem;
+  border: 1px solid #9fb0c4;
+  border-radius: .55rem;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.filter-grid > div {
+  display: grid;
+  gap: .35rem;
+}
+
+.filter-grid label {
+  font-weight: 700;
+}
+
+.filter-grid select {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: .55rem .65rem;
+  border: 1px solid #9fb0c4;
+  border-radius: .55rem;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+.search-results-section {
+  max-width: 62rem;
+  margin-top: 3rem;
+}
+
+.compact-section-head {
+  margin-bottom: 1rem;
+}
+
+.search-results {
+  display: grid;
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.search-result-card {
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.search-result-card h3 {
+  margin: .25rem 0 .6rem;
+}
+
+.search-result-card p:last-child {
+  margin-bottom: 0;
+}
+
+.search-excerpt mark {
+  padding: 0 .1em;
+  background: #fff0a8;
+  color: inherit;
+}
+
+.pagination {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.pagination > :last-child {
+  justify-self: end;
+}
+
+.pagination .meta {
+  margin: 0;
+  text-align: center;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.archive-years {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 58rem;
+}
+
+.archive-year-card {
+  padding: 1.3rem 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.archive-year-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.archive-year-head h2 {
+  margin: 0;
+}
+
+.archive-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archive-month-grid li {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .7rem .8rem;
+  border-radius: .6rem;
+  background: var(--surface-soft);
+}
+
+.pagefind-index-data {
+  display: none;
+}
+
+@media (max-width: 46rem) {
+  .filter-grid,
+  .archive-month-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination > :last-child {
+    justify-self: start;
+  }
+
+  .pagination .meta {
+    text-align: left;
+  }
+
+  .archive-year-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
