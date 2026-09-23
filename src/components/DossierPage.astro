@@ -2,8 +2,8 @@
 import { render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostTimeline from "./PostTimeline.astro";
-import { phaseLabel, type Locale } from "../lib/i18n";
-import { counterpart, dossierPath, formatEventRange, publishedDossiers, publishedNews } from "../lib/news";
+import { pathFor, phaseLabel, ui, type Locale } from "../lib/i18n";
+import { counterpart, dossierPath, formatEventRange, newsPath, publishedDossiers, publishedNews } from "../lib/news";
 
 interface Props {
   lang: Locale;
@@ -16,6 +16,13 @@ const allNews = await publishedNews(lang);
 const related = allNews
   .filter((post) => post.data.dossiers.includes(dossier.data.translationKey))
   .sort((a, b) => (b.data.event.end ?? b.data.event.start).valueOf() - (a.data.event.end ?? a.data.event.start).valueOf());
+
+const featured = dossier.data.featuredItems
+  .map((key) => allNews.find((post) => post.data.translationKey === key))
+  .filter((post): post is (typeof allNews)[number] => Boolean(post));
+const copy = ui[lang];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
 
 const otherLang: Locale = lang === "de" ? "en" : "de";
 const other = counterpart(allDossiers, dossier.data.translationKey, otherLang);
@@ -41,10 +48,37 @@ if (other) alternatePaths[otherLang] = dossierPath(other);
     <Content />
   </article>
 
-  <section class="section section-soft">
+  {featured.length > 0 && (
+    <section class="section section-soft" aria-labelledby="dossier-featured">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">{lang === "de" ? "Kuratierte Vertiefung" : "Curated deep dive"}</p>
+          <h2 id="dossier-featured">{lang === "de" ? "Die wichtigsten Beiträge für den 10-Minuten-Überblick" : "The key posts for a 10-minute overview"}</h2>
+          <p>{lang === "de"
+            ? "Diese Auswahl führt von beobachteten Praxisproblemen über Forschungs- und Lösungshypothesen bis zum aktuellen Produktbild. Die vollständige Chronik folgt darunter."
+            : "This selection moves from observed practical problems through research and solution hypotheses to the current product view. The full timeline follows below."}</p>
+        </div>
+        <div class="grid grid-three">
+          {featured.map((post) => (
+            <article class="card highlight-card">
+              <p class="badge">{copy.categories[post.data.category]}</p>
+              <h3><a href={href(newsPath(post))}>{post.data.title}</a></h3>
+              <p>{post.data.summary}</p>
+            </article>
+          ))}
+        </div>
+        <p class="section-link"><a href={href(pathFor(lang, "partners"))}>{lang === "de" ? "Offene Fragen für Beirat & Partner" : "Open questions for the advisory board & partners"} <span aria-hidden="true">→</span></a></p>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
     <div class="shell">
       <div class="section-head">
-        <h2>{lang === "de" ? "Beiträge in diesem Dossier" : "Posts in this dossier"}</h2>
+        <h2>{lang === "de" ? "Alle Beiträge dieser Vorbereitungsphase" : "All posts from this preparation phase"}</h2>
+        <p>{lang === "de"
+          ? "Nach dem tatsächlichen Ereigniszeitraum sortiert. Einzelne Fachbeiträge können denselben Zeitraum aus unterschiedlichen Blickwinkeln beleuchten."
+          : "Sorted by the actual event period. Individual subject posts may cover the same period from different perspectives."}</p>
       </div>
       <PostTimeline lang={lang} entries={related} mode="event" />
     </div>

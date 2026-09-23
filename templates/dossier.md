@@ -12,6 +12,9 @@ projectPhase: preparation
 updatedAt: 2026-09-30T12:00:00+02:00
 tags:
   - Vorbereitung
+featuredItems:
+  - prep-2026-09-requirements
+  - prep-2026-09-research-evaluation
 aiAssisted: true
 draft: true
 ---
