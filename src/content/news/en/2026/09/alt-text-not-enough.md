@@ -2,7 +2,7 @@
 translationKey: prep-2026-09-alt-text-not-enough
 locale: en
 sourceLang: de
-sourceVersionHash: "2c457738eeb35f502866fc9c6991c4668890484a"
+sourceVersionHash: "ea625c41fada01f4e6c1d3c342f06a8285f08e12"
 translationStatus: machine
 slug: why-alt-text-is-not-enough-for-stem
 title: "Why alt text is not enough for STEM"
