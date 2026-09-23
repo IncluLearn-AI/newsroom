@@ -44,7 +44,7 @@ authors:
 evidence: peer-reviewed
 sources:
   - title: "Accessible Representations of Visual Artifacts in Technical Informatics Education"
-    url: "https://www.thinkmind.org/index.php?view=article&articleid=smart_accessibility_2025_1_10_88001"
+    url: "https://personales.upv.es/thinkmind/SMART_ACCESSIBILITY/SMART_ACCESSIBILITY_2025/smart_accessibility_2025_1_10_88001.html"
     kind: peer-reviewed
     published: 2025-05-18
 aiAssisted: true
