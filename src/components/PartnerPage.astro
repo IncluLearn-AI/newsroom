@@ -1,0 +1,169 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pathFor, topicPath, ui, type Locale } from "../lib/i18n";
+import { dossierPath, newsPath, publishedDossiers, publishedNews } from "../lib/news";
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const copy = ui[lang];
+const isDe = lang === "de";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const href = (path: string) => `${base}${path}`;
+
+const posts = await publishedNews(lang);
+const dossiers = await publishedDossiers(lang);
+const questionPosts = posts.filter((post) => post.data.partnerQuestions.length > 0).slice(0, 6);
+const currentDossiers = dossiers.slice(0, 3);
+---
+
+<BaseLayout
+  lang={lang}
+  title={isDe ? "Für Beirat & Partner · IncluLearn.AI Newsroom" : "For the advisory board & partners · IncluLearn.AI Newsroom"}
+  description={isDe
+    ? "Aktueller Projektstand, offene fachliche Fragen und konkrete Möglichkeiten für Feedback und Validierung."
+    : "Current project status, open subject questions and concrete opportunities for feedback and validation."}
+  canonicalPath={pathFor(lang, "partners")}
+  alternatePaths={{ de: pathFor("de", "partners"), en: pathFor("en", "partners") }}
+>
+  <section class="hero partner-hero">
+    <div class="shell">
+      <p class="eyebrow">{isDe ? "Beirat & Praxispartner" : "Advisory board & practice partners"}</p>
+      <h1>{isDe ? "Wo Ihre Erfahrung jetzt besonders hilfreich ist" : "Where your experience is especially useful now"}</h1>
+      <p class="lead">
+        {isDe
+          ? "Diese Seite bündelt nicht nur fertige Ergebnisse. Sie zeigt, welche Annahmen IncluLearn.AI gerade überprüft, welche Fragen aus der Praxis offen sind und an welchen Stellen Rückmeldung den Projektverlauf tatsächlich beeinflussen kann."
+          : "This page does not only collect finished results. It shows which assumptions IncluLearn.AI is currently testing, which practical questions remain open and where feedback can genuinely influence the project."}
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="partner-status">
+    <div class="shell two-column-content">
+      <div>
+        <p class="eyebrow">{isDe ? "Aktueller Stand" : "Current status"}</p>
+        <h2 id="partner-status">{isDe ? "Vor dem geförderten Projektstart: Grundlagen prüfen, bevor sie fest werden" : "Before the funded project starts: test the foundations before they harden"}</h2>
+        <p>{isDe
+          ? "Der geförderte Projektzeitraum beginnt am 1. Oktober 2026. In der Vorbereitungsphase wurden bereits Nutzer- und Prozesshypothesen, ein Vision Prototype, Evaluationsregeln, Governance und erste modulare Dienste vorbereitet. Genau jetzt lassen sich Begriffe, Prioritäten und Arbeitsabläufe noch vergleichsweise leicht korrigieren."
+          : "The funded project period starts on 1 October 2026. The preparation phase has already produced user and workflow hypotheses, a vision prototype, evaluation rules, governance and first modular services. This is the point at which terminology, priorities and workflows can still be corrected relatively easily."}</p>
+        <p>{isDe
+          ? "Der Newsroom trennt dabei bewusst zwischen recherchiertem Befund, noch zu validierender Hypothese und bereits umgesetzter technischer Funktion."
+          : "The newsroom deliberately distinguishes researched findings, hypotheses still requiring validation and technical functionality that has actually been implemented."}</p>
+      </div>
+      <aside class="focus-panel">
+        <h2>{isDe ? "Öffentliche Einstiege" : "Public starting points"}</h2>
+        <ul class="compact-list">
+          <li><a href={href(pathFor(lang, "project"))}>{copy.project}</a></li>
+          <li><a href={href(topicPath(lang, "project-progress"))}>{copy.categories["project-progress"]}</a></li>
+          <li><a href={href(topicPath(lang, "research-radar"))}>{copy.categories["research-radar"]}</a></li>
+          <li><a href="https://inclulearn-test.owli-ai.com/">{isDe ? "Vision Prototype öffnen" : "Open vision prototype"}</a></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-soft" aria-labelledby="feedback-now">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{isDe ? "Offene fachliche Fragen" : "Open subject questions"}</p>
+        <h2 id="feedback-now">{isDe ? "Diese Punkte möchten wir nicht allein aus Projektsicht entscheiden" : "We do not want to decide these points from the project perspective alone"}</h2>
+        <p>{isDe
+          ? "Die folgenden Fragen stammen direkt aus veröffentlichten Fachbeiträgen. Sie werden automatisch aktualisiert, wenn neue freigegebene Beiträge konkrete Partnerfragen enthalten."
+          : "The following questions come directly from published subject posts. They update automatically when newly reviewed posts contain concrete partner questions."}</p>
+      </div>
+
+      {questionPosts.length > 0 ? (
+        <div class="partner-question-list">
+          {questionPosts.map((post) => (
+            <article class="card partner-question-card">
+              <p class="eyebrow">{copy.categories[post.data.category]}</p>
+              <h3><a href={href(newsPath(post))}>{post.data.title}</a></h3>
+              <ul>
+                {post.data.partnerQuestions.slice(0, 2).map((question) => <li>{question}</li>)}
+              </ul>
+              <p class="card-link"><a href={href(newsPath(post))}>{isDe ? "Kontext im Beitrag lesen" : "Read the context"} <span aria-hidden="true">→</span></a></p>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p>{isDe ? "Aktuell sind keine veröffentlichten Partnerfragen hinterlegt." : "No published partner questions are currently available."}</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ways-to-contribute">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">{isDe ? "Möglichkeiten für Feedback" : "Ways to contribute"}</p>
+        <h2 id="ways-to-contribute">{isDe ? "Drei Arten von Rückmeldung sind besonders wertvoll" : "Three types of feedback are especially valuable"}</h2>
+      </div>
+      <div class="grid grid-three">
+        <article class="card">
+          <h3>{isDe ? "Arbeitsabläufe spiegeln" : "Reality-check workflows"}</h3>
+          <p>{isDe
+            ? "Welche recherchierten Prozesse treffen Ihre Praxis? Wo entstehen tatsächlich Zeitaufwand, Medienbrüche, Qualitätsrisiken oder Doppelarbeit?"
+            : "Which researched workflows match your practice? Where do time costs, media breaks, quality risks or duplicated work actually occur?"}</p>
+        </article>
+        <article class="card">
+          <h3>{isDe ? "Prototypen erproben" : "Try prototypes"}</h3>
+          <p>{isDe
+            ? "Ist der nächste Schritt verständlich? Sind Status, Review und Freigabe klar? Funktionieren zentrale Aufgaben auch nicht-visuell und ohne technisches Spezialwissen?"
+            : "Is the next step understandable? Are status, review and approval clear? Do core tasks work non-visually and without specialised technical knowledge?"}</p>
+        </article>
+        <article class="card">
+          <h3>{isDe ? "Qualitätsgrenzen benennen" : "Define quality thresholds"}</h3>
+          <p>{isDe
+            ? "Welche Fehler wären in Lehre, Medienaufbereitung oder Prüfungen besonders kritisch? Welche Entscheidungen dürfen aus Ihrer Sicht nicht automatisiert werden?"
+            : "Which errors would be especially critical in teaching, media conversion or examinations? Which decisions should not be automated in your view?"}</p>
+        </article>
+      </div>
+      <p class="notice">
+        {isDe
+          ? "Konkrete Rückmeldungen laufen über die im Projekt vereinbarten Kommunikationswege. Im öffentlichen Newsroom werden keine personenbezogenen oder vertraulichen Partnerinformationen gesammelt."
+          : "Concrete feedback uses the communication channels agreed within the project. The public newsroom does not collect personal or confidential partner information."}
+      </p>
+    </div>
+  </section>
+
+  {currentDossiers.length > 0 && (
+    <section class="section section-soft" aria-labelledby="partner-dossiers">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">{copy.dossiers}</p>
+          <h2 id="partner-dossiers">{isDe ? "Zusammenhänge statt Einzelmeldungen" : "Context instead of isolated updates"}</h2>
+          <p>{isDe
+            ? "Dossiers bündeln Entwicklungen, die sich über mehrere Beiträge und Arbeitsschritte erstrecken."
+            : "Dossiers connect developments that span several posts and work steps."}</p>
+        </div>
+        <div class="grid grid-three">
+          {currentDossiers.map((dossier) => (
+            <article class="card">
+              <h3><a href={href(dossierPath(dossier))}>{dossier.data.title}</a></h3>
+              <p>{dossier.data.summary}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="partner-publications">
+    <div class="shell two-column-content">
+      <div>
+        <p class="eyebrow">{copy.categories["tools-transfer"]}</p>
+        <h2 id="partner-publications">{isDe ? "Werkzeuge und Transfer nachvollziehen" : "Follow tools and transfer"}</h2>
+        <p>{isDe
+          ? "Hier ordnen wir offene Standards, Werkzeuge und Integrationsfragen danach ein, ob sie professionelle Arbeitsabläufe tatsächlich unterstützen können."
+          : "Here we assess open standards, tools and integration questions by whether they can support real professional workflows."}</p>
+        <p><a href={href(topicPath(lang, "tools-transfer"))}>{isDe ? "Zu Tools & Transfer" : "Go to Tools & transfer"} <span aria-hidden="true">→</span></a></p>
+      </div>
+      <div>
+        <p class="eyebrow">{copy.categories["publications-events"]}</p>
+        <h2>{isDe ? "Publikationen und öffentliche Termine" : "Publications and public dates"}</h2>
+        <p>{isDe
+          ? "Eigene Publikationen werden inhaltlich erklärt und in Beziehung zum Projekt gesetzt. Öffentliche Veranstaltungstermine erscheinen erst, wenn sie tatsächlich feststehen und zur Veröffentlichung freigegeben sind."
+          : "Our publications are explained in substance and connected to the project. Public event dates appear only once they are confirmed and cleared for publication."}</p>
+        <p><a href={href(topicPath(lang, "publications-events"))}>{isDe ? "Zu Publikationen & Veranstaltungen" : "Go to Publications & events"} <span aria-hidden="true">→</span></a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
