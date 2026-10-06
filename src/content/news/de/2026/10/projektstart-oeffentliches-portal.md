@@ -13,7 +13,7 @@ event:
 projectPhase: funded
 retroactive: true
 category: project-progress
-format: brief
+format: article
 keyFindings:
   - "Seit dem Projektstart am 1. Oktober läuft die reguläre geförderte Projektphase; das öffentliche Portal wurde am 2. Oktober technisch abgenommen."
   - "Das Portal bündelt Projektüberblick, öffentliche News und Pilotinformationen unter einer eigenen Projektadresse."
@@ -36,7 +36,7 @@ tags:
   - Pilot
   - Accessibility
 authors: []
-evidence: official-primary
+evidence: project-source
 sources:
   - title: "IncluLearn.AI – öffentliches Projektportal"
     url: "https://inclulearn.owli-ai.com/"
@@ -64,8 +64,6 @@ Das neue Portal bündelt die wichtigsten öffentlichen Einstiege unter einer eig
 - Informationen zum geplanten Pilotzugang.
 
 Damit muss man nicht die internen GitHub-Repositories kennen, um zu verstehen, woran das Projekt arbeitet und welche nächsten Schritte geplant sind.
-
-Der Newsroom bleibt dabei die redaktionelle Ebene für ausführlichere, quellenbasierte Einordnungen von Projektfortschritt, Forschung und Transfer.
 
 ## Demo ist nicht gleich Pilot
 
