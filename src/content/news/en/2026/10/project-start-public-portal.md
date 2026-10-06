@@ -2,7 +2,7 @@
 translationKey: funded-2026-10-public-portal
 locale: en
 sourceLang: de
-sourceVersionHash: "fb43231011ae8e1bf7db82172856cc5aaff445be"
+sourceVersionHash: "3474af5e21451ff59bc6137741e8c94585cb909f"
 translationStatus: machine
 slug: project-start-and-public-portal
 title: "Project start: IncluLearn.AI now has its own public portal"
@@ -14,7 +14,7 @@ event:
 projectPhase: funded
 retroactive: true
 category: project-progress
-format: brief
+format: article
 keyFindings:
   - "The regular funded project phase began on 1 October; the public portal completed its technical acceptance on 2 October."
   - "The portal brings together the project overview, public news and pilot information under a dedicated project address."
@@ -37,7 +37,7 @@ tags:
   - Pilot
   - Accessibility
 authors: []
-evidence: official-primary
+evidence: project-source
 sources:
   - title: "IncluLearn.AI – public project portal"
     url: "https://inclulearn.owli-ai.com/"
@@ -65,8 +65,6 @@ The new portal brings together the most important public entry points under a de
 - information about planned pilot access.
 
 This means that people do not need to know the internal GitHub repositories in order to understand what the project is working on and which next steps are planned.
-
-The Newsroom remains the editorial layer for more detailed, source-based explanations of project progress, research and transfer.
 
 ## Demo is not the same as pilot
 
