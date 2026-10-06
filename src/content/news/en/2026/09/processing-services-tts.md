@@ -2,33 +2,34 @@
 translationKey: prep-2026-09-processing-tts
 locale: en
 sourceLang: de
-sourceVersionHash: "db7faf94c6781c30618dc7f55ce567354483ac82"
+sourceVersionHash: "4c6a085967b99461df39b3f1973c60b7a4e2114e"
 translationStatus: machine
 slug: service-architecture-and-first-tts-contract-prepared
-title: "TTS as the first modular service: API and Qwen adapter exist, product integration does not yet"
-summary: "The first independent processing service demonstrates IncluLearn.AI's architectural principle: an engine-neutral TTS API with ephemeral jobs, privacy by default and a fixed-version Qwen3-TTS adapter. This is not yet a product-integrated speech service or GPU-qualified operation."
+title: "TTS from architecture building block to public test path: six profiles and VoiceDesign on the target VM"
+summary: "The TTS path has moved well beyond the first September state: the engine-neutral API now runs with Qwen3-TTS-1.7B, six neutral preset profiles and VoiceDesign on the target VM and is reachable through the public test demo. This is real integration, but not yet an audio-quality or production approval."
 publishedAt: 2026-09-22T17:08:00+02:00
-updatedAt: 2026-09-23T08:33:00+02:00
+updatedAt: 2026-10-06T12:30:00+02:00
 event:
   start: 2026-09-22
-  end: 2026-09-22
+  end: 2026-09-29
 projectPhase: preparation
 retroactive: true
 category: project-progress
 format: article
 keyFindings:
-  - "The HTTP contract remains engine-neutral: clients submit text, language and optionally a neutral voice profile, but no model names, speaker IDs or sampling parameters."
-  - "A Qwen3-TTS CustomVoice adapter now exists and is pinned to a fixed model revision; model weights are not stored in the repository and network downloads are not enabled silently."
-  - "Jobs and audio are deliberately ephemeral in the current v1 design; request text and audio should not be stored permanently or logged in full by default."
-  - "The service is not yet product-integrated: there is no approved public service operation, no productive authentication and no CUDA configuration qualified on the real project GPU."
-  - "TTS quality should be measured not only by naturalness but also by technical terms, numbers, units, variable names and prepared technical speech text."
+  - "The HTTP contract remains engine-neutral: legacy requests continue to work, while the additive advanced path supports presets with optional instructions and VoiceDesign without exposing Qwen model names or sampling parameters in the public contract."
+  - "The active reference runtime now uses the pinned Qwen3-TTS-1.7B models for CustomVoice and VoiceDesign; six service-owned neutral preset profiles are exposed."
+  - "The single-resident lifecycle keeps at most one large model worker in memory at a time and switches serially between preset and design mode."
+  - "The TTS service was deployed to the target VM through processing-services and verified with real synthetic German/English inference through the public demo's same-origin path."
+  - "The runtime qualification is deliberately limited: human listening evaluation and an actual rollback were not performed, and the qualified container path remains CPU/FP32 rather than GPU/CUDA."
 openQuestions:
-  - "Which TTS engine offers the best combination of intelligibility, reproducibility and operating effort for German/English STEM content?"
-  - "How should mathematics, variable names, units and technical terminology be semantically prepared for speech synthesis?"
-  - "Which audio functions do learners actually need: linear playback, navigation, segmented playback or combinations with structured text?"
+  - "How reliably are technical terms, numbers, units, variable names and mathematically prepared speech rendered intelligibly for learners?"
+  - "Which navigation functions do learners actually need for longer audio versions – for example segmentation, synchronous highlighting or controlled interruption?"
+  - "Does VoiceDesign provide relevant value in the application context, or are a highly reliable voice and consistent technical terminology more important?"
 partnerQuestions:
-  - "Which pronunciation errors in technical learning content are particularly disruptive in your practice?"
-  - "Is a particular voice important for your use case, or are intelligibility, navigation and consistent terminology clearly more important?"
+  - "Which pronunciation errors involving technical terms, numbers, units or formulas would be particularly critical in your practice?"
+  - "Which audio-navigation functions do learners actually need for longer STEM texts?"
+  - "Is voice choice or voice design important in your use case, or do intelligibility and reliability clearly matter more?"
 related:
   - prep-2026-09-infrastructure
   - prep-2026-09-service-priorities
@@ -40,6 +41,7 @@ tags:
   - Text to speech
   - API
   - Qwen3-TTS
+  - VoiceDesign
   - Privacy by default
 authors: []
 evidence: project-source
@@ -47,9 +49,15 @@ sources:
   - title: "Qwen3-TTS"
     url: "https://github.com/QwenLM/Qwen3-TTS"
     kind: vendor-project
-  - title: "Qwen3-TTS-12Hz-0.6B-CustomVoice"
-    url: "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice"
+  - title: "Qwen3-TTS-12Hz-1.7B-CustomVoice"
+    url: "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
     kind: vendor-project
+  - title: "Qwen3-TTS-12Hz-1.7B-VoiceDesign"
+    url: "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign"
+    kind: vendor-project
+  - title: "IncluLearn.AI Vision Prototype"
+    url: "https://inclulearn-test.owli-ai.com/"
+    kind: official-primary
 aiAssisted: true
 featured: false
 draft: false
@@ -57,86 +65,94 @@ draft: false
 
 ## In brief
 
-Text to speech is the first independent processing service on which IncluLearn.AI is testing its planned service model.
+Text to speech remains the first independent processing service through which IncluLearn.AI is testing its modular service model in practice. The state has changed substantially since the first September version.
 
-The important point is not only that a speech model can be connected. The architectural goal is to separate a stable subject-level API contract from a replaceable engine.
+The prepared API and adapter building block has become a **real integrated test path**: the active runtime uses Qwen3-TTS-1.7B, provides six neutral preset profiles plus VoiceDesign and runs on the target VM through `processing-services`. Real, exclusively synthetic German/English cases were exercised through the public test demo all the way to generated WAV output.
 
-Both the engine-neutral v1 API and an adapter for Qwen3-TTS CustomVoice now exist. That is more than the earlier contract-only state, but it is not yet a product-integrated speech service.
+This is an important integration step – but it is **not yet an audio-quality or production approval**.
 
-## The API should not need to know which model is behind it
+## The API contract remains engine-neutral despite new capabilities
 
-The service contract uses neutral inputs:
+The central architectural decision is unchanged: the platform should be able to use TTS capabilities without coupling itself to specific model names or provider-specific sampling parameters.
 
-- text,
-- explicit language,
-- optionally a neutral voice profile.
+Legacy requests using text, language and a neutral voice profile continue to work. The same v1 path now also supports a structured advanced contract:
 
-The HTTP contract does not contain model names, Qwen speaker IDs, sampling parameters, voice prompts or engine-specific options.
+- preset voice with a service-owned profile ID,
+- an optional bounded voice instruction,
+- VoiceDesign with a textual description.
 
-This is deliberate. If another TTS system later proves more suitable, the platform should not have to change model-specific details everywhere.
+Model choice remains internal. This allows the runtime to evolve without forcing the platform to understand Qwen-specific parameters everywhere.
 
-## Ephemeral jobs rather than unnoticed data collection
+## Six neutral profiles and two 1.7B modes
 
-Speech synthesis can take longer than a normal HTTP request, so the v1 contract uses jobs: a request is accepted, its status can be polled, and completed WAV audio can be retrieved later.
+The active Qwen adapter now uses two immutable pinned 1.7B models:
 
-The current design is deliberately **non-persistent**:
+- CustomVoice for preset voices,
+- VoiceDesign for textually described voice characteristics.
 
-- input text remains in process only as long as necessary for processing,
-- the job record does not permanently store the text,
-- audio expires after a limited time,
-- a restart discards jobs and results,
-- responses and audio are marked not to be cached,
-- error responses do not expose input text or engine exceptions.
+Externally, presets appear as neutral profiles `standard-a` through `standard-f`. Qwen speaker IDs remain an implementation detail.
 
-Privacy by default is therefore already part of the service contract.
+A **single-resident lifecycle** applies to the two large models: the service keeps at most one model worker resident at any one time. When switching between preset and design mode, the old worker is terminated and reaped before the new one starts. This limits memory use and makes the operating boundary explicit.
 
-## Qwen3-TTS is the first engine, not the identity of the service
+## Integrated on the target VM and tested through the public demo
 
-The current adapter targets **Qwen3-TTS-12Hz-0.6B-CustomVoice**.
+The TTS service was deployed to the actual target VM through the `processing-services` integration layer. The service itself receives no public host port and remains inside the internal processing network.
 
-The model source and revision are pinned. Model weights are not committed to Git, and service startup does not silently download them. A local cache is expected by default; network download must be explicitly enabled.
+The web platform calls it through an engine-neutral same-origin path. The public boundary therefore remains the IncluLearn.AI web application rather than a raw TTS API.
 
-Speaker choices are also hidden behind neutral service-level voice profiles.
+During the six-profile runtime gate on 29 September, four real internal jobs and three short public same-origin cases completed successfully. The exercised paths included legacy simple, German/English presets and VoiceDesign. Jobs passed through the intended lifecycle and produced valid WAV files.
 
-This makes it possible to reproduce which model revision produced a benchmark or result without hard-coding that model into the long-term API.
+These tests use synthetic inputs only.
 
-## What must not yet be presented as productive
+## Privacy by default remains part of the service contract
 
-The current state does **not** mean:
+The existing privacy and operational boundaries remain in force with the expanded runtime:
 
-- TTS is already integrated into the platform,
-- the service should be publicly exposed,
-- productive authentication and authorisation exist,
-- CUDA has been qualified on the actual project GPU,
-- voice cloning or free-form voice design are in scope,
-- the current engine has already won a quality comparison.
+- input texts and voice descriptions are processed ephemerally,
+- jobs and audio are not intended as durable storage,
+- audio expires after a limited period,
+- standard logs should not contain complete input texts or audio data,
+- model weights are provisioned separately and are not embedded in the repository or container image,
+- the normal service runs offline with a read-only model cache.
 
-CUDA is technically configurable, but current documentation explicitly states that it has not yet been qualified on real GPU hardware for this work item.
+The technical integration has therefore advanced without giving up the privacy-by-default design.
 
-## For STEM, "sounds natural" is not enough
+## What the successful test explicitly does not prove
 
-A TTS system can sound pleasant and still be poor for technical learning content.
+The current final classification is effectively **"PASS WITH FINDINGS"**.
 
-Quality planning therefore includes:
+What has been shown is that the integrated CPU/FP32 path works on the target VM and that preset and VoiceDesign modes can produce real audio through the intended platform path.
 
-- German prose,
-- English technical terms embedded in German,
+What has not been shown is:
+
+- that the voices are already sufficiently intelligible for STEM learning content,
+- that technical terms, numbers, units and formulas are pronounced reliably,
+- that VoiceDesign provides an actual benefit to learners,
+- that a real runtime rollback succeeds,
+- that a GPU/CUDA path is qualified.
+
+Human listening evaluation was deliberately **not** inferred from a valid WAV file. Technical functionality and perceived audio quality remain separate forms of evidence.
+
+## For STEM, the next evaluation stage is decisive
+
+For IncluLearn.AI, the basic question "Can the service generate audio?" is now largely answered. The more important next question is: **Is the output reliably intelligible and navigable for technical teaching?**
+
+This includes in particular:
+
+- German and English technical terminology,
 - numbers and units,
-- abbreviations,
-- variable names,
-- technically or mathematically prepared speech text,
-- stability across longer segments,
-- consistent voice and prosody,
-- understandable error behaviour.
+- variable names and abbreviations,
+- mathematically prepared speech,
+- stability over longer passages,
+- segmentation and navigation,
+- human listening assessment.
 
-Later benchmarks should also record engine version, hardware context, input class, cold/warm run, synthesis time, audio duration, resource use and relevant inference parameters.
+For STEM material, natural-sounding but technically ambiguous pronunciation would not be an adequate result.
 
-## Why the service matters to the wider architecture
+## Why this matters to the overall architecture
 
-TTS is a small but concrete test of a larger principle:
+TTS now demonstrates in practice that the intended service model can work across several layers:
 
-**The platform orchestrates user goals; specialised processing services sit behind stable contracts.**
+**web platform → engine-neutral contract → processing integration → specialised service → replaceable model runtime**
 
-If this works, future services for document analysis, diagram interpretation or output generation can follow the same modular pattern.
-
-The present TTS state is therefore mainly an **architecture and quality building block**, not a finished product feature.
+TTS is therefore no longer only an architectural design. It is a limited, qualified real test path – with continued clear boundaries between technical integration, subject-level quality and later production operation.
